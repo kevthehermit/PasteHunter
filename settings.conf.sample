@@ -1,0 +1,15 @@
+[pastebin]
+api_key =
+api_scrape = https://pastebin.com/api_scraping.php
+api_raw = https://pastebin.com/api_scrape_item.php?i=
+paste_limit = 100
+
+[database]
+elastic_host = 127.0.0.1
+elastic_port = 9200
+
+
+[parsers]
+regex = True
+yara = False
+keywords = True
