@@ -1,23 +1,23 @@
-# pastehunter
-Just some pastebin things
+# PasteHunter
+Scan pastebin pastes with a collection of yara rules.
 
-## PreReqs
+# PreReqs
 
 You need a Pro account on pastebin that has access to the scraping API.
 https://pastebin.com/api_scraping_faq
 
-## Install.
+# Install.
 
-# Elastic Search
+## Elastic Search
 https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
 
-# Kibana
+## Kibana
 https://www.elastic.co/guide/en/kibana/current/deb.html
 
-# This little app
+## This little app
 git clone https://github.com/kevthehermit/pastehunter
 
-## Configure
+# Configure
 
 copy settings.conf.sample to settings.conf
 populate the details.
