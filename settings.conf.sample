@@ -1,15 +1,12 @@
 [pastebin]
-api_key =
 api_scrape = https://pastebin.com/api_scraping.php
 api_raw = https://pastebin.com/api_scrape_item.php?i=
-paste_limit = 100
+paste_limit = 200
+store_all = false
 
 [database]
-elastic_host = 127.0.0.1
+elastic_host = 192.168.1.1
 elastic_port = 9200
 
-
-[parsers]
-regex = True
-yara = False
-keywords = True
+[yara]
+rule_path = YaraRules/index.yar
