@@ -103,8 +103,9 @@ for paste in paste_list_json:
         # For keywords get the word from the matched string
         if match.rule == 'core_keywords' or match.rule == 'custom_keywords':
             for s in match.strings:
-                if s[1] not in results:
-                    results.append(s[1].lstrip('$'))
+                rule_match = s[1].lstrip('$')
+                if rule_match not in results:
+                    results.append(rule_match)
 
         # But a break in here for the base64. Will use it later.
         elif match.rule.startswith('b64'):
