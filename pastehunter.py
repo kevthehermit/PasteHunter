@@ -37,7 +37,6 @@ api_scrape = conf['pastebin']['api_scrape']
 api_raw = conf['pastebin']['api_raw']
 es_host = conf['database']['elastic_host']
 es_port = conf['database']['elastic_port']
-store_all = bool(conf['pastebin']['store_all'])
 
 #Set up the database connection
 es = Elasticsearch(es_host, port=es_port)
@@ -54,9 +53,6 @@ rules = yara.compile(rule_path)
 # Get some pastes and convert to json
 # Get last 'paste_limit' pastes
 paste_list_request = requests.get(scrape_uri)
-
-print(paste_list_request)
-print(paste_list_request.text)
 
 paste_list_json = paste_list_request.json()
 
