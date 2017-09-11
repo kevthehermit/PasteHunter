@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import os
+import sys
 import yara
 import hashlib
 import requests
@@ -28,8 +29,19 @@ def parse_config():
         config_dict['valid'] = False
     return config_dict
 
+
+def yara_index(rule_path):
+    index_file = os.path.join(rule_path, 'index.yar')
+    with open(index_file, 'w') as yar:
+        for filename in os.listdir('YaraRules'):
+            if filename.endswith('.yar') and filename != 'index.yar':
+                include = 'include "{0}"\n'.format(filename)
+                yar.write(include)
+
+
 # Parse the config file
 conf = parse_config()
+
 
 # populate vars from config
 paste_limit = conf['pastebin']['paste_limit']
@@ -37,24 +49,36 @@ api_scrape = conf['pastebin']['api_scrape']
 api_raw = conf['pastebin']['api_raw']
 es_host = conf['database']['elastic_host']
 es_port = conf['database']['elastic_port']
+rule_path = conf['yara']['rule_path']
+
 
 #Set up the database connection
-es = Elasticsearch(es_host, port=es_port)
+try:
+    es = Elasticsearch(es_host, port=es_port)
+except Exception as e:
+    print("[!] Unable to connect to Elastic Search: ", e)
+    sys.exit()
 
+try:
+    # Update the yara rules index
+    yara_index(rule_path)
+    # Compile the yara rules we will use to match pastes
+    index_file = os.path.join(rule_path, 'index.yar')
+    rules = yara.compile(index_file)
+except Exception as e:
+    print("Unable to Create Yara index: ", e)
+    sys.exit()
 
-# Create the API uri
-scrape_uri = '{0}?limit={1}'.format(api_scrape, paste_limit)
-
-
-# Compile the yara rules we will use to match pastes
-rule_path = conf['yara']['rule_path']
-rules = yara.compile(rule_path)
-
-# Get some pastes and convert to json
-# Get last 'paste_limit' pastes
-paste_list_request = requests.get(scrape_uri)
-
-paste_list_json = paste_list_request.json()
+try:
+    # Create the API uri
+    scrape_uri = '{0}?limit={1}'.format(api_scrape, paste_limit)
+    # Get some pastes and convert to json
+    # Get last 'paste_limit' pastes
+    paste_list_request = requests.get(scrape_uri)
+    paste_list_json = paste_list_request.json()
+except Exception as e:
+    print("Unable to parse paste results: ", e)
+    sys.exit()
 
 
 # Iterate the results
@@ -90,8 +114,12 @@ for paste in paste_list_json:
     paste_data['regex_results'] = []
     paste_data['keywords'] = []
 
-    # Scan with yara
-    matches = rules.match(data=raw_paste_data)
+    try:
+        # Scan with yara
+        matches = rules.match(data=raw_paste_data)
+    except Exception as e:
+        print("Unable to scan raw paste : {0} - {1}".format(paste['key'], e))
+        continue
 
     results = []
     for match in matches:
@@ -120,9 +148,12 @@ for paste in paste_list_json:
         paste_data['SHA256'] = sha256
         paste_data['raw_paste'] = raw_paste_data
         paste_data['YaraRule'] = results
-        stored = es.index(index='paste-test', doc_type='paste', id=paste['key'], body=paste_data)
-        store_count += 1
-        print(stored)
+        try:
+            stored = es.index(index='paste-test', doc_type='paste', id=paste['key'], body=paste_data)
+            store_count += 1
+            print("Stored: {0}".format(paste['key']))
+        except Exception as e:
+            print("Unable to store results: {0} - {1}".format(paste['key'], e))
 
 print("Saved {0} Pastes".format(store_count))
 # Store paste ids for next check

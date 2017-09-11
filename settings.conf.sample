@@ -9,4 +9,4 @@ elastic_host = 192.168.1.1
 elastic_port = 9200
 
 [yara]
-rule_path = YaraRules/index.yar
+rule_path = YaraRules
