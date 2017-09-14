@@ -11,7 +11,9 @@ rule db_connection
 
     strings:
         $a = /\b(mongodb|http|https|ftp|mysql|postgresql|oracle):\/\/(\S*):(\S*)@(\S*)b/
+        $n1 = "#EXTINF"
+        $n2 = "m3u8"
 
     condition:
-        any of them
+        $a and not any of ($n*)
 }

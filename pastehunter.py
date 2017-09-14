@@ -95,7 +95,7 @@ for paste in paste_list_json:
     # Track paste ids to prevent dupes
     paste_ids += '{0},'.format(paste['key'])
     if paste['key'] in old_pastes:
-        print("Skipping")
+        print("Already Processed, Skipping")
         continue
 
     # Create a new paste dict for us to modify
