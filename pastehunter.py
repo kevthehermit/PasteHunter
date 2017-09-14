@@ -8,6 +8,7 @@ import requests
 import datetime
 from elasticsearch import Elasticsearch
 import configparser
+requests.packages.urllib3.disable_warnings()
 
 
 # Parse the config file in to a dict
