@@ -39,6 +39,6 @@ I set a cronjob to run this script every two minutes with a pastelimit of 200
 ```
 localadmin@pastebin:~/pastehunter$ cat /etc/cron.d/pastehunter
 # Run every 5 minutes
-*/2 * * * *   localadmin  cd /home/localadmin/pastehunter && python3 pastabean.py >> /home/localadmin/pastehunter/cronlog.txt
+*/2 * * * *   localadmin  cd /home/localadmin/pastehunter && python3 pastehunter.py >> /home/localadmin/pastehunter/cronlog.txt
 localadmin@pastebin:~/pastehunter$
 ```
