@@ -9,9 +9,11 @@ class ElasticOutput():
         # Set up the database connection
         es_host = config['elastic_output']['elastic_host']
         es_port = config['elastic_output']['elastic_port']
+        es_user = config['elastic_output']['elastic_user']
+        es_pass = config['elastic_output']['elastic_pass']
         self.test = False
         try:
-            self.es = Elasticsearch(es_host, port=es_port)
+            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user,es_pass))
             self.test = True
         except Exception:
             raise Exception('Unable to Connect') from None

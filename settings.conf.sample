@@ -9,6 +9,8 @@ enabled = True
 elastic_index = paste-test
 elastic_host = 192.168.1.1
 elastic_port = 9200
+elastic_user = elastic
+elastic_pass = changeme
 
 [json_output]
 enabled = True
