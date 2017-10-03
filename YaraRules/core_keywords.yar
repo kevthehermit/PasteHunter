@@ -18,7 +18,7 @@ rule core_keywords
         $pgp_priv = "BEGIN PGP PRIVATE KEY" wide ascii nocase
         $DOX = " DOX" wide ascii nocase
         $hacked = "hacked by" wide ascii nocase
-        $onion_url = /'.*.\.onion'/
+        $onion_url = /.*.\.onion/
     condition:
         any of them
 
