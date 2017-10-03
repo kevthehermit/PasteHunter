@@ -4,9 +4,34 @@ api_raw = https://pastebin.com/api_scrape_item.php?i=
 paste_limit = 200
 store_all = false
 
-[database]
+[elastic_output]
+enabled = True
+elastic_index = paste-test
 elastic_host = 192.168.1.1
 elastic_port = 9200
+
+[json_output]
+enabled = True
+json_path = logs/json/
+store_raw = True
+encode_raw = True
+
+[csv_output]
+enabled = True
+csv_path = logs/csv/
+
+[syslog_output]
+enabled = True
+host = 192.168.1.1
+port = 514
+
+[smtp_output]
+enabled = False
+server =
+port =
+tls = True
+username =
+password =
 
 [yara]
 rule_path = YaraRules
