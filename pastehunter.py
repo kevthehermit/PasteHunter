@@ -6,29 +6,31 @@ import yara
 import hashlib
 import requests
 import datetime
-from elasticsearch import Elasticsearch
-import configparser
+from common import parse_config
+from outputs import elastic_output, json_output
 
+print("Reading Configs")
+# Parse the config file
+conf = parse_config()
 
-# Parse the config file in to a dict
-def parse_config():
-    config_dict = {}
-    config = configparser.ConfigParser(allow_no_value=True)
+# populate vars from config
+paste_limit = conf['pastebin']['paste_limit']
+api_scrape = conf['pastebin']['api_scrape']
+api_raw = conf['pastebin']['api_raw']
+rule_path = conf['yara']['rule_path']
 
-    conf_file = 'settings.conf'
+print("Configure Outputs")
+# configure outputs
+outputs = []
+enable_elastic = conf['elastic_output']['enabled']
+if enable_elastic == 'True':
+    es = elastic_output.ElasticOutput()
+    outputs.append(es)
 
-    valid = config.read(conf_file)
-    if len(valid) > 0:
-        config_dict['valid'] = True
-        for section in config.sections():
-            section_dict = {}
-            for key, value in config.items(section):
-                section_dict[key] = value
-            config_dict[section] = section_dict
-    else:
-        config_dict['valid'] = False
-    return config_dict
-
+enable_json = conf['json_output']['enabled']
+if enable_json == 'True':
+    js = json_output.JsonOutput()
+    outputs.append(js)
 
 def yara_index(rule_path):
     index_file = os.path.join(rule_path, 'index.yar')
@@ -38,27 +40,7 @@ def yara_index(rule_path):
                 include = 'include "{0}"\n'.format(filename)
                 yar.write(include)
 
-
-# Parse the config file
-conf = parse_config()
-
-
-# populate vars from config
-paste_limit = conf['pastebin']['paste_limit']
-api_scrape = conf['pastebin']['api_scrape']
-api_raw = conf['pastebin']['api_raw']
-es_host = conf['database']['elastic_host']
-es_port = conf['database']['elastic_port']
-rule_path = conf['yara']['rule_path']
-
-
-#Set up the database connection
-try:
-    es = Elasticsearch(es_host, port=es_port)
-except Exception as e:
-    print("[!] Unable to connect to Elastic Search: ", e)
-    sys.exit()
-
+print("Compile Yara Rules")
 try:
     # Update the yara rules index
     yara_index(rule_path)
@@ -69,6 +51,7 @@ except Exception as e:
     print("Unable to Create Yara index: ", e)
     sys.exit()
 
+print("Connecting to Pastebin")
 try:
     # Create the API uri
     scrape_uri = '{0}?limit={1}'.format(api_scrape, paste_limit)
@@ -81,6 +64,7 @@ except Exception as e:
     sys.exit()
 
 
+print("Processing Results")
 # Iterate the results
 store_count = 0
 paste_ids = ''
@@ -111,8 +95,6 @@ for paste in paste_list_json:
     raw_paste_data = requests.get(raw_paste_uri).text
 
     # Process the paste data here
-    paste_data['regex_results'] = []
-    paste_data['keywords'] = []
 
     try:
         # Scan with yara
@@ -123,7 +105,6 @@ for paste in paste_list_json:
 
     results = []
     for match in matches:
-        #print(match.strings)
         # For keywords get the word from the matched string
         if match.rule == 'core_keywords' or match.rule == 'custom_keywords':
             for s in match.strings:
@@ -139,7 +120,7 @@ for paste in paste_list_json:
         else:
             results.append(match.rule)
 
-    # If we have a result send it to ES
+    # If we have a result add some meta data and send to storage
     if len(results) > 0:
         encoded_paste_data = raw_paste_data.encode('utf-8')
         md5 = hashlib.md5(encoded_paste_data).hexdigest()
@@ -148,12 +129,9 @@ for paste in paste_list_json:
         paste_data['SHA256'] = sha256
         paste_data['raw_paste'] = raw_paste_data
         paste_data['YaraRule'] = results
-        try:
-            stored = es.index(index='paste-test', doc_type='paste', id=paste['key'], body=paste_data)
-            store_count += 1
-            print("Stored: {0}".format(paste['key']))
-        except Exception as e:
-            print("Unable to store results: {0} - {1}".format(paste['key'], e))
+        for output in outputs:
+            output.store_paste(paste_data)
+        store_count += 1
 
 print("Saved {0} Pastes".format(store_count))
 # Store paste ids for next check
