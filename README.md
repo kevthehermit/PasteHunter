@@ -10,10 +10,17 @@ https://pastebin.com/api_scraping_faq
 * Python3
 * Elastic Search Kibana optional
 
+
 # Install.
 
 ## Elastic Search
 https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+
+Install appropriate JDK 
+
+```pip install configparser```
+
+```pip install elasticsearch```
 
 ## Kibana
 https://www.elastic.co/guide/en/kibana/current/deb.html
@@ -22,6 +29,7 @@ https://www.elastic.co/guide/en/kibana/current/deb.html
 https://yara.readthedocs.io/en/v3.6.0/gettingstarted.html#compiling-and-installing-yara
 
 Don't forget the python bindings
+
 ```pip install yara-python```
 
 If you have yara errors check the installed version numbers for yara and yara-python match the lastest versions.

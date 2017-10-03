@@ -8,6 +8,7 @@ import requests
 import datetime
 from common import parse_config
 from outputs import elastic_output, json_output
+requests.packages.urllib3.disable_warnings()
 
 print("Reading Configs")
 # Parse the config file
