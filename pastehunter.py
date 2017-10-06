@@ -7,7 +7,7 @@ import hashlib
 import requests
 import datetime
 from common import parse_config
-from outputs import elastic_output, json_output
+from outputs import elastic_output, json_output, csv_output, syslog_output, smtp_output
 
 print("Reading Configs")
 # Parse the config file
@@ -22,15 +22,26 @@ rule_path = conf['yara']['rule_path']
 print("Configure Outputs")
 # configure outputs
 outputs = []
-enable_elastic = conf['elastic_output']['enabled']
-if enable_elastic == 'True':
+if conf['elastic_output']['enabled'] == 'True':
     es = elastic_output.ElasticOutput()
     outputs.append(es)
 
-enable_json = conf['json_output']['enabled']
-if enable_json == 'True':
+if conf['json_output']['enabled'] == 'True':
     js = json_output.JsonOutput()
     outputs.append(js)
+
+if conf['csv_output']['enabled'] == 'True':
+    csv = csv_output.CSVOutput()
+    outputs.append(csv)
+
+if conf['syslog_output']['enabled'] == 'True':
+    syslog = syslog_output.SyslogOutput()
+    outputs.append(syslog)
+
+if conf['smtp_output']['enabled'] == 'True':
+    smtp = smtp_output.SMTPOutput()
+    outputs.append(smtp)
+
 
 def yara_index(rule_path):
     index_file = os.path.join(rule_path, 'index.yar')
