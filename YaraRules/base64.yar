@@ -38,12 +38,10 @@ rule b64_url
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $a = "aHR0cDovLw" // http://
-        $b = "SFRUUDovLw" // HTTP://
-        $c = "aHR0cHM6Ly8" // https://
-        $d = "SFRUUFM6Ly8" // HTTPS://
-        $e = "d3d3Lg" // www.
-        $f = "V1dXLg" // WWW.
+        $a = "aHR0cDov" // http/s
+        $b = "SFRUUDov" // HTTP/S
+        $c = "d3d3Lg" // www.
+        $d = "V1dXLg" // WWW.
     condition:
         any of them
 

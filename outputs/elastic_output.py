@@ -11,16 +11,19 @@ class ElasticOutput():
         es_port = config['elastic_output']['elastic_port']
         es_user = config['elastic_output']['elastic_user']
         es_pass = config['elastic_output']['elastic_pass']
+        self.es_index = config['elastic_output']['elastic_index']
         self.test = False
         try:
-            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user,es_pass))
+            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass))
             self.test = True
         except Exception:
             raise Exception('Unable to Connect') from None
 
     def store_paste(self, paste_data):
         if self.test:
-            self.es.index(index='paste-test', doc_type='paste', id=paste_data['key'], body=paste_data)
+            index_name = self.es_index
+            # Consider adding date to the index
+            self.es.index(index=index_name, doc_type='paste', id=paste_data['key'], body=paste_data)
             print("Stored Paste {0}".format(paste_data['key']))
         else:
             print("Elastic Search Enabled, not configured!")

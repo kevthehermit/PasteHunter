@@ -14,8 +14,11 @@ rule generic_api
         $a2 = "api_key" nocase
         $hash32 = /\b[a-fA-F\d]{32}\b/
         $hash64 = /\b[a-fA-F\d]{64}\b/
+        $n1 = "#EXTINF"
+        $n2 = "m3u8"
+
     condition:
-        any of ($a*) and any of ($hash*)
+        (any of ($a*)) and (any of ($hash*)) and (not any of ($n*))
 
 }
 

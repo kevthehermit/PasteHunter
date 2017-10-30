@@ -17,6 +17,8 @@ rule powershell
         $e = "downloadstring" nocase
         $f = "-WindowStyle Hidden" nocase
         $g = "invoke" nocase
+        $h = "bitsadmin" nocase
+        $i = "certutil -decode" nocase
     condition:
         4 of them
 
