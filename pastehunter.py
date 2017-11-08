@@ -42,6 +42,10 @@ if conf['smtp_output']['enabled'] == 'True':
     smtp = smtp_output.SMTPOutput()
     outputs.append(smtp)
 
+# Do we need to store all pastes, irrespective of Yara rule matches ?
+if conf['pastebin']['store_all'] == 'True':
+    store_all = True
+
 
 def yara_index(rule_path):
     index_file = os.path.join(rule_path, 'index.yar')
@@ -50,6 +54,7 @@ def yara_index(rule_path):
             if filename.endswith('.yar') and filename != 'index.yar':
                 include = 'include "{0}"\n'.format(filename)
                 yar.write(include)
+
 
 print("Compile Yara Rules")
 try:
@@ -100,7 +105,6 @@ for paste in paste_list_json:
     date = datetime.datetime.utcfromtimestamp(float(paste_data['date'])).isoformat()
     paste_data['@timestamp'] = date
 
-    #print("Found paste: {0}".format(paste['key']))
     # get raw paste and hash them
     raw_paste_uri = paste['scrape_url']
     raw_paste_data = requests.get(raw_paste_uri).text
@@ -132,6 +136,13 @@ for paste in paste_list_json:
             results.append(match.rule)
 
     # If we have a result add some meta data and send to storage
+    # If results is empty, ie no match, and store_all is True,
+    # then append "no_match" to results. This will then force output.
+
+    if store_all is True:
+        if len(results) == 0:
+            results.append('no_match')
+
     if len(results) > 0:
         encoded_paste_data = raw_paste_data.encode('utf-8')
         md5 = hashlib.md5(encoded_paste_data).hexdigest()
