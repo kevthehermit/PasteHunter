@@ -13,7 +13,13 @@ def parse_config():
         for section in config.sections():
             section_dict = {}
             for key, value in config.items(section):
-                section_dict[key] = value
+                if value.lower() == 'true':
+                    new_val = True
+                elif value.lower() == 'false':
+                    new_val = False
+                else:
+                    new_val = value
+                section_dict[key] = new_val
             config_dict[section] = section_dict
     else:
         config_dict['valid'] = False

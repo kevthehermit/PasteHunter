@@ -18,33 +18,30 @@ paste_limit = conf['pastebin']['paste_limit']
 api_scrape = conf['pastebin']['api_scrape']
 api_raw = conf['pastebin']['api_raw']
 rule_path = conf['yara']['rule_path']
+store_all = conf['pastebin']['store_all']
 
 print("Configure Outputs")
 # configure outputs
 outputs = []
-if conf['elastic_output']['enabled'] == 'True':
+if conf['elastic_output']['enabled']:
     es = elastic_output.ElasticOutput()
     outputs.append(es)
 
-if conf['json_output']['enabled'] == 'True':
+if conf['json_output']['enabled']:
     js = json_output.JsonOutput()
     outputs.append(js)
 
-if conf['csv_output']['enabled'] == 'True':
+if conf['csv_output']['enabled']:
     csv = csv_output.CSVOutput()
     outputs.append(csv)
 
-if conf['syslog_output']['enabled'] == 'True':
+if conf['syslog_output']['enabled']:
     syslog = syslog_output.SyslogOutput()
     outputs.append(syslog)
 
-if conf['smtp_output']['enabled'] == 'True':
+if conf['smtp_output']['enabled']:
     smtp = smtp_output.SMTPOutput()
     outputs.append(smtp)
-
-# Do we need to store all pastes, irrespective of Yara rule matches ?
-if conf['pastebin']['store_all'] == 'True':
-    store_all = True
 
 
 def yara_index(rule_path):
@@ -126,6 +123,7 @@ for paste in paste_list_json:
                 rule_match = s[1].lstrip('$')
                 if rule_match not in results:
                     results.append(rule_match)
+            results.append(str(match.rule))
 
         # But a break in here for the base64. Will use it later.
         elif match.rule.startswith('b64'):

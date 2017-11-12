@@ -17,7 +17,8 @@ class ElasticOutput():
         try:
             self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl)
             self.test = True
-        except Exception:
+        except Exception as e:
+            print(e)
             raise Exception('Unable to Connect') from None
 
     def store_paste(self, paste_data):
