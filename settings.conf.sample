@@ -2,7 +2,7 @@
 api_scrape = https://pastebin.com/api_scraping.php
 api_raw = https://pastebin.com/api_scrape_item.php?i=
 paste_limit = 200
-store_all = false
+store_all = False
 
 [elastic_output]
 enabled = True
@@ -24,7 +24,7 @@ enabled = True
 csv_path = logs/csv/
 
 [syslog_output]
-enabled = True
+enabled = False
 host = 192.168.1.1
 port = 514
 
