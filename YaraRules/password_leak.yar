@@ -10,10 +10,9 @@ rule email_list
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        //$email_add1 = /^([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)$/
         $email_add = /\b[\w\.-]+@[\w\.-]+\.\w+\b/
     condition:
-        #email_add > 10
+        #email_add > 20
 
 }
 
@@ -27,6 +26,7 @@ rule password_list
 
     strings:
         $data_format = /\b([@a-zA-Z0-9._-]{5,})(:|\|)(.*)\b/
+
     condition:
         #data_format > 10
 
