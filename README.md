@@ -61,13 +61,13 @@ If you have yara errors check the installed version numbers for yara and yara-py
 ### This little app
 git clone https://github.com/kevthehermit/pastehunter
 
-# Configure
+## Configure
 
 copy settings.conf.sample to settings.conf
 populate the details.
 For the scraping API you need to whitelist your IP on pastebin. No API key is required. See the link above
 
-# Running
+## Running
 
 This needs python 3 as per the prereqs. 
 You can run it on its own with ```python3 pastehunter.py```

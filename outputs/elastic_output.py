@@ -2,6 +2,7 @@ from elasticsearch import Elasticsearch
 from common import parse_config
 
 config = parse_config()
+import logging
 
 
 class ElasticOutput():
@@ -25,7 +26,12 @@ class ElasticOutput():
         if self.test:
             index_name = self.es_index
             # Consider adding date to the index
-            self.es.index(index=index_name, doc_type='paste', id=paste_data['key'], body=paste_data)
-            print("Stored Paste {0}, Matched Rule {1}".format(paste_data['key'], paste_data['YaraRule']))
+            # ToDo: With multiple paste sites a pasteid collision is more likly!
+            self.es.index(index=index_name, doc_type='paste', id=paste_data['pasteid'], body=paste_data)
+            logging.info("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
+                                                                         paste_data['pasteid'],
+                                                                         paste_data['YaraRule']
+                                                                         )
+                         )
         else:
-            print("Elastic Search Enabled, not configured!")
+            logging.error("Elastic Search Enabled, not configured!")
