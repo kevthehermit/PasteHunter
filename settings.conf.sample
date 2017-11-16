@@ -38,3 +38,4 @@ password =
 
 [yara]
 rule_path = YaraRules
+blacklist = True

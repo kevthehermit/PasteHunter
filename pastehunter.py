@@ -18,6 +18,7 @@ paste_limit = conf['pastebin']['paste_limit']
 api_scrape = conf['pastebin']['api_scrape']
 api_raw = conf['pastebin']['api_raw']
 rule_path = conf['yara']['rule_path']
+blacklist = conf['yara']['blacklist']
 store_all = conf['pastebin']['store_all']
 
 print("Configure Outputs")
@@ -80,7 +81,10 @@ except Exception as e:
 print("Processing Results")
 # Iterate the results
 store_count = 0
+skipped_count = 0
+blacklist_count = 0
 paste_ids = ''
+
 # Get paste ids from last round
 if os.path.exists('paste_history.tmp'):
     with open('paste_history.tmp', 'r')as old:
@@ -92,7 +96,7 @@ for paste in paste_list_json:
     # Track paste ids to prevent dupes
     paste_ids += '{0},'.format(paste['key'])
     if paste['key'] in old_pastes:
-        print("Already Processed, Skipping")
+        skipped_count += 1
         continue
 
     # Create a new paste dict for us to modify
@@ -133,6 +137,13 @@ for paste in paste_list_json:
         else:
             results.append(match.rule)
 
+    # Blacklist Check
+    # If any of the blacklist rules appear then empty the result set
+    if blacklist and 'blacklist' in results:
+        results = []
+        print("Blacklisted paste {0}".format(paste['key']))
+        blacklist_count += 0
+
     # If we have a result add some meta data and send to storage
     # If results is empty, ie no match, and store_all is True,
     # then append "no_match" to results. This will then force output.
@@ -142,6 +153,7 @@ for paste in paste_list_json:
             results.append('no_match')
 
     if len(results) > 0:
+
         encoded_paste_data = raw_paste_data.encode('utf-8')
         md5 = hashlib.md5(encoded_paste_data).hexdigest()
         sha256 = hashlib.sha256(encoded_paste_data).hexdigest()
@@ -153,7 +165,9 @@ for paste in paste_list_json:
             output.store_paste(paste_data)
         store_count += 1
 
-print("Saved {0} Pastes".format(store_count))
+print("\n\nSaved {0} Pastes".format(store_count))
+print("Skipped {0} Pastes".format(skipped_count))
+print("Blacklisted {0} Pastes\n\n".format(blacklist_count))
 # Store paste ids for next check
 with open('paste_history.tmp', 'w')as old:
     old.write(paste_ids)
