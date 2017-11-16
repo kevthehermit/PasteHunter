@@ -9,10 +9,11 @@ class SyslogOutput():
         host = config['syslog_output']['host']
         port = int(config['syslog_output']['port'])
 
-        syslog_line = '{0} "{1}" "{2}" "{3}"'.format(paste_data['@timestamp'],
-                                            paste_data['key'],
-                                            paste_data['YaraRule'],
-                                            paste_data['scrape_url'])
+        syslog_line = '"{0}" "{1}" "{2}" "{3}" "{4}"'.format(paste_data['@timestamp'],
+                                                paste_data['pasteid'],
+                                                paste_data['YaraRule'],
+                                                paste_data['scrape_url'],
+                                                paste_data['pastesite'])
         syslog = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         syslog.connect((host, port))
         syslog.send(syslog_line.encode('utf-8'))
