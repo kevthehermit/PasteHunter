@@ -41,6 +41,24 @@ Get a single gist
 
 GET /gists/:id
 
+example code
+
+
+# Create a token - https://github.com/settings/tokens  Needs only Gist
+
+token = ''
+
+from octohub.connection import Connection
+
+conn = Connection(token)
+uri = '/repos/turnkeylinux/tracker/issues'
+
+uri = '/gists/public'
+
+response = conn.send('GET', uri, params={})
+for gist in response.parsed:
+    print(gist)
+
 
 
 
