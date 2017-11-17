@@ -191,7 +191,7 @@ if __name__ == "__main__":
             q.join()
 
             # Slow it down a little
-            logging.info("Sleeping for 30")
+            logging.info("Sleeping for 10 Seconds")
             sleep(10)
 
     except KeyboardInterrupt:
