@@ -1,5 +1,5 @@
 [inputs]
-inputs = pastebin,dumpz
+inputs = pastebin,dumpz,gists
 
 [pastebin]
 api_scrape = https://pastebin.com/api_scraping.php
@@ -11,6 +11,10 @@ store_all = false
 api_scrape = https://dumpz.org/api/recent
 api_raw = https://dumpz.org/api/dump/
 paste_limit = 200
+
+[gists]
+api_token =
+api_limit = 200
 
 [elastic_output]
 enabled = True
