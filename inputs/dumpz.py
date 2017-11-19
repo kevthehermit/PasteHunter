@@ -30,7 +30,11 @@ def recent_pastes(conf, input_history):
             paste_data = paste
             paste_data['pasteid'] = paste['id']
             paste_data['pastesite'] = 'dumpz.org'
-            paste_data['scrape_url'] = '{0}{1}'.format(conf['dumpz']['api_raw'], paste['id'])
+
+            #paste_data['scrape_url'] = '{0}{1}'.format(conf['dumpz']['api_raw'], paste['id'])
+
+            paste_data['scrape_url'] = 'https://dumpz.org/{0}/text/'.format(paste['id'])
+
             # Add a date field that kibana will map
             paste_data['@timestamp'] = paste_data['date']
             paste_list.append(paste_data)
