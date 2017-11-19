@@ -17,8 +17,9 @@ import logging
 lock = threading.Lock()
 
 # Set some logging options
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format='%(levelname)s:%(filename)s:%(message)s', level=logging.INFO)
 logging.getLogger('requests').setLevel(logging.ERROR)
+logging.getLogger('elasticsearch').setLevel(logging.ERROR)
 
 logging.info("Reading Configs")
 # Parse the config file

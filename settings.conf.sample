@@ -14,7 +14,7 @@ paste_limit = 200
 
 [gists]
 api_token =
-api_limit = 200
+api_limit = 100
 
 [elastic_output]
 enabled = True

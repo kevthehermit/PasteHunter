@@ -1,9 +1,9 @@
 import requests
 import math
 import logging
+from datetime import datetime
 
 # Set some logging options
-logging.basicConfig(level=logging.INFO)
 logging.getLogger('requests').setLevel(logging.ERROR)
 
 api_uri = 'https://api.github.com/gists/public'
@@ -32,7 +32,10 @@ def recent_pastes(conf, input_history):
             req = requests.get(url, headers=headers)
             # Check some headers
             logging.info("Remainig Limit: {0}".format(req.headers['X-RateLimit-Remaining']))
-            logging.info("Limit Reset: {0}".format(req.headers['X-RateLimit-Reset']))
+
+            reset_date = datetime.utcfromtimestamp(float(req.headers['X-RateLimit-Reset'])).isoformat()
+
+            logging.info("Limit Reset: {0}".format(reset_date))
 
             if req.status_code == 200:
                 result_pages.append(req.json())
