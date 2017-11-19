@@ -1,66 +1,69 @@
-# ToDo:
-'''
-Just some notes for reference while i have them
+import requests
+import math
+import logging
 
-https://developer.github.com/v3/rate_limit/
-GET /rate_limit # Doesnt count against your rate limit
+# Set some logging options
+logging.basicConfig(level=logging.INFO)
+logging.getLogger('requests').setLevel(logging.ERROR)
 
-{
-  "resources": {
-    "core": {
-      "limit": 5000,
-      "remaining": 4999,
-      "reset": 1372700873
-    },
-    "search": {
-      "limit": 30,
-      "remaining": 18,
-      "reset": 1372697452
-    }
-  },
-  "rate": {
-    "limit": 5000,
-    "remaining": 4999,
-    "reset": 1372700873
-  }
-}
+api_uri = 'https://api.github.com/gists/public'
+api_version = 'application/vnd.github.v3+json'  # Set Accept header to force api v3
 
 
-https://developer.github.com/v3/gists/#list-all-public-gists
+def recent_pastes(conf, input_history):
+    oauth_token = conf['gists']['api_token']
+    gist_limit = int(conf['gists']['api_limit'])
+    headers = {'user-agent': 'PasteHunter',
+               'Accept': api_version,
+               'Authorization': 'token {0}'.format(oauth_token)}
 
+    # calculate number of pages
+    page_count = math.ceil(gist_limit / 100)
 
-GET /gists/public
+    result_pages = []
+    history = []
+    paste_list = []
 
-Github API only returns 1Mb of data per gist. look for "truncated"
-You will need to get the raw_gist to get full file. If its over 10Mb you need to clone the gist.
+    try:
+        # Get the required amount of entries via pagination
+        for page_num in range(1, page_count + 1):
+            url = '{0}?page={1}&per_page=100'.format(api_uri, page_num)
+            logging.info("Fetching page: {0}".format(page_num))
+            req = requests.get(url, headers=headers)
+            # Check some headers
+            logging.info("Remainig Limit: {0}".format(req.headers['X-RateLimit-Remaining']))
+            logging.info("Limit Reset: {0}".format(req.headers['X-RateLimit-Reset']))
 
-Each gist can hold multiple files
+            if req.status_code == 200:
+                result_pages.append(req.json())
 
+            if req.status_code == 401:
+                logging.error("Auth Failed")
 
-Get a single gist
+            elif req.status_code == 403:
+                logging.error("Login Attempts Exceeded")
 
-GET /gists/:id
+        # Parse results
 
-example code
+        for page in result_pages:
+            for gist_meta in page:
+                # Track paste ids to prevent dupes
+                history.append(gist_meta['id'])
+                if gist_meta['id'] in input_history:
+                    continue
 
+                for file_name, file_meta in gist_meta['files'].items():
+                    gist_data = file_meta
+                    gist_data['@timestamp'] = gist_meta['created_at']
+                    gist_data['pasteid'] = gist_meta['id']
+                    gist_data['pastesite'] = 'gist.github.com'
+                    gist_data['scrape_url'] = file_meta['raw_url']
+                    # remove some origional keys just to keep it a bit cleaner
+                    del gist_data['raw_url']
+                    paste_list.append(gist_data)
 
-# Create a token - https://github.com/settings/tokens  Needs only Gist
-
-token = ''
-
-from octohub.connection import Connection
-
-conn = Connection(token)
-uri = '/repos/turnkeylinux/tracker/issues'
-
-uri = '/gists/public'
-
-response = conn.send('GET', uri, params={})
-for gist in response.parsed:
-    print(gist)
-
-
-
-
-
-'''
+        # Return results and history
+        return paste_list, history
+    except Exception as e:
+        logging.error("Unable to parse paste results: {0}".format(e))
+        return paste_list, history
