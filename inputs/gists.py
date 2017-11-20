@@ -31,7 +31,7 @@ def recent_pastes(conf, input_history):
             logging.info("Fetching page: {0}".format(page_num))
             req = requests.get(url, headers=headers)
             # Check some headers
-            logging.info("Remainig Limit: {0}".format(req.headers['X-RateLimit-Remaining']))
+            logging.info("Remaining Limit: {0}".format(req.headers['X-RateLimit-Remaining']))
 
             reset_date = datetime.utcfromtimestamp(float(req.headers['X-RateLimit-Reset'])).isoformat()
 
