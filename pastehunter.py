@@ -77,7 +77,7 @@ def paste_scanner():
     # Store the Paste
     while True:
         paste_data = q.get()
-        logging.info("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+        logging.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
         raw_paste_data = requests.get(raw_paste_uri).text
