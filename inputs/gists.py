@@ -68,7 +68,7 @@ def recent_pastes(conf, input_history):
                 for file_name, file_meta in gist_meta['files'].items():
 
                     if file_name in gist_file_blacklist:
-                        logging.info("Blacklisting Paste {0}".format(gist_meta['filename']))
+                        logging.info("Blacklisting Paste {0}".format(file_name))
                         continue
 
                     gist_data = file_meta
