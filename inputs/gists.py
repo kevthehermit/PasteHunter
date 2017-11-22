@@ -9,6 +9,9 @@ logging.getLogger('requests').setLevel(logging.ERROR)
 api_uri = 'https://api.github.com/gists/public'
 api_version = 'application/vnd.github.v3+json'  # Set Accept header to force api v3
 
+# Some people use gists to store large blobs of data every 17 minutes. This just slows down the kibana UI
+
+
 
 def recent_pastes(conf, input_history):
     oauth_token = conf['gists']['api_token']
@@ -23,6 +26,9 @@ def recent_pastes(conf, input_history):
     result_pages = []
     history = []
     paste_list = []
+
+    gist_file_blacklist = conf['gists']['file_blacklist'].split(',')
+    gist_user_blacklist = conf['gists']['user_blacklist'].split(',')
 
     try:
         # Get the required amount of entries via pagination
@@ -55,10 +61,20 @@ def recent_pastes(conf, input_history):
                 if gist_meta['id'] in input_history:
                     continue
 
+                if gist_meta['user'] in gist_user_blacklist:
+                    logging.info("Blacklisting Gist from user: {0}".format(gist_meta['owner']['login']))
+                    continue
+
                 for file_name, file_meta in gist_meta['files'].items():
+
+                    if file_name in gist_file_blacklist:
+                        logging.info("Blacklisting Paste {0}".format(gist_meta['filename']))
+                        continue
+
                     gist_data = file_meta
                     gist_data['@timestamp'] = gist_meta['created_at']
                     gist_data['pasteid'] = gist_meta['id']
+                    gist_data['user'] = gist_meta['user']
                     gist_data['pastesite'] = 'gist.github.com'
                     gist_data['scrape_url'] = file_meta['raw_url']
                     # remove some origional keys just to keep it a bit cleaner
