@@ -15,6 +15,8 @@ paste_limit = 200
 [gists]
 api_token =
 api_limit = 100
+user_blacklist =
+file_blacklist = grahamcofborg-eval-package-list
 
 [elastic_output]
 enabled = True
