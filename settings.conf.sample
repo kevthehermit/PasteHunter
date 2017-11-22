@@ -42,13 +42,19 @@ enabled = False
 host = 192.168.1.1
 port = 514
 
+#
+# Recipient is the email address that will receive the alerts
+# Rule list is a comma separated list of rules that will generate an alert.
+# Alternatively use all
 [smtp_output]
 enabled = False
-server =
-port =
-tls = True
-username =
-password =
+smtp_host =
+smtp_port =
+smtp_tls =
+smtp_user =
+smtp_pass =
+recipient = pastehunter@techanarchy.net
+rule_list = custom_keywords
 
 [yara]
 rule_path = YaraRules
