@@ -103,3 +103,4 @@ ENV/
 /YaraRules/custom_keywords.yar
 /paste_history.tmp
 /settings.json
+/.idea
