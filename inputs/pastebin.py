@@ -5,8 +5,8 @@ from datetime import datetime
 
 def recent_pastes(conf, input_history):
     # populate vars from config
-    paste_limit = conf['pastebin']['paste_limit']
-    api_scrape = conf['pastebin']['api_scrape']
+    paste_limit = conf['inputs']['pastebin']['paste_limit']
+    api_scrape = conf['inputs']['pastebin']['api_scrape']
     history = []
     paste_list = []
     try:

@@ -4,8 +4,8 @@ import logging
 
 def recent_pastes(conf, input_history):
     # populate vars from config
-    paste_limit = conf['dumpz']['paste_limit']
-    api_scrape = conf['dumpz']['api_scrape']
+    paste_limit = conf['inputs']['dumpz']['paste_limit']
+    api_scrape = conf['inputs']['dumpz']['api_scrape']
     history = []
     paste_list = []
     try:

@@ -14,34 +14,33 @@ api_version = 'application/vnd.github.v3+json'  # Set Accept header to force api
 
 
 def recent_pastes(conf, input_history):
-    oauth_token = conf['gists']['api_token']
-    gist_limit = int(conf['gists']['api_limit'])
+    oauth_token = conf['inputs']['gists']['api_token']
+    gist_limit = conf['inputs']['gists']['api_limit']
     headers = {'user-agent': 'PasteHunter',
                'Accept': api_version,
                'Authorization': 'token {0}'.format(oauth_token)}
 
     # calculate number of pages
-    page_count = math.ceil(gist_limit / 100)
+    page_count = int(math.ceil(gist_limit / 100))
 
     result_pages = []
     history = []
     paste_list = []
 
-    gist_file_blacklist = conf['gists']['file_blacklist'].split(',')
-    gist_user_blacklist = conf['gists']['user_blacklist'].split(',')
+    gist_file_blacklist = conf['inputs']['gists']['file_blacklist']
+    gist_user_blacklist = conf['inputs']['gists']['user_blacklist']
 
     try:
         # Get the required amount of entries via pagination
         for page_num in range(1, page_count + 1):
             url = '{0}?page={1}&per_page=100'.format(api_uri, page_num)
-            logging.info("Fetching page: {0}".format(page_num))
+            logging.debug("Fetching page: {0}".format(page_num))
             req = requests.get(url, headers=headers)
             # Check some headers
-            logging.info("Remaining Limit: {0}".format(req.headers['X-RateLimit-Remaining']))
-
             reset_date = datetime.utcfromtimestamp(float(req.headers['X-RateLimit-Reset'])).isoformat()
-
-            logging.info("Limit Reset: {0}".format(reset_date))
+            # logging.info("Limit Reset: {0}".format(reset_date))
+            logging.info("Remaining Limit: {0}. Resets at {1}".format(req.headers['X-RateLimit-Remaining'],
+                                                                      reset_date))
 
             if req.status_code == 200:
                 result_pages.append(req.json())

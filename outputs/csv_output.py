@@ -7,7 +7,7 @@ config = parse_config()
 
 class CSVOutput():
     def __init__(self):
-        base_path = config['csv_output']['csv_path']
+        base_path = config['outputs']['csv_output']['output_path']
         # Get todays CSV
         dtg = datetime.date.today().strftime("%Y-%m-%d")
         csv_name = 'pastes_{0}.csv'.format(dtg)

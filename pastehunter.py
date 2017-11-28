@@ -6,13 +6,13 @@ import yara
 import json
 import hashlib
 import requests
-from time import sleep
-from common import parse_config
-from outputs import elastic_output, json_output, csv_output, syslog_output, smtp_output
-from queue import Queue
 import threading
 import importlib
 import logging
+from time import sleep
+from queue import Queue
+from common import parse_config
+from postprocess import postprocess
 
 lock = threading.Lock()
 
@@ -25,40 +25,23 @@ logging.info("Reading Configs")
 # Parse the config file
 conf = parse_config()
 
-# populate vars from config
-api_raw = conf['pastebin']['api_raw']
-rule_path = conf['yara']['rule_path']
-blacklist = conf['yara']['blacklist']
-store_all = conf['pastebin']['store_all']
-input_list = conf['inputs']['inputs']
+logging.info("Configure Inputs")
+input_list = []
+for input_type, input_values in conf["inputs"].items():
+    if input_values["enabled"]:
+        input_list.append(input_values["module"])
+        logging.info("Enabled Input: {0}".format(input_type))
+
 
 logging.info("Configure Outputs")
-# configure outputs
 outputs = []
-if conf['elastic_output']['enabled']:
-    es = elastic_output.ElasticOutput()
-    outputs.append(es)
-    logging.info("Elastic Output Enabled")
-
-if conf['json_output']['enabled']:
-    js = json_output.JsonOutput()
-    outputs.append(js)
-    logging.info("Json Output Enabled")
-
-if conf['csv_output']['enabled']:
-    csv = csv_output.CSVOutput()
-    outputs.append(csv)
-    logging.info("CSV Output Enabled")
-
-if conf['syslog_output']['enabled']:
-    syslog = syslog_output.SyslogOutput()
-    outputs.append(syslog)
-    logging.info("Syslog Output Enabled")
-
-if conf['smtp_output']['enabled']:
-    smtp = smtp_output.SMTPOutput()
-    outputs.append(smtp)
-    logging.info("SMTP Output Enabled")
+for output_type, output_values in conf["outputs"].items():
+    if output_values["enabled"]:
+        logging.info("Enabled Output: {0}".format(output_type))
+        _module = importlib.import_module(output_values["module"])
+        _class = getattr(_module, output_values["classname"])
+        instance = _class()
+        outputs.append(instance)
 
 
 def yara_index(rule_path):
@@ -110,14 +93,19 @@ def paste_scanner():
 
         # Blacklist Check
         # If any of the blacklist rules appear then empty the result set
-        if blacklist and 'blacklist' in results:
+        if conf['yara']['blacklist'] and 'blacklist' in results:
             results = []
             logging.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+
+        # Post Process
+        new_output = postprocess.run(results, paste_data)
 
         # If we have a result add some meta data and send to storage
         # If results is empty, ie no match, and store_all is True,
         # then append "no_match" to results. This will then force output.
 
+        #ToDo: Need to make this check for each output not universal
+        store_all = conf['inputs']['pastebin']['store_all']
         if store_all is True:
             if len(results) == 0:
                 results.append('no_match')
@@ -142,9 +130,9 @@ if __name__ == "__main__":
     logging.info("Compile Yara Rules")
     try:
         # Update the yara rules index
-        yara_index(rule_path)
+        yara_index(conf['yara']['rule_path'])
         # Compile the yara rules we will use to match pastes
-        index_file = os.path.join(rule_path, 'index.yar')
+        index_file = os.path.join(conf['yara']['rule_path'], 'index.yar')
         rules = yara.compile(index_file)
     except Exception as e:
         print("Unable to Create Yara index: ", e)
@@ -170,20 +158,21 @@ if __name__ == "__main__":
             else:
                 paste_history = {}
 
-            for input_name in input_list.split(','):
+            for input_name in input_list:
                 if input_name in paste_history:
                     input_history = paste_history[input_name]
                 else:
                     input_history = []
 
-                import_name = 'inputs.{0}'.format(input_name)
-                i = importlib.import_module(import_name)
+                i = importlib.import_module(input_name)
                 # Get list of recent pastes
+                logging.info("Fetching paste list from {0}".format(input_name))
                 paste_list, history = i.recent_pastes(conf, input_history)
                 for paste in paste_list:
                     q.put(paste)
                 paste_history[input_name] = history
 
+            logging.debug("Writing History")
             # Write History
             with open('paste_history.tmp', 'w') as outfile:
                 json.dump(paste_history, outfile)

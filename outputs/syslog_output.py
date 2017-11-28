@@ -6,8 +6,8 @@ config = parse_config()
 class SyslogOutput():
 
     def store_paste(self, paste_data):
-        host = config['syslog_output']['host']
-        port = int(config['syslog_output']['port'])
+        host = config['outputs']['syslog_output']['host']
+        port = config['outputs']['syslog_output']['port']
 
         syslog_line = '"{0}" "{1}" "{2}" "{3}" "{4}"'.format(paste_data['@timestamp'],
                                                 paste_data['pasteid'],
