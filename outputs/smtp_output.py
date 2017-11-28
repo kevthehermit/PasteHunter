@@ -14,13 +14,13 @@ config = parse_config()
 
 class SMTPOutput():
     def __init__(self):
-        self.smtp_host = config['smtp_output']['smtp_host']
-        self.smtp_port = int(config['smtp_output']['smtp_port'])
-        self.smtp_tls = config['smtp_output']['smtp_tls']
-        self.smtp_user = config['smtp_output']['smtp_user']
-        self.smtp_pass = config['smtp_output']['smtp_pass']
-        self.recipient = config['smtp_output']['recipient']
-        self.alert_list = config['smtp_output']['rule_list'].split(',')
+        self.smtp_host = config['outputs']['smtp_output']['smtp_host']
+        self.smtp_port = config['outputs']['smtp_output']['smtp_port']
+        self.smtp_tls = config['outputs']['smtp_output']['smtp_tls']
+        self.smtp_user = config['outputs']['smtp_output']['smtp_user']
+        self.smtp_pass = config['outputs']['smtp_output']['smtp_pass']
+        self.recipient = config['outputs']['smtp_output']['recipient']
+        self.alert_list = config['outputs']['smtp_output']['rule_list']
 
     def store_paste(self, paste_data):
 

@@ -8,12 +8,12 @@ import logging
 class ElasticOutput():
     def __init__(self):
         # Set up the database connection
-        es_host = config['elastic_output']['elastic_host']
-        es_port = config['elastic_output']['elastic_port']
-        es_user = config['elastic_output']['elastic_user']
-        es_pass = config['elastic_output']['elastic_pass']
-        self.es_index = config['elastic_output']['elastic_index']
-        es_ssl = config['elastic_output']['elastic_ssl']
+        es_host = config['outputs']['elastic_output']['elastic_host']
+        es_port = config['outputs']['elastic_output']['elastic_port']
+        es_user = config['outputs']['elastic_output']['elastic_user']
+        es_pass = config['outputs']['elastic_output']['elastic_pass']
+        self.es_index = config['outputs']['elastic_output']['elastic_index']
+        es_ssl = config['outputs']['elastic_output']['elastic_ssl']
         self.test = False
         try:
             self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl)
