@@ -12,7 +12,7 @@ import logging
 from time import sleep
 from queue import Queue
 from common import parse_config
-from postprocess import postprocess
+from postprocess import post_email
 
 lock = threading.Lock()
 
@@ -98,7 +98,22 @@ def paste_scanner():
             logging.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
 
         # Post Process
-        new_output = postprocess.run(results, paste_data)
+
+        # If post module is enabled and the paste has a matching rule.
+        post_results = paste_data
+        for post_process, post_values in conf["post_process"].items():
+            if post_values["enabled"]:
+                if any(i in results for i in post_values["rule_list"]):
+                    logging.info("Running Post Module on {0}".format(paste_data["pasteid"]))
+                    post_module = importlib.import_module(post_values["module"])
+                    post_results = post_module.run(results,
+                                                   raw_paste_data,
+                                                   paste_data
+                                                   )
+
+        # Throw everything back to paste_data for ease.
+        paste_data = post_results
+
 
         # If we have a result add some meta data and send to storage
         # If results is empty, ie no match, and store_all is True,
