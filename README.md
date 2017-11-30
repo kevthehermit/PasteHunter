@@ -3,7 +3,7 @@ PasteHunter is a python3 application that is designed to query a collection of s
 For all the pasts it finds it scans the raw contents against a series of yara rules looking for information that can be used 
 by an org or a researcher.
 
-## Supported Sites
+## Supported Inputs
 Pastehunter currently has support for the following sites:
  - pastebin.com
  - dumpz.org
@@ -12,8 +12,15 @@ Pastehunter currently has support for the following sites:
 Support for the following sites is listed as ToDo:
  - paste.ee
 
+## Supported Outputs
 
-# Installation
+## PostProcess Modules
+Pastehunter comes with a couple of post process modules that extact useful data from pastes or pass them to other services
+The following are default modules:
+
+ - Emails
+ - 
+
 
 ## PreReqs
 

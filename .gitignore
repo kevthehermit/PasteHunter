@@ -104,3 +104,4 @@ ENV/
 /paste_history.tmp
 /settings.json
 /.idea
+/postprocess/tester.py
