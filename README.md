@@ -41,9 +41,6 @@ https://www.elastic.co/guide/en/kibana/current/deb.html
 ### Yara
 https://yara.readthedocs.io/en/v3.6.0/gettingstarted.html#compiling-and-installing-yara
 
-Don't forget the python bindings
-```pip3 install yara-python```
-
 If you have yara errors check the installed version numbers for yara and yara-python match the lastest versions.
 
 ### PasteHunter
