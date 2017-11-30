@@ -32,11 +32,6 @@ YOU DO NOT NEED TO GIVE IT ANY ACCESS PERMISSIONS
 
 ## Local install 
 
-### Python / Deps
-Python 3
-```pip3 install -r requirements.txt```
-
-
 ### Elastic Search
 https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
 
@@ -53,6 +48,10 @@ If you have yara errors check the installed version numbers for yara and yara-py
 
 ### PasteHunter
 git clone https://github.com/kevthehermit/pastehunter
+
+### Python / Deps
+Python 3
+```pip3 install -r requirements.txt```
 
 ## Using Docker
 
@@ -89,6 +88,8 @@ Docker-compose will use already running instances of Elasticsearch and Kibana
 copy settings.conf.sample to settings.conf
 populate the details.
 For the scraping API you need to whitelist your IP on pastebin. No API key is required. See the link above
+
+
 
 # Running
 
