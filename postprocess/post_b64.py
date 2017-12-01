@@ -13,61 +13,69 @@ conf = parse_config()
 def run(results, raw_paste_data, paste_object):
     # Figure out which b64 rule fire
 
-    # The base64 re can hang on occasion with this one
-    # b64_re = '(?:[A-Za-z0-9+/]{4}){2,}(?:[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/][AQgw]==)'
+    '''
+    ToDo: This needs a lot of work to correctly parse a full exe file from middle of content
+    ToDo: For now going back to @0 in the yara rule
 
-    # This one has a few empty results i need to catch but doesn't kill pastehunter
+    The base64 re can hang on occasion with this one
+    b64_re = '(?:[A-Za-z0-9+/]{4}){2,}(?:[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/][AQgw]==)'
+
+    This one has a few empty results i need to catch but doesn't kill pastehunter
     b64_re = '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
+
     b64_strings = re.findall(b64_re, raw_paste_data)
+
 
 
     # Set a counter for multiple streams.
     counter = 0
     for b64_str in b64_strings:
+        logging.info(b64_str[:10])
         for rule in results:
             if len(b64_str) > 0:
-                if rule == 'b64_gzip':
-                    # Lets try to decode and get a file listing.
-                    # Also get the MD5 of the decoded file
+    '''
+
+    b64_str = raw_paste_data
+
+    for rule in results:
+        if rule == 'b64_gzip':
+            # Lets try to decode and get a file listing.
+            # Also get the MD5 of the decoded file
+            try:
+                uncompressed = gzip.decompress(b64decode(b64_str))
+                try:
+                    encoded_paste_data = uncompressed.encode('utf-8')
+                    paste_object["decompressed_stream"] = encoded_paste_data
+                except:
+                    logging.error("Unable to store data")
+            except Exception as e:
+                logging.error("Unable to decompress gzip stream")
+        if rule == 'b64_exe':
+            try:
+                raw_exe = b64decode(raw_paste_data)
+                paste_object["exe_size"] = len(raw_exe)
+                paste_object["exe_md5"] = hashlib.md5(raw_exe).hexdigest()
+                paste_object["exe_sha256"] = hashlib.sha256(raw_exe).hexdigest()
+                paste_object["VT"] = 'https://www.virustotal.com/#/file/{0}'.format(paste_object["exe_md5"])
+
+                # Cuckoo
+                if conf["post_process"]["post_b64"]["cuckoo"]["enabled"]:
+                    logging.info("Submitting to Cuckoo")
                     try:
-                        uncompressed = gzip.decompress(b64decode(b64_str))
-                        try:
-                            encoded_paste_data = uncompressed.encode('utf-8')
-                            paste_object["decompressed_stream"] = encoded_paste_data
-                        except:
-                            logging.error("Unable to store data")
+                        task_id = send_to_cuckoo(raw_exe, paste_object["pasteid"])
+                        paste_object["Cuckoo Task ID"] = task_id
+                        logging.info("exe submitted to Cuckoo with task id {0}".format(task_id))
                     except Exception as e:
-                        logging.error("Unable to decompress gzip stream")
-                if rule == 'b64_exe':
-                    try:
-                        raw_exe = b64decode(b64_str)
-                        paste_object["exe_size"] = len(raw_exe)
-                        paste_object["exe_md5"] = hashlib.md5(raw_exe).hexdigest()
-                        paste_object["exe_sha256"] = hashlib.sha256(raw_exe).hexdigest()
-                        paste_object["VT"] = 'https://www.virustotal.com/#/file/{0}'.format(paste_object["exe_md5"])
+                        logging.error("Unabled to submit sample to cuckoo")
 
-                        # Cuckoo
-                        if conf["post_process"]["post_b64"]["cuckoo"]["enabled"]:
-                            logging.info("Submitting to Cuckoo")
-                            try:
-                                task_id = send_to_cuckoo(raw_exe, paste_object["pasteid"])
-                                paste_object["Cuckoo Task ID"] = task_id
-                                logging.info("exe submitted to Cuckoo with task id {0}".format(task_id))
-                            except Exception as e:
-                                logging.error("Unabled to submit sample to cuckoo")
+                # Viper
+                if conf["post_process"]["post_b64"]["viper"]["enabled"]:
+                    send_to_cuckoo(raw_exe, paste_object["pasteid"])
 
-                        # Viper
-                        if conf["post_process"]["post_b64"]["viper"]["enabled"]:
-                            send_to_cuckoo(raw_exe, paste_object["pasteid"])
+            except Exception as e:
+                logging.error("Unable to decode exe file")
 
-                    except Exception as e:
-                        logging.error("Unable to decode exe file")
 
-        # Increase the counter
-        counter += 1
-
-    # Get unique domain count
-    # Update the json
 
     # Send the updated json back
     return paste_object
