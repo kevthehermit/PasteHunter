@@ -11,6 +11,12 @@ conf = parse_config()
 
 
 def run(results, raw_paste_data, paste_object):
+
+    '''
+
+    ToDo: Lets look at multiple base64 streams
+    for now only accept if the entire paste is
+
     # Figure out which b64 rule fire
 
     # The base64 re can hang on occasion with this one
@@ -24,47 +30,48 @@ def run(results, raw_paste_data, paste_object):
     # Set a counter for multiple streams.
     counter = 0
     for b64_str in b64_strings:
-        for rule in results:
-            if len(b64_str) > 0:
-                if rule == 'b64_gzip':
-                    # Lets try to decode and get a file listing.
-                    # Also get the MD5 of the decoded file
-                    try:
-                        uncompressed = gzip.decompress(b64decode(b64_str))
-                        paste_object["decompressed_stream"] = uncompressed
-                    except Exception as e:
-                        logging.error("Unable to decompress gzip stream")
-                if rule == 'b64_exe':
-                    try:
-                        raw_exe = b64decode(b64_str)
-                        paste_object["exe_size"] = len(raw_exe)
-                        paste_object["exe_md5"] = hashlib.md5(raw_exe).hexdigest()
-                        paste_object["exe_sha256"] = hashlib.sha256(raw_exe).hexdigest()
 
-                        # We are guessing that the sample has been submitted, and crafting a URL
-                        paste_object["VT"] = 'https://www.virustotal.com/#/file/{0}'.format(paste_object["exe_md5"])
+    '''
 
-                        # Cuckoo
-                        if conf["post_process"]["post_b64"]["cuckoo"]["enabled"]:
-                            logging.info("Submitting to Cuckoo")
-                            try:
-                                task_id = send_to_cuckoo(raw_exe, paste_object["pasteid"])
-                                paste_object["Cuckoo Task ID"] = task_id
-                                logging.info("exe submitted to Cuckoo with task id {0}".format(task_id))
-                            except Exception as e:
-                                logging.error("Unabled to submit sample to cuckoo")
+    for rule in results:
+        if len(raw_paste_data) > 0:
+            if rule == 'b64_gzip':
+                # Lets try to decode and get a file listing.
+                # Also get the MD5 of the decoded file
+                try:
+                    uncompressed = gzip.decompress(b64decode(raw_paste_data))
+                    paste_object["decompressed_stream"] = uncompressed
+                except Exception as e:
+                    logging.error("Unable to decompress gzip stream")
+            if rule == 'b64_exe':
+                try:
+                    raw_exe = b64decode(raw_paste_data)
+                    paste_object["exe_size"] = len(raw_exe)
+                    paste_object["exe_md5"] = hashlib.md5(raw_exe).hexdigest()
+                    paste_object["exe_sha256"] = hashlib.sha256(raw_exe).hexdigest()
 
-                        # Viper
-                        if conf["post_process"]["post_b64"]["viper"]["enabled"]:
-                            send_to_cuckoo(raw_exe, paste_object["pasteid"])
+                    # We are guessing that the sample has been submitted, and crafting a URL
+                    paste_object["VT"] = 'https://www.virustotal.com/#/file/{0}'.format(paste_object["exe_md5"])
 
-                        # VirusTotal
+                    # Cuckoo
+                    if conf["post_process"]["post_b64"]["cuckoo"]["enabled"]:
+                        logging.info("Submitting to Cuckoo")
+                        try:
+                            task_id = send_to_cuckoo(raw_exe, paste_object["pasteid"])
+                            paste_object["Cuckoo Task ID"] = task_id
+                            logging.info("exe submitted to Cuckoo with task id {0}".format(task_id))
+                        except Exception as e:
+                            logging.error("Unabled to submit sample to cuckoo")
 
-                    except Exception as e:
-                        logging.error("Unable to decode exe file")
+                    # Viper
+                    if conf["post_process"]["post_b64"]["viper"]["enabled"]:
+                        send_to_cuckoo(raw_exe, paste_object["pasteid"])
 
-        # Increase the counter
-        counter += 1
+                    # VirusTotal
+
+                except Exception as e:
+                    logging.error("Unable to decode exe file")
+
 
     # Get unique domain count
     # Update the json
