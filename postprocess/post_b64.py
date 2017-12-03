@@ -40,6 +40,8 @@ def run(results, raw_paste_data, paste_object):
                         paste_object["exe_size"] = len(raw_exe)
                         paste_object["exe_md5"] = hashlib.md5(raw_exe).hexdigest()
                         paste_object["exe_sha256"] = hashlib.sha256(raw_exe).hexdigest()
+
+                        # We are guessing that the sample has been submitted, and crafting a URL
                         paste_object["VT"] = 'https://www.virustotal.com/#/file/{0}'.format(paste_object["exe_md5"])
 
                         # Cuckoo
@@ -55,6 +57,8 @@ def run(results, raw_paste_data, paste_object):
                         # Viper
                         if conf["post_process"]["post_b64"]["viper"]["enabled"]:
                             send_to_cuckoo(raw_exe, paste_object["pasteid"])
+
+                        # VirusTotal
 
                     except Exception as e:
                         logging.error("Unable to decode exe file")
