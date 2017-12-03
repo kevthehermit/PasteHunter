@@ -154,4 +154,3 @@ rule b64_xml_doc
         $b64_xml at 0 and 3 of ($docx*)
 
 }
-PD94bWwg
