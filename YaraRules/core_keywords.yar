@@ -32,12 +32,12 @@ rule dox
 
     strings:
         $dox = "DOX" wide ascii nocase fullword
-        $keywords1 = "name" wide ascii nocase
+        $keyword1 = "name" wide ascii nocase
         $keyword2 = "dob" wide ascii nocase
         $keyword3 = "age" wide ascii nocase
         $keyword4 = "password" wide ascii nocase
         $keyword5 = "email" wide ascii nocase
     condition:
-        $dox and 3 of ($keywords*)
+        $dox and 3 of ($keyword*)
 
 }
