@@ -10,7 +10,8 @@ rule b64_exe
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $b64_exe = /TV(oA|pB|pQ|qA|qQ|ro)/
+        $b64_exe = /\bTV(oA|pB|pQ|qA|qQ|ro)/
+        // Double b64 = VFZxUU
     condition:
         $b64_exe
 
