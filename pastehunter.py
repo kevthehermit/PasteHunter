@@ -71,6 +71,7 @@ def paste_scanner():
             matches = rules.match(data=raw_paste_data)
         except Exception as e:
             logging.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+            q.task_done()
             continue
 
         results = []
@@ -135,7 +136,10 @@ def paste_scanner():
             paste_data['raw_paste'] = raw_paste_data
             paste_data['YaraRule'] = results
             for output in outputs:
-                output.store_paste(paste_data)
+                try:
+                    output.store_paste(paste_data)
+                except Exception as e:
+                    logging.error("Unable to store {0}".format(paste_data["pasteid"]))
 
         # Mark Tasks as complete
         q.task_done()
