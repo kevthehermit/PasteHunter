@@ -16,10 +16,28 @@ rule core_keywords
         $enable_pass = "enable password" wide ascii nocase
         $ssh_priv = "BEGIN RSA PRIVATE KEY" wide ascii nocase
         $pgp_priv = "BEGIN PGP PRIVATE KEY" wide ascii nocase
-        $DOX = " DOX" wide ascii nocase
         $hacked = "hacked by" wide ascii nocase
         $onion_url = /.*.\.onion/
     condition:
         any of them
+
+}
+
+rule dox
+{
+    meta:
+        author = "@KevTheHermit"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $dox = "DOX" wide ascii nocase fullword
+        $keyword1 = "name" wide ascii nocase
+        $keyword2 = "dob" wide ascii nocase
+        $keyword3 = "age" wide ascii nocase
+        $keyword4 = "password" wide ascii nocase
+        $keyword5 = "email" wide ascii nocase
+    condition:
+        $dox and 3 of ($keyword*)
 
 }
