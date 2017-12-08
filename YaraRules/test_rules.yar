@@ -25,15 +25,42 @@ rule test_vbscript
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $a1 = "Function" nocase wide ascii fullword
-        $a2 = "CreateObject" nocase wide ascii fullword
-        $a3  = "Wscript" nocase wide ascii fullword
-        $a4 = "As Long" nocase wide ascii fullword
-        $a5 = "run" nocase wide ascii fullword
-        $b1 = "NtAllocateVirtualMemory" nocase wide ascii fullword
-        $b2 = "NtWriteVirtualMemory" nocase wide ascii fullword
+        $a = "Function" nocase wide ascii fullword
+        $b = "CreateObject" nocase wide ascii fullword
+        $c  = "Wscript" nocase wide ascii fullword
+        $d = "As Long" nocase wide ascii fullword
+        $e = "run" nocase wide ascii fullword
+        $f = "for each" nocase wide ascii fullword
+        $g = "end function" nocase wide ascii fullword
+        $h = "NtAllocateVirtualMemory" nocase wide ascii fullword
+        $i = "NtWriteVirtualMemory" nocase wide ascii fullword
 
 
     condition:
-        3 of them
+        5 of them
+}
+
+rule test_autoit
+{
+    meta:
+        author = "kevthehermit"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $tray = "NoTrayIcon" nocase wide ascii fullword
+        $a = "iniread" nocase wide ascii fullword
+        $b = "fileinstall" nocase wide ascii fullword
+        $c  = "EndFunc" nocase wide ascii fullword
+        $d = "FileRead" nocase wide ascii fullword
+        $e = "DllStructSetData" nocase wide ascii fullword
+        $f = "Global Const" nocase wide ascii fullword
+        $g = "Run(@AutoItExe" nocase wide ascii fullword
+        $h = "StringReplace" nocase wide ascii fullword
+        $i = "filewrite" nocase wide ascii fullword
+
+
+
+    condition:
+        ($tray and 3 of them) or (5 of them)
 }
