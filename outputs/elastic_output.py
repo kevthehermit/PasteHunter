@@ -1,8 +1,9 @@
 from elasticsearch import Elasticsearch
 from common import parse_config
+from datetime import datetime
+import logging
 
 config = parse_config()
-import logging
 
 
 class ElasticOutput():
@@ -13,6 +14,7 @@ class ElasticOutput():
         es_user = config['outputs']['elastic_output']['elastic_user']
         es_pass = config['outputs']['elastic_output']['elastic_pass']
         self.es_index = config['outputs']['elastic_output']['elastic_index']
+        self.weekly = config['outputs']['elastic_output']['weekly-index']
         es_ssl = config['outputs']['elastic_output']['elastic_ssl']
         self.test = False
         try:
@@ -25,7 +27,9 @@ class ElasticOutput():
     def store_paste(self, paste_data):
         if self.test:
             index_name = self.es_index
-            # Consider adding date to the index
+            if self.weekly:
+                week_number = datetime.date(datetime.now()).isocalendar()[1]
+                index_name = '{0}-{1}'.format(index_name, week_number)
             # ToDo: With multiple paste sites a pasteid collision is more likly!
             self.es.index(index=index_name, doc_type='paste', id=paste_data['pasteid'], body=paste_data)
             logging.info("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
