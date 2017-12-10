@@ -44,11 +44,21 @@ for output_type, output_values in conf["outputs"].items():
         outputs.append(instance)
 
 
-def yara_index(rule_path):
+def yara_index(rule_path, blacklist, test_rules):
     index_file = os.path.join(rule_path, 'index.yar')
     with open(index_file, 'w') as yar:
         for filename in os.listdir('YaraRules'):
             if filename.endswith('.yar') and filename != 'index.yar':
+                if filename == 'blacklist.yar':
+                    if blacklist:
+                        logging.info("Enable Blacklist Rules")
+                    else:
+                        continue
+                if filename == 'test_rules.yar':
+                    if test_rules:
+                        logging.info("Enable Test Rules")
+                    else:
+                        continue
                 include = 'include "{0}"\n'.format(filename)
                 yar.write(include)
 
@@ -149,7 +159,10 @@ if __name__ == "__main__":
     logging.info("Compile Yara Rules")
     try:
         # Update the yara rules index
-        yara_index(conf['yara']['rule_path'])
+        yara_index(conf['yara']['rule_path'],
+                   conf['yara']['blacklist'],
+                   conf['yara']['test_rules'])
+
         # Compile the yara rules we will use to match pastes
         index_file = os.path.join(conf['yara']['rule_path'], 'index.yar')
         rules = yara.compile(index_file)
