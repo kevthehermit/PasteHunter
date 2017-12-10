@@ -19,8 +19,9 @@ Pastehunter comes with a couple of post process modules that extact useful data 
 The following are default modules:
 
  - Emails
- - 
-
+ - Base64 Decoders
+   - Cuckoo
+   - Viper
 
 ## PreReqs
 
