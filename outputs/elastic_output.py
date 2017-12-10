@@ -14,7 +14,7 @@ class ElasticOutput():
         es_user = config['outputs']['elastic_output']['elastic_user']
         es_pass = config['outputs']['elastic_output']['elastic_pass']
         self.es_index = config['outputs']['elastic_output']['elastic_index']
-        self.weekly = config['outputs']['elastic_output']['weekly-index']
+        self.weekly = config['outputs']['elastic_output']['weekly_index']
         es_ssl = config['outputs']['elastic_output']['elastic_ssl']
         self.test = False
         try:
