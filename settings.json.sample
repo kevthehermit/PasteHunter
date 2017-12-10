@@ -75,7 +75,8 @@
   },
   "yara": {
     "rule_path": "YaraRules",
-    "blacklist": true
+    "blacklist": true,
+    "test_rules": false
   },
   "post_process": {
     "post_email": {
