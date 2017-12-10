@@ -40,7 +40,8 @@ def run(results, raw_paste_data, paste_object):
                 # Also get the MD5 of the decoded file
                 try:
                     uncompressed = gzip.decompress(b64decode(raw_paste_data))
-                    paste_object["decompressed_stream"] = uncompressed
+                    encoded = uncompressed.encode('utf-8')
+                    paste_object["decompressed_stream"] = encoded
                 except Exception as e:
                     logging.error("Unable to decompress gzip stream")
             if rule == 'b64_exe':
