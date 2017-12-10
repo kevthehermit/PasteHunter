@@ -101,3 +101,7 @@ ENV/
 .mypy_cache/
 /settings.conf
 /YaraRules/custom_keywords.yar
+/paste_history.tmp
+/settings.json
+/.idea
+/postprocess/tester.py

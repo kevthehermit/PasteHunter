@@ -1,16 +1,62 @@
 # PasteHunter
-Scan pastebin pastes with a collection of yara rules.
+PasteHunter is a python3 application that is designed to query a collection of sites that host publicliy pasted data. 
+For all the pasts it finds it scans the raw contents against a series of yara rules looking for information that can be used 
+by an org or a researcher.
 
-# PreReqs
+## Supported Inputs
+Pastehunter currently has support for the following sites:
+ - pastebin.com
+ - dumpz.org
+ - gist.github.com
+
+Support for the following sites is listed as ToDo:
+ - paste.ee
+
+## Supported Outputs
+
+## PostProcess Modules
+Pastehunter comes with a couple of post process modules that extact useful data from pastes or pass them to other services
+The following are default modules:
+
+ - Emails
+ - Base64 Decoders
+   - Cuckoo
+   - Viper
+
+## PreReqs
+
+### Pastebin
 
 You need a Pro account on pastebin that has access to the scraping API.
 https://pastebin.com/api_scraping_faq
 
-* Yara 
-* Python3
-* Elastic Search Kibana optional
+### GitHub
+Github needs an oauth token to stop it hitting the free ratelimit. 
+Create one at https://github.com/settings/tokens
 
-# Install.
+YOU DO NOT NEED TO GIVE IT ANY ACCESS PERMISSIONS
+
+# Installation
+
+## Local install 
+
+### Elastic Search
+https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
+
+### Kibana
+https://www.elastic.co/guide/en/kibana/current/deb.html
+
+### Yara
+https://yara.readthedocs.io/en/v3.6.0/gettingstarted.html#compiling-and-installing-yara
+
+If you have yara errors check the installed version numbers for yara and yara-python match the lastest versions.
+
+### PasteHunter
+git clone https://github.com/kevthehermit/pastehunter
+
+### Python / Deps
+Python 3
+```pip3 install -r requirements.txt```
 
 ## Using Docker
 
@@ -41,25 +87,6 @@ The mount point is `/usr/share/elasticsearch/data` by default
 You can re-run the pastehunter script by doing `docker-compose up -d`
 Docker-compose will use already running instances of Elasticsearch and Kibana
 
-## Local install 
-
-### Elastic Search
-https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html
-
-### Kibana
-https://www.elastic.co/guide/en/kibana/current/deb.html
-
-### Yara
-https://yara.readthedocs.io/en/v3.6.0/gettingstarted.html#compiling-and-installing-yara
-
-Don't forget the python bindings
-```pip install yara-python```
-
-If you have yara errors check the installed version numbers for yara and yara-python match the lastest versions.
-
-
-### This little app
-git clone https://github.com/kevthehermit/pastehunter
 
 # Configure
 
@@ -67,16 +94,13 @@ copy settings.conf.sample to settings.conf
 populate the details.
 For the scraping API you need to whitelist your IP on pastebin. No API key is required. See the link above
 
+
+
 # Running
 
-This needs python 3 as per the prereqs. 
-You can run it on its own with ```python3 pastehunter.py```
+Start the application with ```python3 pastehunter.py```
 
-Or you can set a cronjob to run this script every two minutes with a pastelimit of 200
+It may be useful to run in a screen to keep it running in the background. 
 
-```
-localadmin@pastebin:~/pastehunter$ cat /etc/cron.d/pastehunter
-# Run every 5 minutes
-*/2 * * * *   localadmin  cd /home/localadmin/pastehunter && python3 pastehunter.py >> /home/localadmin/pastehunter/cronlog.txt
-localadmin@pastebin:~/pastehunter$
-```
+## Service 
+Service config is coming 

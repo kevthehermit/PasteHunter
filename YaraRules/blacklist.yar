@@ -8,6 +8,7 @@ rule blacklist
     strings:
         $a = "#EXTINF:" nocase // IPTV stream Lists.
         $b = "--app-name=LeagueClient" nocase // League of Legends Debug Log
+        $c = "common.application_name: LeagueClient" // League of Legends Debug Log
     condition:
         any of them
 
