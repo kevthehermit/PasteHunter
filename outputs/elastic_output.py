@@ -28,8 +28,9 @@ class ElasticOutput():
         if self.test:
             index_name = self.es_index
             if self.weekly:
+                year_number = datetime.date(datetime.now()).isocalendar()[0]
                 week_number = datetime.date(datetime.now()).isocalendar()[1]
-                index_name = '{0}-{1}'.format(index_name, week_number)
+                index_name = '{0}-{1}-{2}'.format(index_name, year_number, week_number)
             # ToDo: With multiple paste sites a pasteid collision is more likly!
             self.es.index(index=index_name, doc_type='paste', id=paste_data['pasteid'], body=paste_data)
             logging.info("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
