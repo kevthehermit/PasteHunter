@@ -131,8 +131,10 @@ def paste_scanner():
         # then append "no_match" to results. This will then force output.
 
         #ToDo: Need to make this check for each output not universal
+
+        paste_site = paste_data['pastesite']
         store_all = conf['inputs']['pastebin']['store_all']
-        if store_all is True:
+        if store_all is True and paste_site == 'pastebin.com':
             if len(results) == 0:
                 results.append('no_match')
 
