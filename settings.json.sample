@@ -37,7 +37,7 @@
       "elastic_user": "elastic",
       "elastic_pass": "changeme",
       "elastic_ssl": false,
-      "weekly_index" false
+      "weekly_index": false
     },
     "json_output": {
       "enabled": true,
