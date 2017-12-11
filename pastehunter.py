@@ -215,8 +215,8 @@ if __name__ == "__main__":
             q.join()
 
             # Slow it down a little
-            logging.info("Sleeping for 10 Seconds")
-            sleep(10)
+            logging.info("Sleeping for " + str(conf['general']['run_frequency']) + " Seconds")
+            sleep(conf['general']['run_frequency'])
 
     except KeyboardInterrupt:
         logging.info("Stopping Threads")
