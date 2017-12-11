@@ -78,6 +78,9 @@
     "blacklist": true,
     "test_rules": false
   },
+  "general": {
+    "run_frequency": 300
+  },
   "post_process": {
     "post_email": {
       "enabled": false,
