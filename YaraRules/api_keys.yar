@@ -50,3 +50,56 @@ rule google_api
     condition:
         all of them
 }
+
+rule slack_api
+{
+    meta:
+        author = "@ntddk"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $a = /(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})/
+    condition:
+        all of them
+}
+
+rule github_api
+{
+    meta:
+        author = "@ntddk"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $a = /[g|G][i|I][t|T][h|H][u|U][b|B].*[[\'|"]0-9a-zA-Z]{35,40}[\'|"]/
+    condition:
+        all of them
+}
+
+rule aws_api
+{
+    meta:
+        author = "@ntddk"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $a = /AKIA[0-9A-Z]{16}/
+    condition:
+        all of them
+}
+
+rule heroku_api
+{
+    meta:
+        author = "@ntddk"
+        info = "Part of PasteHunter"
+        reference = "https://github.com/kevthehermit/PasteHunter"
+
+    strings:
+        $a = /[h|H][e|E][r|R][o|O][k|K][u|U].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}/
+    condition:
+        all of them
+}
+
