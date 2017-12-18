@@ -7,12 +7,12 @@ services:
       - ./logs:/usr/src/pastehunter/logs
     networks:
       esnet:
-        ipv4_address: 172.16.10.11
+        ipv4_address: 172.18.10.11
     depends_on:
       - "elasticsearch"
       - "kibana"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -29,15 +29,15 @@ services:
       - "127.0.0.1:9200:9200"
     networks:
       esnet:
-        ipv4_address: 172.16.10.10
+        ipv4_address: 172.18.10.10
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:5.6.2
+    image: docker.elastic.co/kibana/kibana:6.1.0
     ports:
       - "127.0.0.1:5601:5601"
     networks:
       esnet:
-        ipv4_address: 172.16.10.12
+        ipv4_address: 172.18.10.12
     depends_on:
       - "elasticsearch"
 
@@ -49,4 +49,4 @@ networks:
     driver: bridge
     ipam:
       config:
-      - subnet: 172.16.10.0/24
+      - subnet: 172.18.10.0/24
