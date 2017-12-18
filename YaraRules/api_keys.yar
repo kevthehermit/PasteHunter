@@ -59,7 +59,7 @@ rule slack_api
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $a = /(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})/
+        $a = /(xox(p|b|o|a)-[0-9]{9,12}-[0-9]{9,12}-[0-9]{9,12}-[a-z0-9]{32})/
     condition:
         all of them
 }
