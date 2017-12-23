@@ -97,7 +97,7 @@ Docker-compose will use already running instances of Elasticsearch and Kibana
 
 # Configure
 
-copy settings.conf.sample to settings.conf
+copy settings.json.sample to settings.json
 populate the details.
 For the scraping API you need to whitelist your IP on pastebin. No API key is required. See the link above
 
