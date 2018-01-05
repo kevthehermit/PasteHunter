@@ -37,10 +37,10 @@
       "elastic_user": "elastic",
       "elastic_pass": "changeme",
       "elastic_ssl": false,
-      "weekly_index": false
+      "weekly_index": true
     },
     "json_output": {
-      "enabled": true,
+      "enabled": false,
       "module": "outputs.json_output",
       "classname": "JsonOutput",
       "output_path": "logs/json/",
@@ -83,12 +83,12 @@
   },
   "post_process": {
     "post_email": {
-      "enabled": false,
+      "enabled": true,
       "module": "postprocess.post_email",
       "rule_list": ["email_list"]
     },
     "post_b64": {
-      "enabled": false,
+      "enabled": true,
       "module": "postprocess.post_b64",
       "rule_list": ["b64_exe", "b64_rar", "b64_zip", "b64_gzip"],
       "cuckoo": {
