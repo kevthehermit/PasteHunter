@@ -44,7 +44,12 @@ class SMTPOutput():
         msg['From'] = self.smtp_user
         msg['To'] = self.recipient
 
-        body = 'This is the body of the email'
+        body = 'PasteHunter Notification\n' \
+               'The following rules {0} were found in paste {1}.\n' \
+               'A Copy of the paste has been attached'.format(', '.join(paste_data['YaraRule']),
+                                                              paste_data['pasteid'])
+
+
         json_body = json.dumps(paste_data)
         # Attach the body
         msg.attach(email.mime.text.MIMEText(body, 'plain'))
