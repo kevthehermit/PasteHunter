@@ -40,7 +40,7 @@ class SMTPOutput():
             return
 
         msg = MIMEMultipart()
-        msg['Subject'] = 'PasteHunter Alert {0}'.format(paste_data['YaraRule'])
+        msg['Subject'] = 'PasteHunter Alert {0}'.format(', '.join(paste_data['YaraRule']))
         msg['From'] = self.smtp_user
         msg['To'] = self.recipient
 
