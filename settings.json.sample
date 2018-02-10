@@ -51,7 +51,7 @@
       "enabled": false,
       "module": "outputs.csv_output",
       "classname": "CSVOutput",
-      "output_path": "/logs/csv/"
+      "output_path": "logs/csv/"
     },
     "syslog_output": {
       "enabled": false,
