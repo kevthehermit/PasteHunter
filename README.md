@@ -13,12 +13,19 @@ Support for the following sites is listed as ToDo:
  - paste.ee
 
 ## Supported Outputs
+Pastehunter supports several output modules:
+ - dump to ElasticSearch DB (default)
+ - email sending over SMTP
+ - dump to JSON file
+ - dump to CSV file
+
+### SMTP
+Multiple recipients can be specified, with different rulesets each.
+It's possible to combine these rules using simple OR or AND logic (respectively rule_list and mandatory_rule_list).
 
 ## PostProcess Modules
 Pastehunter comes with a couple of post process modules that extact useful data from pastes or pass them to other services
 The following are default modules:
-
- - Emails
  - Base64 Decoders
    - Cuckoo
    - Viper

@@ -69,8 +69,18 @@
       "smtp_tls": true,
       "smtp_user": "smtpusername",
       "smtp_pass": "smtppassword",
-      "recipient": "emailaddress that gets the alerts",
-      "rule_list": ["custom_keywords"]
+      "recipients" : {
+        "recipient_1": {
+          "address": "emailaddress that gets the alerts",
+          "rule_list": ["custom_keywords"],
+          "mandatory_rule_list": []
+        },
+        "recipient_2": {
+          "address": "emailaddress that gets the alerts",
+          "rule_list": [],
+          "mandatory_rule_list": ["keyword1", "keyword2"]
+        }
+      }
     }
   },
   "yara": {
