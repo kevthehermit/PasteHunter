@@ -8,7 +8,7 @@ import hashlib
 import requests
 import threading
 import importlib
-import logging
+import coloredlogs, logging
 from time import sleep
 from queue import Queue
 from common import parse_config
@@ -17,6 +17,7 @@ from postprocess import post_email
 lock = threading.Lock()
 
 # Set some logging options
+coloredlogs.install()
 logging.basicConfig(format='%(levelname)s:%(filename)s:%(message)s', level=logging.INFO)
 logging.getLogger('requests').setLevel(logging.ERROR)
 logging.getLogger('elasticsearch').setLevel(logging.ERROR)
