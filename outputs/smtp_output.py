@@ -14,12 +14,19 @@ config = parse_config()
 
 class SMTPOutput():
     def __init__(self):
-        self.smtp_host = config['outputs']['smtp_output']['smtp_host']
-        self.smtp_port = config['outputs']['smtp_output']['smtp_port']
-        self.smtp_tls = config['outputs']['smtp_output']['smtp_tls']
-        self.smtp_user = config['outputs']['smtp_output']['smtp_user']
-        self.smtp_pass = config['outputs']['smtp_output']['smtp_pass']
-        self.recipients = config['outputs']['smtp_output']['recipients']
+        smtp_object = config['outputs']['smtp_output']
+        self.smtp_host = smtp_object['smtp_host']
+        self.smtp_port = smtp_object['smtp_port']
+        self.smtp_tls = smtp_object['smtp_tls']
+        self.smtp_user = smtp_object['smtp_user']
+        self.smtp_pass = smtp_object['smtp_pass']
+        if 'recipients' in smtp_object:
+            self.recipients = smtp_object['recipients']
+        else:
+            # maintain compatibility with older single recipient config format
+            self.recipients = {'main': {'address': smtp_object['recipient'],
+                                        'rule_list': smtp_object['rule_list'],
+                                        'mandatory_rule_list': []}}
 
 
     def _send_mail(self, send_to_address, paste_data):
@@ -89,6 +96,5 @@ class SMTPOutput():
 
 
     def store_paste(self, paste_data):
-
         for recipient_name in self.recipients:
             self._check_recipient_rules(paste_data, recipient_name)
