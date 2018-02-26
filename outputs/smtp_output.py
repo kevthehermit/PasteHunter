@@ -59,9 +59,7 @@ class SMTPOutput():
                                                               ', '.join(paste_data['YaraRule'])))
 
 
-    def store_paste(self, paste_data):
-
-        for recipient_name in self.recipients:
+    def _check_recipient_rules(self, paste_data, recipient_name):
 
             # Read each recipient's config
             recipient = self.recipients[recipient_name]
@@ -88,3 +86,9 @@ class SMTPOutput():
             if any(elem in paste_data['YaraRule'] for elem in recipient_rule_list):
                 self._send_mail(recipient_address, paste_data)
                 return
+
+
+    def store_paste(self, paste_data):
+
+        for recipient_name in self.recipients:
+            self._check_recipient_rules(paste_data, recipient_name)
