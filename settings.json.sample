@@ -3,8 +3,8 @@
     "pastebin":{
       "enabled": true,
       "module": "inputs.pastebin",
-      "api_scrape": "https://pastebin.com/api_scraping.php",
-      "api_raw": "https://pastebin.com/api_scrape_item.php?i=",
+      "api_scrape": "https://scrape.pastebin.com/api_scraping.php",
+      "api_raw": "https://scrape.pastebin.com/api_scrape_item.php?i=",
       "paste_limit": 200,
       "store_all": false
     },
