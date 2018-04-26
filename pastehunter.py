@@ -14,30 +14,53 @@ from queue import Queue
 from common import parse_config
 from postprocess import post_email
 
+VERSION = 0.1
+
 lock = threading.Lock()
 
-# Set some logging options
-logging.basicConfig(format='%(levelname)s:%(filename)s:%(message)s', level=logging.INFO)
-logging.getLogger('requests').setLevel(logging.ERROR)
-logging.getLogger('elasticsearch').setLevel(logging.ERROR)
+# Setup Default logging
+logger = logging.getLogger('pastehunter')
+logger.setLevel(logging.INFO)
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(levelname)s:%(filename)s:%(message)s')
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
-logging.info("Reading Configs")
+# Version info
+logger.info("Starting PasteHunter Version: {0}".format(VERSION))
+
 # Parse the config file
+logger.info("Reading Configs")
 conf = parse_config()
 
-logging.info("Configure Inputs")
+# Override Log level if needed
+if "logging_level" in conf["general"]:
+    log_level = conf["general"]["logging_level"]
+else:
+    # For old configs
+    logger.error("Log Level not in config file. Update your base config file!")
+    log_level = 20
+logger.info("Setting Log Level to {0}".format(log_level))
+logging.getLogger('requests').setLevel(log_level)
+logging.getLogger('elasticsearch').setLevel(log_level)
+logging.getLogger('pastehunter').setLevel(log_level)
+
+# Configure Inputs
+logger.info("Configure Inputs")
 input_list = []
 for input_type, input_values in conf["inputs"].items():
     if input_values["enabled"]:
         input_list.append(input_values["module"])
-        logging.info("Enabled Input: {0}".format(input_type))
+        logger.info("Enabled Input: {0}".format(input_type))
 
 
-logging.info("Configure Outputs")
+# Configure Outputs
+logger.info("Configure Outputs")
 outputs = []
 for output_type, output_values in conf["outputs"].items():
     if output_values["enabled"]:
-        logging.info("Enabled Output: {0}".format(output_type))
+        logger.info("Enabled Output: {0}".format(output_type))
         _module = importlib.import_module(output_values["module"])
         _class = getattr(_module, output_values["classname"])
         instance = _class()
@@ -51,12 +74,12 @@ def yara_index(rule_path, blacklist, test_rules):
             if filename.endswith('.yar') and filename != 'index.yar':
                 if filename == 'blacklist.yar':
                     if blacklist:
-                        logging.info("Enable Blacklist Rules")
+                        logger.info("Enable Blacklist Rules")
                     else:
                         continue
                 if filename == 'test_rules.yar':
                     if test_rules:
-                        logging.info("Enable Test Rules")
+                        logger.info("Enable Test Rules")
                     else:
                         continue
                 include = 'include "{0}"\n'.format(filename)
@@ -70,7 +93,7 @@ def paste_scanner():
     # Store the Paste
     while True:
         paste_data = q.get()
-        logging.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+        logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
         raw_paste_data = requests.get(raw_paste_uri).text
@@ -80,7 +103,7 @@ def paste_scanner():
             # Scan with yara
             matches = rules.match(data=raw_paste_data)
         except Exception as e:
-            logging.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+            logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
             q.task_done()
             continue
 
@@ -106,7 +129,7 @@ def paste_scanner():
         # If any of the blacklist rules appear then empty the result set
         if conf['yara']['blacklist'] and 'blacklist' in results:
             results = []
-            logging.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+            logger.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
 
         # Post Process
 
@@ -115,7 +138,7 @@ def paste_scanner():
         for post_process, post_values in conf["post_process"].items():
             if post_values["enabled"]:
                 if any(i in results for i in post_values["rule_list"]):
-                    logging.info("Running Post Module on {0}".format(paste_data["pasteid"]))
+                    logger.info("Running Post Module {0} on {1}".format(post_values["module"], paste_data["pasteid"]))
                     post_module = importlib.import_module(post_values["module"])
                     post_results = post_module.run(results,
                                                    raw_paste_data,
@@ -151,14 +174,14 @@ def paste_scanner():
                 try:
                     output.store_paste(paste_data)
                 except Exception as e:
-                    logging.error("Unable to store {0}".format(paste_data["pasteid"]))
+                    logger.error("Unable to store {0} to {1}".format(paste_data["pasteid"], e))
 
         # Mark Tasks as complete
         q.task_done()
 
 
 if __name__ == "__main__":
-    logging.info("Compile Yara Rules")
+    logger.info("Compile Yara Rules")
     try:
         # Update the yara rules index
         yara_index(conf['yara']['rule_path'],
@@ -185,7 +208,7 @@ if __name__ == "__main__":
     try:
         while True:
             # Paste History
-            logging.info("Populating Queue")
+            logger.info("Populating Queue")
             if os.path.exists('paste_history.tmp'):
                 with open('paste_history.tmp') as json_file:
                     paste_history = json.load(json_file)
@@ -200,13 +223,13 @@ if __name__ == "__main__":
 
                 i = importlib.import_module(input_name)
                 # Get list of recent pastes
-                logging.info("Fetching paste list from {0}".format(input_name))
+                logger.info("Fetching paste list from {0}".format(input_name))
                 paste_list, history = i.recent_pastes(conf, input_history)
                 for paste in paste_list:
                     q.put(paste)
                 paste_history[input_name] = history
 
-            logging.debug("Writing History")
+            logger.debug("Writing History")
             # Write History
             with open('paste_history.tmp', 'w') as outfile:
                 json.dump(paste_history, outfile)
@@ -215,8 +238,8 @@ if __name__ == "__main__":
             q.join()
 
             # Slow it down a little
-            logging.info("Sleeping for " + str(conf['general']['run_frequency']) + " Seconds")
+            logger.info("Sleeping for " + str(conf['general']['run_frequency']) + " Seconds")
             sleep(conf['general']['run_frequency'])
 
     except KeyboardInterrupt:
-        logging.info("Stopping Threads")
+        logger.info("Stopping Threads")

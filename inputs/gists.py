@@ -4,6 +4,7 @@ import logging
 from datetime import datetime
 
 # Set some logging options
+logger = logging.getLogger('pastehunter')
 logging.getLogger('requests').setLevel(logging.ERROR)
 
 api_uri = 'https://api.github.com/gists/public'
@@ -34,22 +35,22 @@ def recent_pastes(conf, input_history):
         # Get the required amount of entries via pagination
         for page_num in range(1, page_count + 1):
             url = '{0}?page={1}&per_page=100'.format(api_uri, page_num)
-            logging.debug("Fetching page: {0}".format(page_num))
+            logger.debug("Fetching page: {0}".format(page_num))
             req = requests.get(url, headers=headers)
             # Check some headers
             reset_date = datetime.utcfromtimestamp(float(req.headers['X-RateLimit-Reset'])).isoformat()
             # logging.info("Limit Reset: {0}".format(reset_date))
-            logging.info("Remaining Limit: {0}. Resets at {1}".format(req.headers['X-RateLimit-Remaining'],
+            logger.info("Remaining Limit: {0}. Resets at {1}".format(req.headers['X-RateLimit-Remaining'],
                                                                       reset_date))
 
             if req.status_code == 200:
                 result_pages.append(req.json())
 
             if req.status_code == 401:
-                logging.error("Auth Failed")
+                logger.error("Auth Failed")
 
             elif req.status_code == 403:
-                logging.error("Login Attempts Exceeded")
+                logger.error("Login Attempts Exceeded")
 
         # Parse results
 
@@ -61,13 +62,13 @@ def recent_pastes(conf, input_history):
                     continue
 
                 if gist_meta['user'] in gist_user_blacklist:
-                    logging.info("Blacklisting Gist from user: {0}".format(gist_meta['owner']['login']))
+                    logger.info("Blacklisting Gist from user: {0}".format(gist_meta['owner']['login']))
                     continue
 
                 for file_name, file_meta in gist_meta['files'].items():
 
                     if file_name in gist_file_blacklist:
-                        logging.info("Blacklisting Paste {0}".format(file_name))
+                        logger.info("Blacklisting Paste {0}".format(file_name))
                         continue
 
                     gist_data = file_meta
@@ -83,5 +84,5 @@ def recent_pastes(conf, input_history):
         # Return results and history
         return paste_list, history
     except Exception as e:
-        logging.error("Unable to parse paste results: {0}".format(e))
+        logger.error("Unable to parse paste results: {0}".format(e))
         return paste_list, history

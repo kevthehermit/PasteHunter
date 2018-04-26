@@ -9,6 +9,7 @@ import json
 import logging
 
 from common import parse_config
+logger = logging.getLogger('pastehunter')
 
 config = parse_config()
 
@@ -17,7 +18,7 @@ class SMTPOutput():
         smtp_object = config['outputs']['smtp_output']
         self.smtp_host = smtp_object['smtp_host']
         self.smtp_port = smtp_object['smtp_port']
-        self.smtp_tls = smtp_object['smtp_tls']
+        self.smtp_security = smtp_object['smtp_security']
         self.smtp_user = smtp_object['smtp_user']
         self.smtp_pass = smtp_object['smtp_pass']
         if 'recipients' in smtp_object:
@@ -30,6 +31,7 @@ class SMTPOutput():
 
 
     def _send_mail(self, send_to_address, paste_data):
+        logger.info("crafting email for {0}".format(send_to_address))
 
         # Create the message
         msg = MIMEMultipart()
@@ -54,15 +56,18 @@ class SMTPOutput():
         msg.attach(attachment)
 
         # Connect to the SMTP server and send
-        smtp_conn = smtplib.SMTP_SSL(self.smtp_host, self.smtp_port)
+        if self.smtp_security == 'ssl':
+            smtp_conn = smtplib.SMTP_SSL(self.smtp_host, self.smtp_port)
+        else:
+            smtp_conn = smtplib.SMTP(self.smtp_host, self.smtp_port)
         smtp_conn.ehlo()
-        if self.smtp_tls:
+        if self.smtp_security == 'tls':
             smtp_conn.starttls()
         smtp_conn.login(self.smtp_user, self.smtp_pass)
         smtp_conn.send_message(msg)
         smtp_conn.quit()
 
-        logging.info("Sent mail to {0} with rules {1}".format(send_to_address,
+        logger.info("Sent mail to {0} with rules {1}".format(send_to_address,
                                                               ', '.join(paste_data['YaraRule'])))
 
 

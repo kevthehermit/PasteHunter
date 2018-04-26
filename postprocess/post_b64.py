@@ -9,6 +9,7 @@ from base64 import b64decode
 from common import parse_config
 conf = parse_config()
 
+logger = logging.getLogger('pastehunter')
 
 def run(results, raw_paste_data, paste_object):
 
@@ -43,7 +44,7 @@ def run(results, raw_paste_data, paste_object):
                     encoded = uncompressed.encode('utf-8')
                     paste_object["decompressed_stream"] = encoded
                 except Exception as e:
-                    logging.error("Unable to decompress gzip stream")
+                    logger.error("Unable to decompress gzip stream")
             if rule == 'b64_exe':
                 try:
                     raw_exe = b64decode(raw_paste_data)
@@ -56,13 +57,13 @@ def run(results, raw_paste_data, paste_object):
 
                     # Cuckoo
                     if conf["post_process"]["post_b64"]["cuckoo"]["enabled"]:
-                        logging.info("Submitting to Cuckoo")
+                        logger.info("Submitting to Cuckoo")
                         try:
                             task_id = send_to_cuckoo(raw_exe, paste_object["pasteid"])
                             paste_object["Cuckoo Task ID"] = task_id
-                            logging.info("exe submitted to Cuckoo with task id {0}".format(task_id))
+                            logger.info("exe submitted to Cuckoo with task id {0}".format(task_id))
                         except Exception as e:
-                            logging.error("Unabled to submit sample to cuckoo")
+                            logger.error("Unabled to submit sample to cuckoo")
 
                     # Viper
                     if conf["post_process"]["post_b64"]["viper"]["enabled"]:
@@ -71,7 +72,7 @@ def run(results, raw_paste_data, paste_object):
                     # VirusTotal
 
                 except Exception as e:
-                    logging.error("Unable to decode exe file")
+                    logger.error("Unable to decode exe file")
 
 
     # Get unique domain count
@@ -95,6 +96,6 @@ def send_to_cuckoo(raw_exe, pasteid):
         try:
             task_id = submit_file['task_ids'][0]
         except KeyError:
-            logging.error(submit_file)
+            logger.error(submit_file)
 
     return task_id

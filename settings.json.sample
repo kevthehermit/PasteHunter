@@ -66,7 +66,7 @@
       "classname": "SMTPOutput",
       "smtp_host": "smtp.server.com",
       "smtp_port": 25,
-      "smtp_tls": true,
+      "smtp_security": "starttls",
       "smtp_user": "smtpusername",
       "smtp_pass": "smtppassword",
       "recipients" : {

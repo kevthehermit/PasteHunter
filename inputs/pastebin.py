@@ -2,6 +2,7 @@ import requests
 import logging
 from datetime import datetime
 
+logger = logging.getLogger('pastehunter')
 
 def recent_pastes(conf, input_history):
     # populate vars from config
@@ -34,7 +35,7 @@ def recent_pastes(conf, input_history):
         return paste_list, history
 
     except Exception as e:
-        logging.error("Unable to parse paste results: {0}".format(e))
+        logger.error("Unable to parse paste results: {0}".format(e))
         return paste_list, history
 
 
