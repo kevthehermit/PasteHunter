@@ -22,6 +22,12 @@ Pastehunter supports several output modules:
 ### SMTP
 Multiple recipients can be specified, with different rulesets each.
 It's possible to combine these rules using simple OR or AND logic (respectively rule_list and mandatory_rule_list).
+You need to set SMTP_SECURITY in the config file to one of the following options:
+ - 'tls'
+ - 'starttls'
+ - 'none'
+
+ Refer to your email provider to determine which you require.
 
 ## PostProcess Modules
 Pastehunter comes with a couple of post process modules that extact useful data from pastes or pass them to other services
@@ -108,6 +114,19 @@ copy settings.json.sample to settings.json
 populate the details.
 For the scraping API you need to whitelist your IP on pastebin. No API key is required. See the link above
 
+The logging level can be set to one of the following values. 
+
+
+| Level    | Numerical |
+|----------|-----------|
+| CRITICAL | 50        |
+| ERROR    | 40        |
+| WARNING  | 30        |
+| INFO     | 20        |
+| DEBUG    | 10        |
+| NOTSET   | 0         |
+
+The default is INFO:20
 
 
 # Running

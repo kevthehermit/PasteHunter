@@ -1,7 +1,10 @@
 import os
 import datetime
 import json
+import logging
 from common import parse_config
+
+logger = logging.getLogger('pastehunter')
 
 config = parse_config()
 
@@ -14,7 +17,7 @@ class JsonOutput():
                 os.makedirs(base_path)
                 self.test = True
             except OSError as e:
-                print("Unable to create Json Path: {0}".format(e))
+                logger.error("Unable to create Json Path: {0}".format(e))
                 self.test = False
         else:
             self.test = True
@@ -28,4 +31,4 @@ class JsonOutput():
             with open(json_file, 'w') as out:
                 out.write(json.dumps(paste_data, indent=4))
         else:
-            print("JsonOutput Error")
+            logger.error("JsonOutput Error")

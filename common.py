@@ -1,6 +1,7 @@
 import json
 import logging
 
+logger = logging.getLogger('pastehunter')
 
 # Parse the config file in to a dict
 def parse_config():
@@ -10,6 +11,6 @@ def parse_config():
         with open(conf_file, 'r') as read_conf:
             conf = json.load(read_conf)
     except Exception as e:
-        logging.error("Unable to parse config file: {0}".format(e))
+        logger.error("Unable to parse config file: {0}".format(e))
 
     return conf

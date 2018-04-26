@@ -3,6 +3,7 @@ from common import parse_config
 from datetime import datetime
 import logging
 
+logger = logging.getLogger('pastehunter')
 config = parse_config()
 
 
@@ -21,7 +22,7 @@ class ElasticOutput():
             self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl)
             self.test = True
         except Exception as e:
-            print(e)
+            logger.error(e)
             raise Exception('Unable to Connect') from None
 
     def store_paste(self, paste_data):
@@ -33,10 +34,10 @@ class ElasticOutput():
                 index_name = '{0}-{1}-{2}'.format(index_name, year_number, week_number)
             # ToDo: With multiple paste sites a pasteid collision is more likly!
             self.es.index(index=index_name, doc_type='paste', id=paste_data['pasteid'], body=paste_data)
-            logging.info("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
+            logger.debug("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
                                                                          paste_data['pasteid'],
                                                                          paste_data['YaraRule']
                                                                          )
                          )
         else:
-            logging.error("Elastic Search Enabled, not configured!")
+            logger.error("Elastic Search Enabled, not configured!")
