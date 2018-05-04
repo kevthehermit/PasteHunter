@@ -105,4 +105,4 @@ ENV/
 /settings.json
 /.idea
 /postprocess/tester.py
-.vscode/settings.json
+.vscode/
