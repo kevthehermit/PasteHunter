@@ -90,6 +90,7 @@
   },
   "general": {
     "run_frequency": 300
+    "logging_level": 20
   },
   "post_process": {
     "post_email": {
