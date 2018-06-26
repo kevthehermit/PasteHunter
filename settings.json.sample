@@ -89,7 +89,7 @@
     "test_rules": false
   },
   "general": {
-    "run_frequency": 300
+    "run_frequency": 300,
     "logging_level": 20
   },
   "post_process": {
