@@ -97,11 +97,23 @@ def paste_scanner():
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
         raw_paste_data = requests.get(raw_paste_uri).text
+        raw_paste_user = str(paste_data['user'])
+        insert_header = ' +++++ PASTE AUTHOR +++++ '
+        
+        if (raw_paste_user[:4] != "None") and (" " not in raw_paste_user) and raw_paste_user:
+            #The commented line below is for error checking when needed for testing
+            #print("Author: " + raw_paste_user);
+            raw_paste_user_and_data = insert_header + raw_paste_user + insert_header + raw_paste_data
+        else:
+            #The commented line below is for error checking when needed for testing
+            #print("variable wasn't defined or was bogus");
+            raw_paste_user_and_data =  raw_paste_data
+          
         # Process the paste data here
 
         try:
             # Scan with yara
-            matches = rules.match(data=raw_paste_data)
+            matches = rules.match(data=raw_paste_user_and_data)
         except Exception as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
             q.task_done()
