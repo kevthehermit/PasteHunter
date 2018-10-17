@@ -4,6 +4,7 @@ import email.header
 import email.mime.base
 import email.mime.multipart
 import email.mime.text
+from email.utils import formatdate
 from email.mime.multipart import MIMEMultipart
 import json
 import logging
@@ -38,6 +39,7 @@ class SMTPOutput():
         msg['Subject'] = 'PasteHunter Alert {0}'.format(', '.join(paste_data['YaraRule']))
         msg['From'] = self.smtp_user
         msg['To'] = send_to_address
+        msg["Date"] = formatdate(localtime=True)
 
         # Attach the body
         body = 'Rules : {0}\n' \
