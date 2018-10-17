@@ -24,6 +24,11 @@
       "store_all": false,
       "user_blacklist": [],
       "file_blacklist": ["grahamcofborg-eval-package-list"]
+    },
+    "slexy":{
+      "enabled": true,
+      "module": "inputs.slexy",
+      "store_all": false
     }
   },
   "outputs": {
