@@ -28,6 +28,7 @@ def recent_pastes(conf, input_history):
             paste_data = paste
             paste_data['pasteid'] = paste['key']
             paste_data['pastesite'] = 'pastebin.com'
+            paste_data['user'] = paste['user']
             # Add a date field that kibana will map
             date = datetime.utcfromtimestamp(float(paste_data['date'])).isoformat()
             paste_data['@timestamp'] = date
