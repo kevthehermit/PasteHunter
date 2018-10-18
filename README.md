@@ -8,6 +8,7 @@ Pastehunter currently has support for the following sites:
  - pastebin.com
  - dumpz.org
  - gist.github.com
+ - slexy.org
 
 Support for the following sites is listed as ToDo:
  - paste.ee
