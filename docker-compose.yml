@@ -12,7 +12,7 @@ services:
       - "elasticsearch"
       - "kibana"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
@@ -32,7 +32,8 @@ services:
         ipv4_address: 172.16.10.10
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.0
+    image: docker.elastic.co/kibana/kibana:6.4.2
+    container_name: kibana
     ports:
       - "127.0.0.1:5601:5601"
     networks:
@@ -50,3 +51,4 @@ networks:
     ipam:
       config:
       - subnet: 172.16.10.0/24
+      
