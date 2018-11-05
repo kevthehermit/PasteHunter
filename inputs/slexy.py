@@ -71,21 +71,24 @@ class SlexyScraper(SlexySite):
     def get_recents(self):
         getdata = urllib.urlopen(self.url_recent).read().decode('utf-8')
         pids = re.findall('<td><a href="/view/(.*?)">', getdata)
-        recents = []
-        for pid in list(set(pids)):
-            recents.append(SlexyPaste(pid))
-        return recents
+        return list(set(pids))
 
 
 def recent_pastes(conf, input_history):
     history = []
     paste_list = []
+    my_scraper = SlexyScraper()
+    recent_pids = my_scraper.get_recents()
+    pid_to_process = set()
+    for pid in recent_pids:
+        if pid in input_history:
+           history.append(pid)
+        else:
+           pid_to_process.add(pid)
     try:
-        my_scraper = SlexyScraper()
-        for paste in my_scraper.get_recents():
+        for pid in pid_to_process:
+            paste = SlexyPaste(pid)
             history.append(paste.pid)
-            if paste.pid in input_history:
-                continue
             paste_data = {}
             paste_data['scrape_url'] = paste.url.full_url
             paste_data['pasteid'] = paste.pid
