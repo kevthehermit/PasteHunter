@@ -72,7 +72,7 @@ class SlexyScraper(SlexySite):
         getdata = urllib.urlopen(self.url_recent).read().decode('utf-8')
         pids = re.findall('<td><a href="/view/(.*?)">', getdata)
         recents = []
-        for pid in pids:
+        for pid in list(set(pids)):
             recents.append(SlexyPaste(pid))
         return recents
 
