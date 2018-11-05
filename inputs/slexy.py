@@ -42,7 +42,7 @@ class SlexyPaste(SlexySite):
         self.parse()
 
     def parse(self):
-        data = urllib.urlopen(self.view_link(self.pid)).read().decode('utf-8')
+        data = urllib.urlopen(self.view_link(self.pid), timeout=10).read().decode('utf-8')
         self.url = self.get_raw_link(data)
         self.timestamp = self.get_timestamp(data)
 
@@ -52,7 +52,7 @@ class SlexyPaste(SlexySite):
         return self.raw_link(self.pid, token)
 
     def get_raw_data(self):
-        return urllib.urlopen(self.url).read().decode('utf-8')
+        return urllib.urlopen(self.url, timeout=10).read().decode('utf-8')
 
     def get_timestamp(self, data):
         pattern = 'Timestamp: <b>(.*?)</b>'
