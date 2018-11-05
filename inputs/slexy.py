@@ -87,7 +87,7 @@ def recent_pastes(conf, input_history):
             if paste.pid in input_history:
                 continue
             paste_data = {}
-            paste_data['scrape_url'] = paste.url
+            paste_data['scrape_url'] = paste.url.full_url
             paste_data['pasteid'] = paste.pid
             paste_data['pastesite'] = paste.site
             paste_data['@timestamp'] = paste.timestamp
