@@ -16,10 +16,20 @@ class SlexySite(object):
         self.url_raw = url_slexy + "/raw"
 
     def view_link(self, pid):
-        return "%s/%s" % (self.url_view, pid)
+        return self.create_req("%s/%s" % (self.url_view, pid))
 
     def raw_link(self, pid, args):
-        return "%s/%s%s" % (self.url_raw, pid, args)
+        return self.create_req("%s/%s%s" % (self.url_raw, pid, args))
+
+    def create_req(self, url):
+        return urllib.Request(
+            url,
+            data=None,
+            headers={
+              'Referer': self.url_recent,
+              'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
+            }
+        )
 
 
 class SlexyPaste(SlexySite):
