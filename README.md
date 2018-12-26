@@ -21,5 +21,6 @@ Pastehunter supports several output modules:
  - Dump to JSON file.
  - Dump to CSV file.
  - Send to syslog.
+ - Send to telegram channel.
 
 For examples of data discovered using pastehunter check out my posts https://techanarchy.net/blog/hunting-pastebin-with-pastehunter and https://techanarchy.net/blog/pastehunter-the-results
