@@ -55,6 +55,14 @@
     }
   },
   "outputs": {
+    "telegram_output": {
+      "enabled": true,
+      "token": "xxx",
+      "chat_id": "",
+      "proxy_url": "",
+      "module": "outputs.telegram_output",
+      "classname": "TelegramOutput"
+    },
     "elastic_output": {
       "enabled": true,
       "module": "outputs.elastic_output",
