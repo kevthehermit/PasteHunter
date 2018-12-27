@@ -16,6 +16,11 @@ def recent_pastes(conf, input_history):
         # Get some pastes and convert to json
         # Get last 'paste_limit' pastes
         paste_list_request = requests.get(scrape_uri)
+
+        # Check to see if our IP is whitelisted or not. 
+        if 'DOES NOT HAVE ACCESS' in paste_list_request.text:
+            logger.error("Your IP is not whitelisted visits 'https://pastebin.com/doc_scraping_api'")
+            return [], []
         paste_list_json = paste_list_request.json()
 
         for paste in paste_list_json:
