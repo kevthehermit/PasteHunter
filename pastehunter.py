@@ -6,17 +6,18 @@ import yara
 import json
 import hashlib
 import requests
-import threading
+import multiprocessing
 import importlib
 import logging
+import time
 from time import sleep
-from queue import Queue
+#from queue import Queue
 from common import parse_config
 from postprocess import post_email
 
-VERSION = 0.1
+from multiprocessing import Queue
 
-lock = threading.Lock()
+VERSION = 0.2
 
 # Setup Default logging
 logger = logging.getLogger('pastehunter')
@@ -93,19 +94,20 @@ def paste_scanner():
     # Store the Paste
     while True:
         paste_data = q.get()
+
+        # Start a timer
+        start_time = time.time()
         logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
         raw_paste_data = requests.get(raw_paste_uri).text
         # Process the paste data here
-
         try:
             # Scan with yara
             matches = rules.match(data=raw_paste_data)
         except Exception as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
-            q.task_done()
-            continue
+            return
 
         results = []
         for match in matches:
@@ -141,9 +143,9 @@ def paste_scanner():
                     logger.info("Running Post Module {0} on {1}".format(post_values["module"], paste_data["pasteid"]))
                     post_module = importlib.import_module(post_values["module"])
                     post_results = post_module.run(results,
-                                                   raw_paste_data,
-                                                   paste_data
-                                                   )
+                                                    raw_paste_data,
+                                                    paste_data
+                                                    )
 
         # Throw everything back to paste_data for ease.
         paste_data = post_results
@@ -175,9 +177,13 @@ def paste_scanner():
                     output.store_paste(paste_data)
                 except Exception as e:
                     logger.error("Unable to store {0} to {1}".format(paste_data["pasteid"], e))
+        
+        end_time = time.time()
+        logger.debug("Processing Finished for {0} in {1} seconds".format(
+            paste_data["pasteid"],
+            (end_time - start_time)
+        ))
 
-        # Mark Tasks as complete
-        q.task_done()
 
 
 if __name__ == "__main__":
@@ -197,16 +203,19 @@ if __name__ == "__main__":
 
     # Create Queue to hold paste URI's
     q = Queue()
+    processes = []
 
     # Threads
     for i in range(5):
-        t = threading.Thread(target=paste_scanner)
-        t.daemon = True
-        t.start()
+        m = multiprocessing.Process(target=paste_scanner)
+        # Add new process to list so we can run join on them later. 
+        processes.append(m)
+        m.start()
 
     # Now Fill the Queue
     try:
         while True:
+            queue_count = 0
             # Paste History
             logger.info("Populating Queue")
             if os.path.exists('paste_history.tmp'):
@@ -227,19 +236,27 @@ if __name__ == "__main__":
                 paste_list, history = i.recent_pastes(conf, input_history)
                 for paste in paste_list:
                     q.put(paste)
+                    queue_count += 1
                 paste_history[input_name] = history
 
             logger.debug("Writing History")
             # Write History
             with open('paste_history.tmp', 'w') as outfile:
                 json.dump(paste_history, outfile)
+            logger.info("Added {0} Items to the queue".format(queue_count))
 
-            # Flush the list
-            q.join()
+            for proc in processes:
+                proc.join(2)
 
             # Slow it down a little
             logger.info("Sleeping for " + str(conf['general']['run_frequency']) + " Seconds")
             sleep(conf['general']['run_frequency'])
+        
+
 
     except KeyboardInterrupt:
-        logger.info("Stopping Threads")
+        logger.info("Stopping Processes")
+        for proc in processes:
+            proc.terminate()
+            proc.join()
+
