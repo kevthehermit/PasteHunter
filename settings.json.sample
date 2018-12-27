@@ -9,7 +9,8 @@
       "store_all": false
     },
     "dumpz": {
-      "enabled": true,
+      "enabled": false,
+      "comment": "This api endpoint has been removed.",
       "module": "inputs.dumpz",
       "api_scrape": "https://dumpz.org/api/recent",
       "api_raw": "https://dumpz.org/api/dump",
@@ -28,7 +29,10 @@
     "slexy":{
       "enabled": true,
       "module": "inputs.slexy",
-      "store_all": false
+      "store_all": false,
+      "api_scrape": "http://slexy.org/recent",
+      "api_raw": "http://slexy.org/raw",
+      "api_view": "http://slexy.org/view"
     }
   },
   "outputs": {
