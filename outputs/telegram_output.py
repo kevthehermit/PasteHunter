@@ -1,7 +1,9 @@
 from telegram.ext import Updater
 
 from common import parse_config
+import logging
 
+logger = logging.getLogger('pastehunter')
 config = parse_config()
 
 
@@ -13,9 +15,11 @@ class TelegramOutput():
                                request_kwargs={"proxy_url": config['outputs']['telegram_output']['proxy_url']})
 
     def store_paste(self, paste_data):
-        csv_line = '{0},{1},{2},{3},{4}'.format(paste_data['@timestamp'],
-                                                paste_data['pasteid'],
-                                                paste_data['YaraRule'],
-                                                paste_data['scrape_url'],
-                                                paste_data['pastesite'])
-        self.updater.bot.send_message(chat_id=self.chat_id, text=csv_line)
+        if paste_data['pastesite']=='pastebin.com':
+            url = paste_data['full_url']
+        else:
+            url = paste_data['scrape_url']
+        send_data = "From {0}: Matched Rule: {1}, See : {2}".format(paste_data['pastesite'], str(paste_data['YaraRule']), url)
+
+        self.updater.bot.send_message(chat_id=self.chat_id, text=send_data)
+        logger.debug("send a message %s"%send_data)
