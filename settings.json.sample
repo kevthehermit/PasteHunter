@@ -90,6 +90,13 @@
           "mandatory_rule_list": ["keyword1", "keyword2"]
         }
       }
+    },
+    "slack_output": {
+      "enabled": true,
+      "module": "outputs.slack_output",
+      "classname": "SlackOutput",
+      "webhook_url": "",
+      "rule_list": ["custom_keywords"]
     }
   },
   "yara": {

@@ -176,7 +176,7 @@ def paste_scanner():
                 try:
                     output.store_paste(paste_data)
                 except Exception as e:
-                    logger.error("Unable to store {0} to {1}".format(paste_data["pasteid"], e))
+                    logger.error("Unable to store {0} to {1} with error {2}".format(paste_data["pasteid"], output, e))
         
         end_time = time.time()
         logger.debug("Processing Finished for {0} in {1} seconds".format(
