@@ -139,7 +139,7 @@ def paste_scanner():
         post_results = paste_data
         for post_process, post_values in conf["post_process"].items():
             if post_values["enabled"]:
-                if any(i in results for i in post_values["rule_list"]):
+                if any(i in results for i in post_values["rule_list"]) or "ALL" in post_values["rule_list"]:
                     logger.info("Running Post Module {0} on {1}".format(post_values["module"], paste_data["pasteid"]))
                     post_module = importlib.import_module(post_values["module"])
                     post_results = post_module.run(results,
