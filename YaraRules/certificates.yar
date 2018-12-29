@@ -1,8 +1,8 @@
 /*
-    This rule will match any of the keywords in the list
+    This rule will look for common encoded certificates and secrets
 */
 
-rule core_keywords
+rule certificates
 {
     meta:
         author = "@KevTheHermit"
