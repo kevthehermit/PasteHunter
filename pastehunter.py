@@ -101,13 +101,22 @@ def paste_scanner():
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
         raw_paste_data = requests.get(raw_paste_uri).text
+
+        # Pastebin Cache
+        if raw_paste_data == "File is not ready for scraping yet. Try again in 1 minute.":
+            logger.info("Paste is still cached sleeping to try again")
+            sleep(45)
+            # get raw paste and hash them
+            raw_paste_uri = paste_data['scrape_url']
+            raw_paste_data = requests.get(raw_paste_uri).text
+
         # Process the paste data here
         try:
             # Scan with yara
             matches = rules.match(data=raw_paste_data)
         except Exception as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
-            return
+            continue
 
         results = []
         for match in matches:
