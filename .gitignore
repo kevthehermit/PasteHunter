@@ -106,3 +106,4 @@ ENV/
 /.idea
 /postprocess/tester.py
 .vscode/
+logs/

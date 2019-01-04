@@ -9,7 +9,8 @@
       "store_all": false
     },
     "dumpz": {
-      "enabled": true,
+      "enabled": false,
+      "comment": "This api endpoint has been removed.",
       "module": "inputs.dumpz",
       "api_scrape": "https://dumpz.org/api/recent",
       "api_raw": "https://dumpz.org/api/dump",
@@ -28,7 +29,10 @@
     "slexy":{
       "enabled": true,
       "module": "inputs.slexy",
-      "store_all": false
+      "store_all": false,
+      "api_scrape": "http://slexy.org/recent",
+      "api_raw": "http://slexy.org/raw",
+      "api_view": "http://slexy.org/view"
     }
   },
   "outputs": {
@@ -86,6 +90,13 @@
           "mandatory_rule_list": ["keyword1", "keyword2"]
         }
       }
+    },
+    "slack_output": {
+      "enabled": true,
+      "module": "outputs.slack_output",
+      "classname": "SlackOutput",
+      "webhook_url": "",
+      "rule_list": ["custom_keywords"]
     }
   },
   "yara": {
@@ -116,7 +127,12 @@
         "enabled": false,
         "api_host": "127.0.0.1",
         "api_port": 8080
-      }
+      },
+    "post_entropy": {
+      "enabled": true,
+      "module": "postprocess.post_entropy",
+      "rule_list": ["ALL"]
+    }
     }
   }
 }

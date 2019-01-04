@@ -19,6 +19,9 @@ rule powershell
         $g = "invoke" nocase
         $h = "bitsadmin" nocase
         $i = "certutil -decode" nocase
+        $j = "hidden" nocase
+        $k = "nop" nocase
+        $l = "-e" nocase
     condition:
         4 of them
 
