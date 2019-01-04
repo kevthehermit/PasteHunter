@@ -48,7 +48,7 @@ rule google_api
     strings:
         $a = /\bAIza.{35}\b/
     condition:
-        all of them
+        any of them
 }
 
 rule slack_api
@@ -60,8 +60,9 @@ rule slack_api
 
     strings:
         $a = /(xox(p|b|o|a)-[0-9]{9,12}-[0-9]{9,12}-[0-9]{9,12}-[a-z0-9]{32})/
+        $b = "hooks.slack.com" nocase
     condition:
-        all of them
+        any of them
 }
 
 rule github_api
@@ -74,7 +75,7 @@ rule github_api
     strings:
         $a = /[g|G][i|I][t|T][h|H][u|U][b|B].*[[\'|"]0-9a-zA-Z]{35,40}[\'|"]/
     condition:
-        all of them
+        any of them
 }
 
 rule aws_api
@@ -87,7 +88,7 @@ rule aws_api
     strings:
         $a = /AKIA[0-9A-Z]{16}/
     condition:
-        all of them
+        any of them
 }
 
 rule heroku_api
@@ -100,6 +101,5 @@ rule heroku_api
     strings:
         $a = /[h|H][e|E][r|R][o|O][k|K][u|U].*[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}/
     condition:
-        all of them
+        any of them
 }
-
