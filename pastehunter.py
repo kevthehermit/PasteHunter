@@ -100,7 +100,12 @@ def paste_scanner():
         logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
-        raw_paste_data = requests.get(raw_paste_uri).text
+        # Cover fetch site SSLErrors
+        try:
+            raw_paste_data = requests.get(raw_paste_uri).text
+        except requests.exceptions.SSLError as e:
+            logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+            continue
 
         # Pastebin Cache
         if raw_paste_data == "File is not ready for scraping yet. Try again in 1 minute.":
@@ -108,8 +113,12 @@ def paste_scanner():
             sleep(45)
             # get raw paste and hash them
             raw_paste_uri = paste_data['scrape_url']
-            raw_paste_data = requests.get(raw_paste_uri).text
-
+            # Cover fetch site SSLErrors
+            try:
+                raw_paste_data = requests.get(raw_paste_uri).text
+            except requests.exceptions.SSLError as e:
+                logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+                continue
         # Process the paste data here
         try:
             # Scan with yara
