@@ -26,7 +26,7 @@ services:
     volumes:
       - esdata1:/usr/share/elasticsearch/data
     ports:
-      - "127.0.0.1:9200:9200"
+      - "0.0.0.0:9200:9200"
     networks:
       esnet:
         ipv4_address: 172.16.10.10
@@ -34,7 +34,7 @@ services:
   kibana:
     image: docker.elastic.co/kibana/kibana:6.1.0
     ports:
-      - "127.0.0.1:5601:5601"
+      - "0.0.0.0:5601:5601"
     networks:
       esnet:
         ipv4_address: 172.16.10.12
