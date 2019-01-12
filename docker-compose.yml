@@ -4,7 +4,8 @@ services:
     build: .
     container_name: pastehunter-core
     volumes:
-      - ./logs:/usr/src/pastehunter/logs
+      - /opt/PasteHunter:/usr/src/pastehunter/
+      - /opt/PasteHunter/logs:/usr/src/pastehunter/logs
     networks:
       esnet:
         ipv4_address: 172.16.10.11
@@ -24,7 +25,7 @@ services:
         hard: -1
     mem_limit: 1g
     volumes:
-      - esdata1:/usr/share/elasticsearch/data
+      - /opt/PasteHunter/data:/usr/share/elasticsearch/data
     ports:
       - "0.0.0.0:9200:9200"
     networks:
@@ -41,9 +42,6 @@ services:
         ipv4_address: 172.16.10.12
     depends_on:
       - "elasticsearch"
-
-volumes:
-  esdata1:
 
 networks:
   esnet:
