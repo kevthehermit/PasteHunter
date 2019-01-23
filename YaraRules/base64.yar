@@ -82,12 +82,15 @@ rule b64_url
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $a = "aHR0cDov" // http/s
-        $b = "SFRUUDov" // HTTP/S
-        $c = "d3d3Lg" // www.
-        $d = "V1dXLg" // WWW.
+        $a1 = "aHR0cDov" // http/s
+        $a2 = "SFRUUDov" // HTTP/S
+        $a3 = "d3d3Lg" // www.
+        $a4 = "V1dXLg" // WWW.
+
+        // ignore vendor certs in this rule. The certs rule will pick them up if we want them
+        $not1 = "GlobalSign Root CA" nocase 
     condition:
-        any of them
+        any of ($a*) and not any of ($not*)
 
 }
 
