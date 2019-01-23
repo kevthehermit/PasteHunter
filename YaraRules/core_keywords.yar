@@ -15,6 +15,8 @@ rule core_keywords
         $hacked = "hacked by" wide ascii nocase
         $onion_url = /.*.\.onion/
         $nmap_scan = "Nmap scan report for" wide ascii nocase
+        $enabled_sec = "enable secret" wide ascii nocase
+        $enable_pass = "enable password" wide ascii nocase
     condition:
         any of them
 
