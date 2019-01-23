@@ -12,12 +12,19 @@ services:
       - "elasticsearch"
       - "kibana"
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:6.1.0
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.4.2
     container_name: elasticsearch
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - xpack.monitoring.enabled=false
+      - xpack.ml.enabled=false
+      - xpack.graph.enabled=false
+      - xpack.watcher.enabled=false
+      - discovery.zen.minimum_master_nodes=1
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
@@ -32,7 +39,8 @@ services:
         ipv4_address: 172.16.10.10
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:6.1.0
+    image: docker.elastic.co/kibana/kibana:6.4.2
+    container_name: kibana
     ports:
       - "127.0.0.1:5601:5601"
     networks:
@@ -50,3 +58,4 @@ networks:
     ipam:
       config:
       - subnet: 172.16.10.0/24
+      

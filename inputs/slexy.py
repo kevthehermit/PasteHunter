@@ -16,10 +16,20 @@ class SlexySite(object):
         self.url_raw = url_slexy + "/raw"
 
     def view_link(self, pid):
-        return "%s/%s" % (self.url_view, pid)
+        return self.create_req("%s/%s" % (self.url_view, pid))
 
     def raw_link(self, pid, args):
-        return "%s/%s%s" % (self.url_raw, pid, args)
+        return self.create_req("%s/%s%s" % (self.url_raw, pid, args))
+
+    def create_req(self, url):
+        return urllib.Request(
+            url,
+            data=None,
+            headers={
+              'Referer': self.url_recent,
+              'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
+            }
+        )
 
 
 class SlexyPaste(SlexySite):
@@ -32,7 +42,7 @@ class SlexyPaste(SlexySite):
         self.parse()
 
     def parse(self):
-        data = urllib.urlopen(self.view_link(self.pid)).read().decode('utf-8')
+        data = urllib.urlopen(self.view_link(self.pid), timeout=10).read().decode('utf-8')
         self.url = self.get_raw_link(data)
         self.timestamp = self.get_timestamp(data)
 
@@ -42,7 +52,7 @@ class SlexyPaste(SlexySite):
         return self.raw_link(self.pid, token)
 
     def get_raw_data(self):
-        return urllib.urlopen(self.url).read().decode('utf-8')
+        return urllib.urlopen(self.url, timeout=10).read().decode('utf-8')
 
     def get_timestamp(self, data):
         pattern = 'Timestamp: <b>(.*?)</b>'
@@ -61,23 +71,26 @@ class SlexyScraper(SlexySite):
     def get_recents(self):
         getdata = urllib.urlopen(self.url_recent).read().decode('utf-8')
         pids = re.findall('<td><a href="/view/(.*?)">', getdata)
-        recents = []
-        for pid in pids:
-            recents.append(SlexyPaste(pid))
-        return recents
+        return list(set(pids))
 
 
 def recent_pastes(conf, input_history):
     history = []
     paste_list = []
+    my_scraper = SlexyScraper()
+    recent_pids = my_scraper.get_recents()
+    pid_to_process = set()
+    for pid in recent_pids:
+        if pid in input_history:
+           history.append(pid)
+        else:
+           pid_to_process.add(pid)
     try:
-        my_scraper = SlexyScraper()
-        for paste in my_scraper.get_recents():
+        for pid in pid_to_process:
+            paste = SlexyPaste(pid)
             history.append(paste.pid)
-            if paste.pid in input_history:
-                continue
             paste_data = {}
-            paste_data['scrape_url'] = paste.url
+            paste_data['scrape_url'] = paste.url.full_url
             paste_data['pasteid'] = paste.pid
             paste_data['pastesite'] = paste.site
             paste_data['@timestamp'] = paste.timestamp
