@@ -71,13 +71,6 @@ else:
     logger.error("Log Level not in config file. Update your base config file!")
     log_level = 20
 
-# Set logtofile if set
-if "logtofile" in conf["general"]:
-    if conf["general"]["logtofile"]:
-        fh = logging.FileHandler(conf["general"]["logtofile"])
-        fh.setFormatter(formatter)
-        logger.addHandler(fh)
-
 logger.info("Setting Log Level to {0}".format(log_level))
 logging.getLogger('requests').setLevel(log_level)
 logging.getLogger('elasticsearch').setLevel(log_level)
