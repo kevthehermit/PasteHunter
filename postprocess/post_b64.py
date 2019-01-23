@@ -24,7 +24,7 @@ def run(results, raw_paste_data, paste_object):
     # b64_re = '(?:[A-Za-z0-9+/]{4}){2,}(?:[A-Za-z0-9+/]{2}[AEIMQUYcgkosw048]=|[A-Za-z0-9+/][AQgw]==)'
 
     # This one has a few empty results i need to catch but doesn't kill pastehunter
-    b64_re = '(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
+    b64_re = '(?:[A-Za-z0-9+/]{4}){3,}(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?'
     b64_strings = re.findall(b64_re, raw_paste_data)
 
 

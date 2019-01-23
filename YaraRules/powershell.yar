@@ -10,19 +10,22 @@ rule powershell
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $a = "powershell" nocase
-        $b = "IEX" nocase
-        $c = "new-object" nocase
-        $d = "webclient" nocase
-        $e = "downloadstring" nocase
-        $f = "-WindowStyle Hidden" nocase
-        $g = "invoke" nocase
-        $h = "bitsadmin" nocase
-        $i = "certutil -decode" nocase
-        $j = "hidden" nocase
-        $k = "nop" nocase
-        $l = "-e" nocase
+        $a1 = "powershell" nocase
+        $a2 = "IEX" nocase
+        $a3 = "new-object" nocase
+        $a4 = "webclient" nocase
+        $a5 = "downloadstring" nocase
+        $a6 = "-WindowStyle Hidden" nocase
+        $a7 = "invoke" nocase
+        $a8 = "bitsadmin" nocase
+        $a9 = "certutil -decode" nocase
+        $a10 = "hidden" nocase
+        $a11 = "nop" nocase
+        $a12 = "-e" nocase
+
+        $not1 = "chocolatey" nocase
+        $not2 = "XmlConfiguration is now operational" nocase
     condition:
-        4 of them
+        4 of ($a*) and not any of ($not*)
 
 }

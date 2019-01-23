@@ -10,8 +10,6 @@ rule certificates
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $enabled_sec = "enable secret" wide ascii nocase
-        $enable_pass = "enable password" wide ascii nocase
         $ssh_priv = "BEGIN RSA PRIVATE KEY" wide ascii nocase
         $openssh_priv = "BEGIN OPENSSH PRIVATE KEY" wide ascii nocase
         $dsa_priv = "BEGIN DSA PRIVATE KEY" wide ascii nocase
