@@ -9,6 +9,7 @@ import requests
 import multiprocessing
 import importlib
 import logging
+from logging import handlers 
 import time
 from time import sleep
 #from queue import Queue
@@ -34,6 +35,33 @@ logger.info("Starting PasteHunter Version: {0}".format(VERSION))
 # Parse the config file
 logger.info("Reading Configs")
 conf = parse_config()
+
+# Set up the log file
+if "log" in conf and conf["log"]["log_to_file"]:
+    if conf["log"]["log_path"] != "":
+        logfile = "{0}/{1}.log".format(conf["log"]["log_path"], conf["log"]["log_file"])
+        try:
+            os.makedirs(conf["log"]["log_path"], exist_ok=True)  # Python>3.2
+        except TypeError:
+            try:
+                os.makedirs(conf["log"]["log_path"])
+            except OSError as exc: # Python >2.5
+                if exc.errno == errno.EEXIST and os.path.isdir(conf["log"]["log_path"]):
+                    pass
+                else: logger.error("Can not create log file {0}: {1}".format(conf["log"]["log_path"], exc))
+    else:
+        logfile = "{0}.log".format(conf["log"]["log_file"])
+    fileHandler = handlers.RotatingFileHandler(logfile, mode='a+', maxBytes=(1048576*5), backupCount=7)
+    if conf["log"]["format"] != "":
+        fileFormatter = logging.Formatter("{0}".format(conf["log"]["format"]))
+        fileHandler.setFormatter(fileFormatter)
+    else:
+        fileHandler.setFormatter(logFormatter)
+    fileHandler.setLevel(conf["log"]["logging_level"])
+    logger.addHandler(fileHandler)
+    logger.info("Enabled Log File: {0}".format(logfile))
+else:
+    logger.info("Logging to file disabled.")
 
 # Override Log level if needed
 if "logging_level" in conf["general"]:
