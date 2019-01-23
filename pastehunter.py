@@ -40,8 +40,8 @@ conf = parse_config()
 if "log" in conf and conf["log"]["log_to_file"]:
     if conf["log"]["log_path"] != "":
         logfile = "{0}/{1}.log".format(conf["log"]["log_path"], conf["log"]["log_file"])
-        try:
-            os.makedirs(conf["log"]["log_path"], exist_ok=True)  # Python>3.2
+        # Assure directory exists
+        try: os.makedirs(conf["log"]["log_path"], exist_ok=True)  # Python>3.2
         except TypeError:
             try:
                 os.makedirs(conf["log"]["log_path"])
@@ -133,7 +133,7 @@ def paste_scanner():
             raw_paste_data = requests.get(raw_paste_uri).text
         except requests.exceptions.SSLError as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
-            continue
+            raw_paste_data = ""
 
         # Pastebin Cache
         if raw_paste_data == "File is not ready for scraping yet. Try again in 1 minute.":
@@ -146,7 +146,7 @@ def paste_scanner():
                 raw_paste_data = requests.get(raw_paste_uri).text
             except requests.exceptions.SSLError as e:
                 logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
-                continue
+                raw_paste_data = ""
         # Process the paste data here
         try:
             # Scan with yara
