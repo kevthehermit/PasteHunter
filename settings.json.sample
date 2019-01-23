@@ -104,6 +104,13 @@
     "blacklist": true,
     "test_rules": false
   },
+  "log": {
+    "log_to_file": false,
+    "log_file": "pastehunter",
+    "logging_level": 20,
+    "log_path": "logs",
+    "format": "%(asctime)s [%(threadName)-12.12s] %(levelname)s:%(message)s"
+  },
   "general": {
     "run_frequency": 300,
     "logging_level": 20
@@ -127,12 +134,12 @@
         "enabled": false,
         "api_host": "127.0.0.1",
         "api_port": 8080
-      },
+      }
+    }
     "post_entropy": {
       "enabled": true,
       "module": "postprocess.post_entropy",
       "rule_list": ["ALL"]
-    }
     }
   }
 }
