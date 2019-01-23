@@ -106,7 +106,8 @@
   },
   "general": {
     "run_frequency": 300,
-    "logging_level": 20
+    "logging_level": 20,
+    "logtofile": "pastehunter.log"
   },
   "post_process": {
     "post_email": {
