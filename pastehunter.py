@@ -9,6 +9,7 @@ import requests
 import multiprocessing
 import importlib
 import logging
+from logging import handlers 
 import time
 from time import sleep
 #from queue import Queue
@@ -34,6 +35,33 @@ logger.info("Starting PasteHunter Version: {0}".format(VERSION))
 # Parse the config file
 logger.info("Reading Configs")
 conf = parse_config()
+
+# Set up the log file
+if "log" in conf and conf["log"]["log_to_file"]:
+    if conf["log"]["log_path"] != "":
+        logfile = "{0}/{1}.log".format(conf["log"]["log_path"], conf["log"]["log_file"])
+        # Assure directory exists
+        try: os.makedirs(conf["log"]["log_path"], exist_ok=True)  # Python>3.2
+        except TypeError:
+            try:
+                os.makedirs(conf["log"]["log_path"])
+            except OSError as exc: # Python >2.5
+                if exc.errno == errno.EEXIST and os.path.isdir(conf["log"]["log_path"]):
+                    pass
+                else: logger.error("Can not create log file {0}: {1}".format(conf["log"]["log_path"], exc))
+    else:
+        logfile = "{0}.log".format(conf["log"]["log_file"])
+    fileHandler = handlers.RotatingFileHandler(logfile, mode='a+', maxBytes=(1048576*5), backupCount=7)
+    if conf["log"]["format"] != "":
+        fileFormatter = logging.Formatter("{0}".format(conf["log"]["format"]))
+        fileHandler.setFormatter(fileFormatter)
+    else:
+        fileHandler.setFormatter(logFormatter)
+    fileHandler.setLevel(conf["log"]["logging_level"])
+    logger.addHandler(fileHandler)
+    logger.info("Enabled Log File: {0}".format(logfile))
+else:
+    logger.info("Logging to file disabled.")
 
 # Override Log level if needed
 if "logging_level" in conf["general"]:
@@ -108,7 +136,12 @@ def paste_scanner():
         logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
         raw_paste_uri = paste_data['scrape_url']
-        raw_paste_data = requests.get(raw_paste_uri).text
+        # Cover fetch site SSLErrors
+        try:
+            raw_paste_data = requests.get(raw_paste_uri).text
+        except requests.exceptions.SSLError as e:
+            logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+            raw_paste_data = ""
 
         # Pastebin Cache
         if raw_paste_data == "File is not ready for scraping yet. Try again in 1 minute.":
@@ -116,8 +149,12 @@ def paste_scanner():
             sleep(45)
             # get raw paste and hash them
             raw_paste_uri = paste_data['scrape_url']
-            raw_paste_data = requests.get(raw_paste_uri).text
-
+            # Cover fetch site SSLErrors
+            try:
+                raw_paste_data = requests.get(raw_paste_uri).text
+            except requests.exceptions.SSLError as e:
+                logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+                raw_paste_data = ""
         # Process the paste data here
         try:
             # Scan with yara
