@@ -112,7 +112,7 @@
     "format": "%(asctime)s [%(threadName)-12.12s] %(levelname)s:%(message)s"
   },
   "general": {
-    "run_frequency": 300,
+    "run_frequency": 300
   },
   "post_process": {
     "post_email": {
@@ -134,7 +134,7 @@
         "api_host": "127.0.0.1",
         "api_port": 8080
       }
-    }
+    },
     "post_entropy": {
       "enabled": true,
       "module": "postprocess.post_entropy",
