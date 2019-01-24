@@ -64,10 +64,13 @@ else:
     logger.info("Logging to file disabled.")
 
 # Override Log level if needed
-if "logging_level" in conf["general"]:
+if "logging_level" in conf["log"]:
+    log_level = conf["log"]["logging_level"]
+elif "loggin_level" in conf["general"]:
+    # For old configs
     log_level = conf["general"]["logging_level"]
 else:
-    # For old configs
+    # For older configs
     logger.error("Log Level not in config file. Update your base config file!")
     log_level = 20
 

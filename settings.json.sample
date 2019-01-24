@@ -134,7 +134,7 @@
         "api_host": "127.0.0.1",
         "api_port": 8080
       }
-    }
+    },
     "post_entropy": {
       "enabled": true,
       "module": "postprocess.post_entropy",
