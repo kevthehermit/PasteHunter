@@ -66,7 +66,7 @@ else:
 # Override Log level if needed
 if "logging_level" in conf["log"]:
     log_level = conf["log"]["logging_level"]
-elif "loggin_level" in conf["general"]:
+elif "logging_level" in conf["general"]:
     # For old configs
     log_level = conf["general"]["logging_level"]
 else:
