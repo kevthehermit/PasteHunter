@@ -139,7 +139,9 @@ It may be useful to run in a screen to keep it running in the background.
 ## Service 
 Service config is coming 
 
-$ cat /etc/systemd/system/pastehunter.service 
+`$ cat /etc/systemd/system/pastehunter.service` 
+
+```
 [Unit]
 Description=PasteHunter
 
@@ -152,5 +154,5 @@ Restart=always
 
 [Install]
 WantedBy=multi-user.target
-
+```
 
