@@ -137,7 +137,8 @@ Start the application with ```python3 pastehunter.py```
 It may be useful to run in a screen to keep it running in the background. 
 
 ## Service 
-Service config is coming 
+If your using /opt/ make sure the user your running the service as has permissions to write to /opt/pastehunter/
+Change User and Group to match your system
 
 `$ cat /etc/systemd/system/pastehunter.service` 
 
