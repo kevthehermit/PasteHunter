@@ -141,7 +141,7 @@ def paste_scanner():
         try:
             
             # Stack questions dont have a raw endpoint
-            if paste_data['pastesite'].startswith('stack'):
+            if ('stackexchange' in conf['inputs']) and (paste_data['pastesite'] in conf['inputs']['stackexchange']['site_list']):
                 json_body = requests.get(raw_paste_uri).json()
                 
                 # Unescape the code block strings in the json body. 
