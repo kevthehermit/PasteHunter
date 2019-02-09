@@ -3,8 +3,9 @@ rule CryptoExchangeApi
     meta:
         description = "Contains Crypro Exchange API URL"
         author = "Jason Schorr (0xBanana)"
+        source = "https://github.com/cryptodefense/PasteHunter-Yara/blob/master/CryptoExchangeApi.yar"
     strings:
-    		$a = "api.binance.com" nocase wide ascii
+    	$a = "api.binance.com" nocase wide ascii
 		$a0 = "1btcxe.com/api" nocase wide ascii
 		$a1 = "acx.io/api" nocase wide ascii
 		$a2 = "anxpro.com/api" nocase wide ascii
