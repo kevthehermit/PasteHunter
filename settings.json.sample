@@ -146,7 +146,7 @@
       }
     },
     "post_entropy": {
-      "enabled": true,
+      "enabled": false,
       "module": "postprocess.post_entropy",
       "rule_list": ["ALL"]
     }
