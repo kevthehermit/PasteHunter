@@ -29,6 +29,7 @@ def recent_pastes(conf, input_history):
 
             # Create a new paste dict for us to normalize
             paste_data = paste
+            paste_data['confname'] = 'dumpz'
             paste_data['pasteid'] = paste['id']
             paste_data['pastesite'] = 'dumpz.org'
 

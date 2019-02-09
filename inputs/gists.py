@@ -72,6 +72,7 @@ def recent_pastes(conf, input_history):
                         continue
 
                     gist_data = file_meta
+                    gist_data['confname'] = 'gist'
                     gist_data['@timestamp'] = gist_meta['created_at']
                     gist_data['pasteid'] = gist_meta['id']
                     gist_data['user'] = gist_meta['user']

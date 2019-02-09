@@ -90,6 +90,7 @@ def recent_pastes(conf, input_history):
             paste = SlexyPaste(pid)
             history.append(paste.pid)
             paste_data = {}
+            paste_data['confname'] = 'slexy'
             paste_data['scrape_url'] = paste.url.full_url
             paste_data['pasteid'] = paste.pid
             paste_data['pastesite'] = paste.site
