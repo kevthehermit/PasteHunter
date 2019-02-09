@@ -33,6 +33,16 @@
       "api_scrape": "http://slexy.org/recent",
       "api_raw": "http://slexy.org/raw",
       "api_view": "http://slexy.org/view"
+    },
+    "stackexchange":{
+      "enabled": false,
+      "module": "inputs.stackexchange",
+      "site_list": ["stackoverflow","serverfault", "superuser", "webapps", "webmasters", "dba"],
+      "api_key": "",
+      "store_filter": "!LZg2mkNj0UY)iKNdTbVP4i",
+      "pagesize": 100,
+      "store_all": true,
+      "api_scrape": "https://api.stackexchange.com/2.2/questions"
     }
   },
   "outputs": {
