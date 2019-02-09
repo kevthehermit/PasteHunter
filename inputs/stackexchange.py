@@ -77,7 +77,7 @@ def recent_pastes(conf, input_history):
             quota_max = paste_list_json['quota_max']
             quota_remaining = paste_list_json['quota_remaining']
         
-        logger.info("Used {0} of {1} in api quota".format(quota_remaining, quota_max))
+        logger.info("Used {0} of {1} of StackExchange api quota".format(quota_remaining, quota_max))
         # Return the pastes and update history
         return paste_list, history
 
