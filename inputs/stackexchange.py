@@ -33,6 +33,7 @@ def recent_pastes(conf, input_history):
         
         # For each of the stack sites we want to query
         for site in site_list:
+            logger.info("Query Stack Exchange site: {0}".format(site))
 
             # Create the API uri
             scrape_uri = '{0}?key={1}&site={2}&page=1&pagesize=100&order=desc&sort=creation&filter={3}'.format(api_scrape, api_key, site, store_filter)
@@ -43,7 +44,7 @@ def recent_pastes(conf, input_history):
             # ToDo: Add an API rate test in here. 
             paste_list_json = paste_list_request.json()
             
-            logger.info("Used {0} of {1} in api quota".format(paste_list_json['quota_remaining'], paste_list_json['quota_max']))
+            
     
             for question in paste_list_json['items']:
                 # Track question ids to prevent dupes
@@ -71,7 +72,12 @@ def recent_pastes(conf, input_history):
                     )
                 paste_list.append(question_data)
             
+            
+            # Record API Quota on last call to save some logging. 
+            quota_max = paste_list_json['quota_max']
+            quota_remaining = paste_list_json['quota_remaining']
         
+        logger.info("Used {0} of {1} in api quota".format(quota_remaining, quota_max))
         # Return the pastes and update history
         return paste_list, history
 
