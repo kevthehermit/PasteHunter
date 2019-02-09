@@ -193,11 +193,21 @@ def paste_scanner():
             else:
                 results.append(match.rule)
 
+        # Store all OverRides other options. 
+        paste_site = paste_data['confname']
+        store_all = conf['inputs'][paste_site]['store_all']
+        # remove the confname key as its not really needed past this point
+        del paste_data['confname']
+
+
         # Blacklist Check
         # If any of the blacklist rules appear then empty the result set
+        blacklisted = False
         if conf['yara']['blacklist'] and 'blacklist' in results:
             results = []
+            blacklisted = True
             logger.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+
 
         # Post Process
 
@@ -206,12 +216,13 @@ def paste_scanner():
         for post_process, post_values in conf["post_process"].items():
             if post_values["enabled"]:
                 if any(i in results for i in post_values["rule_list"]) or "ALL" in post_values["rule_list"]:
-                    logger.info("Running Post Module {0} on {1}".format(post_values["module"], paste_data["pasteid"]))
-                    post_module = importlib.import_module(post_values["module"])
-                    post_results = post_module.run(results,
-                                                    raw_paste_data,
-                                                    paste_data
-                                                    )
+                    if not Blacklisted and store_all:
+                        logger.info("Running Post Module {0} on {1}".format(post_values["module"], paste_data["pasteid"]))
+                        post_module = importlib.import_module(post_values["module"])
+                        post_results = post_module.run(results,
+                                                        raw_paste_data,
+                                                        paste_data
+                                                        )
 
         # Throw everything back to paste_data for ease.
         paste_data = post_results
@@ -221,17 +232,10 @@ def paste_scanner():
         # If results is empty, ie no match, and store_all is True,
         # then append "no_match" to results. This will then force output.
 
-        #ToDo: Need to make this check for each output not universal
-
-        paste_site = paste_data['confname']
-        store_all = conf['inputs'][paste_site]['store_all']
         if store_all is True:
             if len(results) == 0:
                 results.append('no_match')
                 
-        # remove the confname key as its not really needed past this point
-        del paste_data['confname']
-
         if len(results) > 0:
 
             encoded_paste_data = raw_paste_data.encode('utf-8')
