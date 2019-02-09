@@ -12,7 +12,7 @@ import logging
 from logging import handlers 
 import time
 from time import sleep
-#from queue import Queue
+from urllib.parse import unquote_plus
 from common import parse_config
 from postprocess import post_email
 
@@ -35,6 +35,10 @@ logger.info("Starting PasteHunter Version: {0}".format(VERSION))
 # Parse the config file
 logger.info("Reading Configs")
 conf = parse_config()
+
+# If the config failed to parse
+if not conf:
+    sys.exit()
 
 # Set up the log file
 if "log" in conf and conf["log"]["log_to_file"]:
@@ -131,10 +135,22 @@ def paste_scanner():
         start_time = time.time()
         logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
+    
         raw_paste_uri = paste_data['scrape_url']
         # Cover fetch site SSLErrors
         try:
-            raw_paste_data = requests.get(raw_paste_uri).text
+            
+            # Stack questions dont have a raw endpoint
+            if paste_data['pastesite'].startswith('stack'):
+                json_body = requests.get(raw_paste_uri).json()
+                
+                # Unescape the code block strings in the json body. 
+                raw_body = json_body['items'][0]['body']
+                raw_paste_data = unquote_plus(raw_body)
+                
+            else:
+                raw_paste_data = requests.get(raw_paste_uri).text
+                
         except requests.exceptions.SSLError as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
             raw_paste_data = ""
@@ -207,11 +223,14 @@ def paste_scanner():
 
         #ToDo: Need to make this check for each output not universal
 
-        paste_site = paste_data['pastesite']
-        store_all = conf['inputs']['pastebin']['store_all']
-        if store_all is True and paste_site == 'pastebin.com':
+        paste_site = paste_data['confname']
+        store_all = conf['inputs'][paste_site]['store_all']
+        if store_all is True:
             if len(results) == 0:
                 results.append('no_match')
+                
+        # remove the confname key as its not really needed past this point
+        del paste_data['confname']
 
         if len(results) > 0:
 
@@ -279,15 +298,19 @@ if __name__ == "__main__":
                     input_history = paste_history[input_name]
                 else:
                     input_history = []
+                    
+                try:
 
-                i = importlib.import_module(input_name)
-                # Get list of recent pastes
-                logger.info("Fetching paste list from {0}".format(input_name))
-                paste_list, history = i.recent_pastes(conf, input_history)
-                for paste in paste_list:
-                    q.put(paste)
-                    queue_count += 1
-                paste_history[input_name] = history
+                    i = importlib.import_module(input_name)
+                    # Get list of recent pastes
+                    logger.info("Fetching paste list from {0}".format(input_name))
+                    paste_list, history = i.recent_pastes(conf, input_history)
+                    for paste in paste_list:
+                        q.put(paste)
+                        queue_count += 1
+                    paste_history[input_name] = history
+                except Exception as e:
+                    logger.error("Unable to fetch list from {0}: {1}".format(input_name, e))
 
             logger.debug("Writing History")
             # Write History

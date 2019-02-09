@@ -9,9 +9,14 @@ Pastehunter currently has support for the following sites:
  - dumpz.org
  - gist.github.com
  - slexy.org
-
-Support for the following sites is listed as ToDo:
- - paste.ee
+ - stackexchange # There are about 176! 
+   - Likly to expose privlidged information
+   - stackoverflow
+   - serverfault
+   - superuser
+   - webapps
+   - webmasters
+   - dba
 
 ## Supported Outputs
 Pastehunter supports several output modules:
