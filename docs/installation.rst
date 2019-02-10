@@ -95,5 +95,36 @@ General config options here.
 
 For Input, Output and Postprocess settings please refer to the relevant sections of the docs. 
     
+
+Starting
+--------
+
+You can run pastehunter by calling the script by name. 
+
+``python3 pastehunter.py``
+
+Service
+^^^^^^^
+
+You can install pastehunter as a service if your planning on running for long periods of time. An example systemd service scrfile is show below
+
+Create a new service file ``/etc/systemd/system/pastehunter.service``
+
+add the following text updating as appropriate for your setup paying attention to file paths and usernames.:: 
+
+
+    [Unit]
+    Description=PasteHunter
     
+    [Service]
+    WorkingDirectory=/opt/PasteHunter
+    ExecStart=/usr/bin/python3 /opt/PasteHunter/pastehunter.py
+    User=localuser
+    Group=localuser
+    Restart=always
     
+    [Install]
+    WantedBy=multi-user.target
+
+
+Before starting the service ensure you have tested the pastehunter app on the command line and identify any errors. Once your ready then update systemctl ``systemctl daemon-reload`` enable the new service ``systemctl enable pastehunter.service`` and start the service ``systemctl start pastehunter`` 
