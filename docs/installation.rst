@@ -74,7 +74,7 @@ Logging for the application is configured here.
 - **log_path**: path on disk to write log_file to.
 - **format**: python logging format string - https://docs.python.org/3/library/logging.html#formatter-objects
 
-=======  =========
+======== =========
 Level    Numerical
 ======== =========
 CRITICAL 50
@@ -106,11 +106,11 @@ You can run pastehunter by calling the script by name.
 Service
 ^^^^^^^
 
-You can install pastehunter as a service if your planning on running for long periods of time. An example systemd service scrfile is show below
+You can install pastehunter as a service if your planning on running for long periods of time. An example systemd service file is show below
 
 Create a new service file ``/etc/systemd/system/pastehunter.service``
 
-add the following text updating as appropriate for your setup paying attention to file paths and usernames.:: 
+Add the following text updating as appropriate for your setup paying attention to file paths and usernames.:: 
 
 
     [Unit]
