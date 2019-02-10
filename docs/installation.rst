@@ -1,0 +1,99 @@
+Installation
+============
+
+There are a few ways to install 
+
+
+
+Local Installation
+------------------
+
+Pastehunter
+^^^^^^^^^^^
+If you want to run the latest stable version grab the latest release from https://github.com/kevthehermit/PasteHunter/releases.
+If you want to run the development version clone the repository or download the latest archive. 
+
+Pastehunter has very few dependancies you can install all the python libraries using the requirements.txt file and ``sudo pip3 install -r requirements.txt``
+    
+    
+    
+
+Yara
+^^^^
+Yara is the scanning engine that scans each paste. Use the official documentation to install yara and the python3 library. 
+https://yara.readthedocs.io/en/latest/gettingstarted.html#compiling-and-installing-yara
+
+All yara rules are stored in the YaraRules directory. An index.yar file is created at run time that includes all additional yar files in this directory. 
+To add or remove yara rules, simply add or remove the rule file from this directory. 
+
+
+
+Elastic Search
+^^^^^^^^^^^^^^
+If you want to use the elastic search output module you will need to install elastic search. Pastehunter has been tested with version 6.x of Elasticsearch.
+To install follow the offical directions on https://www.elastic.co/guide/en/elasticsearch/reference/current/deb.html.
+
+You will also need the elasticsearch python library which can be installed using ``sudo pip3 install elasticsearch``.
+
+Kibana
+^^^^^^
+Kibana is the frontend search to Elasticsearch. If you have enabled the Elasticsearch module you probably want this. 
+To install follow the offical directions on https://www.elastic.co/guide/en/kibana/current/deb.html.
+
+
+
+Docker Installation
+-------------------
+You will find a Dockerfile that will build the latest stable version of PasteHunter. 
+
+
+This can be used with the included docker-compose.yml file. 
+A sample podspec for kubernets is coming soon. 
+
+
+Configuration
+-------------
+Before you can get up and running you will need to set up the basic config. 
+Copy the settings.json.sample to settings.json and edit with your editor of choice. 
+
+Yara
+^^^^
+
+- **rule_path**: defaults to the YaraRules directory in the PasteHunter root.
+- **blacklist**: If set to true, any pastes that match this rule will be ignored.
+- **test_rules**: Occasionaly I release some early test rules. Set this to ``true`` to use them.
+
+log
+^^^
+
+Logging for the application is configured here. 
+
+- **log_to_file**: true or false, default is stdout.
+- **log_file**: filename to log out to.
+- **logging_level**: numerical value for logging level see the table below.
+- **log_path**: path on disk to write log_file to.
+- **format**: python logging format string - https://docs.python.org/3/library/logging.html#formatter-objects
+
+=======  =========
+Level    Numerical
+======== =========
+CRITICAL 50
+ERROR    40
+WARNING  30
+INFO     20
+DEBUG    10
+NETSET   0
+======== =========
+
+general
+^^^^^^^
+
+General config options here.
+
+- **run_frequency**: Sleep delay between fetching list of inputs to download. This helps rate limits. 
+
+
+For Input, Output and Postprocess settings please refer to the relevant sections of the docs. 
+    
+    
+    
