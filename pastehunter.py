@@ -136,8 +136,7 @@ def paste_scanner():
         logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
         # get raw paste and hash them
     
-        raw_paste_uri = paste_data['scrape_url']
-        # Cover fetch site SSLErrors
+
         try:
             
             # Stack questions dont have a raw endpoint
@@ -152,8 +151,10 @@ def paste_scanner():
                 del paste_data['body']
                 
             else:
+                raw_paste_uri = paste_data['scrape_url']
                 raw_paste_data = requests.get(raw_paste_uri).text
                 
+        # Cover fetch site SSLErrors
         except requests.exceptions.SSLError as e:
             logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
             raw_paste_data = ""
