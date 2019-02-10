@@ -142,14 +142,11 @@ def paste_scanner():
             
             # Stack questions dont have a raw endpoint
             if ('stackexchange' in conf['inputs']) and (paste_data['pastesite'] in conf['inputs']['stackexchange']['site_list']):
-                json_body = requests.get(raw_paste_uri).json()
+                # The body is already included in the first request so we do not need a second call to the API. 
                 
                 # Unescape the code block strings in the json body. 
-                raw_body = json_body['items'][0]['body']
+                raw_body = paste_data['body']
                 raw_paste_data = unquote_plus(raw_body)
-                
-                # URL has the API Key in it so make sure it is removed before store.
-                del paste_data['scrape_url']
                 
             else:
                 raw_paste_data = requests.get(raw_paste_uri).text

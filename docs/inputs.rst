@@ -66,6 +66,6 @@ There are over 170 exchanges that form stackexchange. The following list is the 
 
 - **site_list**: List of site shorttitles that will be scraped. 
 - **api_key**: API App key as generated above.
-- **store_filter**: This is the stackexchange filter that determines what fields are returned. 
+- **store_filter**: This is the stackexchange filter that determines what fields are returned. It must contain the body element.
 - **pagesize**: How many questions to pull from the latest list. 
 - **store_all**: Store all pastes regardless of a rule match.
