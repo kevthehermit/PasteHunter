@@ -148,6 +148,9 @@ def paste_scanner():
                 raw_body = paste_data['body']
                 raw_paste_data = unquote_plus(raw_body)
                 
+                # now remove the old body key as we dont need it any more
+                del paste_data['body']
+                
             else:
                 raw_paste_data = requests.get(raw_paste_uri).text
                 
