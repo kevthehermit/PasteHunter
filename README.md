@@ -21,7 +21,7 @@ Pastehunter supports several output modules:
  - Dump to CSV file.
  - Send to syslog.
 
-For examples of data discovered using pastehunter check out my posts `Using pastehunter https://techanarchy.net/blog/hunting-pastebin-with-pastehunter`_ and 
+For examples of data discovered using pastehunter check out my posts `Using pastehunter <https://techanarchy.net/blog/hunting-pastebin-with-pastehunter>`_ and 
 `Pastehunter results <https://techanarchy.net/blog/pastehunter-the-results>`_
 
 
