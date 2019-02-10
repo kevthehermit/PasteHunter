@@ -44,6 +44,10 @@ def recent_pastes(conf, input_history):
             # ToDo: Add an API rate test in here. 
             paste_list_json = paste_list_request.json()
             
+            if "error_id" in paste_list_json:
+                logging.error("StackExchange API Error: {0}".format(paste_list_json['error_message']))
+                return [], []
+            
             
     
             for question in paste_list_json['items']:
