@@ -39,7 +39,7 @@
       "module": "inputs.stackexchange",
       "site_list": ["stackoverflow","serverfault", "superuser", "webapps", "webmasters", "dba"],
       "api_key": "",
-      "store_filter": "!LZg2mkNj0UY)iKNdTbVP4i",
+      "store_filter": "!)r_ttsG0v3bE1vo3*8Ki",
       "pagesize": 100,
       "store_all": true,
       "api_scrape": "https://api.stackexchange.com/2.2/questions"
