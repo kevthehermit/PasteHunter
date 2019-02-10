@@ -67,13 +67,6 @@ def recent_pastes(conf, input_history):
                 # Add a date field that kibana will map
                 date = datetime.utcfromtimestamp(float(question_data['creation_date'])).isoformat()
                 question_data['@timestamp'] = date
-                question_data['scrape_url'] = "{0}/{1}?key={2}&order=desc&sort=activity&site={3}&filter={4}".format(
-                    api_scrape, 
-                    question['question_id'],
-                    api_key,
-                    site,
-                    question_body_filter
-                    )
                 paste_list.append(question_data)
             
             
