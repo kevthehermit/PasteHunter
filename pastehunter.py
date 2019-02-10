@@ -18,7 +18,7 @@ from postprocess import post_email
 
 from multiprocessing import Queue
 
-VERSION = 0.2
+VERSION = 1.0
 
 # Setup Default logging
 logger = logging.getLogger('pastehunter')
