@@ -59,7 +59,8 @@ def recent_pastes(conf, input_history):
                 # Create a new question dict for us to normalize
                 question_data = question
                 question_data['confname'] = "stackexchange"
-                question_data['pasteid'] = question['question_id']
+                # Force type to string else it breaks ES Index mappings
+                question_data['pasteid'] = str(question['question_id']) 
                 question_data['pastesite'] = site
                 # Get the author and then trim the data we store. 
                 question_data['username'] = question['owner']['display_name']

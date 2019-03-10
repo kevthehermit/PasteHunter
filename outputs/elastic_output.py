@@ -33,11 +33,15 @@ class ElasticOutput():
                 week_number = datetime.date(datetime.now()).isocalendar()[1]
                 index_name = '{0}-{1}-{2}'.format(index_name, year_number, week_number)
             # ToDo: With multiple paste sites a pasteid collision is more likly!
-            self.es.index(index=index_name, doc_type='paste', id=paste_data['pasteid'], body=paste_data)
-            logger.debug("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
-                                                                         paste_data['pasteid'],
-                                                                         paste_data['YaraRule']
-                                                                         )
-                         )
+            try:
+                pasteid = str(paste_data['pasteid'])
+                self.es.index(index=index_name, doc_type='paste', id=pasteid, body=paste_data)
+                logger.debug("Stored {0} Paste {1}, Matched Rule {2}".format(paste_data['pastesite'],
+                                                                             paste_data['pasteid'],
+                                                                             paste_data['YaraRule']
+                                                                             )
+                             )
+            except Exception as e:
+                logger.error(e)
         else:
             logger.error("Elastic Search Enabled, not configured!")
