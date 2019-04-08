@@ -149,7 +149,7 @@ def paste_scanner():
     # scan the Paste
     # Store the Paste
     while True:
-        with timeout(seconds=3):
+        with timeout(seconds=10):
             paste_data = q.get()
             # Start a timer
             start_time = time.time()
