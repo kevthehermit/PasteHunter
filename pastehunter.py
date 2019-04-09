@@ -51,7 +51,8 @@ class timeout:
         self.seconds = seconds
         self.error_message = error_message
     def handle_timeout(self, signum, frame):
-        raise TimeoutError(self.error_message)
+        print("Process timeout: {0}".format(self.error_message))
+        sys.exit(0)
     def __enter__(self):
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.seconds)
@@ -151,8 +152,7 @@ def paste_scanner():
     while True:
         while not q.empty():
             paste_data = q.get()
-            with timeout(seconds=10):
-                
+            with timeout(seconds=5):
                 # Start a timer
                 start_time = time.time()
                 logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
@@ -304,17 +304,27 @@ if __name__ == "__main__":
     q = Queue()
     processes = []
 
-    # Threads
-    for i in range(5):
-        m = multiprocessing.Process(target=paste_scanner)
-        # Add new process to list so we can run join on them later. 
-        processes.append(m)
-        m.start()
-
     # Now Fill the Queue
     try:
         while True:
             queue_count = 0
+            counter = 0
+            if len(processes) < 5:
+                for i in range(5-len(processes)):
+                    logger.warning("Creating New Process")
+                    m = multiprocessing.Process(target=paste_scanner)
+                    # Add new process to list so we can run join on them later. 
+                    processes.append(m)
+                    m.start()
+            for process in processes:
+                if not process.is_alive():
+                    logger.warning("Restarting Dead Process")
+                    del processes[counter]
+                    m = multiprocessing.Process(target=paste_scanner)
+                    # Add new process to list so we can run join on them later. 
+                    processes.append(m)
+                    m.start()
+                counter += 1
             
             # Check if the processors are active
             # Paste History
