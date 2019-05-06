@@ -128,7 +128,7 @@ for output_type, output_values in conf["outputs"].items():
 def yara_index(rule_path, blacklist, test_rules):
     index_file = os.path.join(rule_path, 'index.yar')
     with open(index_file, 'w') as yar:
-        for filename in os.listdir('YaraRules'):
+        for filename in os.listdir(rule_path):
             if filename.endswith('.yar') and filename != 'index.yar':
                 if filename == 'blacklist.yar':
                     if blacklist:
