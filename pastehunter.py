@@ -150,7 +150,10 @@ def paste_scanner():
     # scan the Paste
     # Store the Paste
     while True:
-        while not q.empty():
+        if q.empty():
+            # Queue was empty, sleep to prevent busy loop
+            sleep(0.5)
+        else:
             paste_data = q.get()
             with timeout(seconds=5):
                 # Start a timer
