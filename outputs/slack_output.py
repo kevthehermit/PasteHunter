@@ -24,7 +24,7 @@ class SlackOutput():
 
     def store_paste(self, paste_data):
         if self.valid:
-            send = False
+            send = ('all' in self.accepted_rules)
 
             for rule in self.accepted_rules:
                 if rule in paste_data['YaraRule']:
@@ -38,7 +38,7 @@ class SlackOutput():
                             "fallback": "Plan a vacation",
                             "author_name": "PasteHunter",
                             "title": "Paste ID {0}".format(paste_data['pasteid']),
-                            "text": "Yara Rule {0} Found on {1}".format(paste_data['YaraRule'], paste_data['pastesite'])
+                            "text": "Yara Rule {0} Found on {1}\n\r{2}".format(paste_data['YaraRule'], paste_data['pastesite'], paste_data['scrape_url'])
                         }
                     ]
                 }
