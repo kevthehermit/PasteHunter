@@ -24,7 +24,7 @@
       "api_limit": 100,
       "store_all": false,
       "user_blacklist": [],
-      "file_blacklist": ["grahamcofborg-eval-package-list"]
+      "file_blacklist": ["grahamcofborg-eval-package-list", "Changed Paths"]
     },
     "slexy":{
       "enabled": true,
