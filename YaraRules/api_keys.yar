@@ -16,6 +16,7 @@ rule generic_api
         $hash64 = /\b[a-fA-F\d]{64}\b/
         $n1 = "#EXTINF"
         $n2 = "m3u8"
+        $n3 = "Chocolatey is running"
 
     condition:
         (any of ($a*)) and (any of ($hash*)) and (not any of ($n*))
