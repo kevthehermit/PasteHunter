@@ -115,7 +115,7 @@
       "account_sid": "",
       "auth_token": "",
       "twilio_sender": "",
-      "recipient_list": []
+      "recipient_list": [],
       "rule_list": ["custom_keywords"]
     }
   },
