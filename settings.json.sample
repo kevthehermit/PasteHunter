@@ -102,10 +102,20 @@
       }
     },
     "slack_output": {
-      "enabled": true,
+      "enabled": false,
       "module": "outputs.slack_output",
       "classname": "SlackOutput",
       "webhook_url": "",
+      "rule_list": ["custom_keywords"]
+    },
+    "twilio_output": {
+      "enabled": false,
+      "module": "outputs.twilio_output",
+      "classname": "TwilioOutput",
+      "account_sid": "",
+      "auth_token": "",
+      "twilio_sender": "",
+      "recipient_list": []
       "rule_list": ["custom_keywords"]
     }
   },
