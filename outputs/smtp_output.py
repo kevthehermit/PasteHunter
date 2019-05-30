@@ -54,7 +54,7 @@ class SMTPOutput():
         json_body = json.dumps(paste_data)
         attachment.set_payload(json_body)
         email.encoders.encode_base64(attachment)
-        attachment.add_header('Content-Disposition', 'attachment; filename="Alert.json"')
+        attachment.add_header('Content-Disposition', 'attachment; filename="Alert-{0}.json"'.format(paste_data['pasteid']))
         msg.attach(attachment)
 
         # Connect to the SMTP server and send
