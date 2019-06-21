@@ -64,6 +64,7 @@
       "classname": "JsonOutput",
       "output_path": "logs/json/",
       "store_raw": true,
+      "compress_raw": true,
       "encode_raw": true
     },
     "csv_output": {

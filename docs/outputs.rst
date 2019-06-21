@@ -27,6 +27,7 @@ This output module will store each paste in a json file on disk. The name of the
 
 - **output_path**: Path on disk to store output files. 
 - **store_raw**: Include the raw paste in the json file. False jsut stores metadata.
+- **compress_raw**: Compresses the data using LZMA if it will reduce the size. Can be decompressed by base64-decoding, then using the `xz command <https://www.systutorials.com/docs/linux/man/1-xz/>`_.
 - **encode_raw**: Ignored, Reserved for future usage.
 
 CSV
