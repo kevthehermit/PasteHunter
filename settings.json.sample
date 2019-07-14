@@ -64,7 +64,6 @@
       "classname": "JsonOutput",
       "output_path": "logs/json/",
       "store_raw": true,
-      "compress_raw": true,
       "encode_raw": true
     },
     "csv_output": {
@@ -159,6 +158,11 @@
     "post_entropy": {
       "enabled": false,
       "module": "postprocess.post_entropy",
+      "rule_list": ["ALL"]
+    },
+    "post_compress": {
+      "enabled": true,
+      "module": "postprocess.post_compress",
       "rule_list": ["ALL"]
     }
   }
