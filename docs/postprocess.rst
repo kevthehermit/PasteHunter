@@ -51,3 +51,10 @@ Entropy
 This postprocess module calculates shannon entropy on the raw paste data. This can be used to help identify binary and encoded or encrytped data. 
 
 - **rule_list**: List of rules that will trigger the postprocess module. 
+
+Compress
+-------
+Compresses the data using LZMA(lossless compression) if it will reduce the size. Small pastes or pastes that don't benefit from compression will not be affected by this module. 
+Its outputs can be decompressed by base64-decoding, then using the `xz command <https://www.systutorials.com/docs/linux/man/1-xz/>`_.
+
+- **rule_list**: List of rules that will trigger the postprocess module. 
