@@ -1,6 +1,6 @@
 # PasteHunter
 PasteHunter is a python3 application that is designed to query a collection of sites that host publicly pasted data. 
-For all the pasts it finds it scans the raw contents against a series of Yara rules looking for information that can be used 
+For all the pastes it finds it scans the raw contents against a series of Yara rules looking for information that can be used 
 by an organisation or a researcher.
 
 For setup instructions please see the official documentation https://pastehunter.readthedocs.io/en/latest/installation.html
