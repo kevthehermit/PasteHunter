@@ -181,6 +181,11 @@ def paste_scanner():
                 except requests.exceptions.SSLError as e:
                     logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
                     raw_paste_data = ""
+                
+                # General Exception 
+                except Exception as e:
+                    logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+                    raw_paste_data = ""
         
                 # Pastebin Cache
                 if raw_paste_data == "File is not ready for scraping yet. Try again in 1 minute.":
@@ -194,6 +199,12 @@ def paste_scanner():
                     except requests.exceptions.SSLError as e:
                         logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
                         raw_paste_data = ""
+
+                    # General Exception 
+                    except Exception as e:
+                        logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
+                        raw_paste_data = ""
+
                 # Process the paste data here
                 try:
                     # Scan with yara
