@@ -237,6 +237,17 @@ def paste_scanner():
                     # Else use the rule name
                     else:
                         results.append(match.rule)
+
+                # Store additional fields for passing on to post processing
+                encoded_paste_data = raw_paste_data.encode('utf-8')
+                md5 = hashlib.md5(encoded_paste_data).hexdigest()
+                sha256 = hashlib.sha256(encoded_paste_data).hexdigest()
+                paste_data['MD5'] = md5
+                paste_data['SHA256'] = sha256
+                paste_data['raw_paste'] = raw_paste_data
+                paste_data['YaraRule'] = results
+                # Set the size for all pastes - This will override any size set by the source
+                paste_data['size'] = len(raw_paste_data)
         
                 # Store all OverRides other options. 
                 paste_site = paste_data['confname']
@@ -282,21 +293,6 @@ def paste_scanner():
                         results.append('no_match')
                         
                 if len(results) > 0:
-        
-                    encoded_paste_data = raw_paste_data.encode('utf-8')
-                    md5 = hashlib.md5(encoded_paste_data).hexdigest()
-                    sha256 = hashlib.sha256(encoded_paste_data).hexdigest()
-                    paste_data['MD5'] = md5
-                    paste_data['SHA256'] = sha256
-                    # It is possible a post module modified or set this field.
-                    if not paste_data.get('raw_paste'):
-                        paste_data['raw_paste'] = raw_paste_data
-                        paste_data['size'] = len(raw_paste_data)
-                    else:
-                        # Set size based on modified value
-                        paste_data['size'] = len(paste_data['raw_paste'])
-                    
-                    paste_data['YaraRule'] = results
                     for output in outputs:
                         try:
                             output.store_paste(paste_data)
