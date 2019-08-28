@@ -153,7 +153,9 @@
     "format": "%(asctime)s [%(threadName)-12.12s] %(levelname)s:%(message)s"
   },
   "general": {
-    "run_frequency": 300
+    "run_frequency": 300,
+    "process_timeout": 5
+  },
   },
   "post_process": {
     "post_email": {
