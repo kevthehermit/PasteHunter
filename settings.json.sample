@@ -58,6 +58,17 @@
       "elastic_ssl": false,
       "weekly_index": true
     },
+    "splunk_output": {
+      "enabled": false,
+      "module": "outputs.splunk_output",
+      "classname": "SplunkOutput",
+      "splunk_host": "host",
+      "splunk_port": 8089,
+      "splunk_user": "user",
+      "splunk_pass": "pass",
+      "splunk_index": "paste-test",
+      "store_raw": true
+    },
     "json_output": {
       "enabled": false,
       "module": "outputs.json_output",
