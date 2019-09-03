@@ -22,4 +22,9 @@ Pastehunter supports several output modules:
  - Dump to CSV file.
  - Send to syslog.
 
+ ## Supported Sandboxes
+ Pastehunter supports several sandboxes that decoded data can be sent to:
+ - Cuckoo
+ - Viper
+
 For examples of data discovered using pastehunter check out my posts https://techanarchy.net/blog/hunting-pastebin-with-pastehunter and https://techanarchy.net/blog/pastehunter-the-results

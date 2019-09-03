@@ -29,20 +29,7 @@ when the full paste is a base64 blob, i.e. it will not extract base64 code that 
 
 - **rule_list**: List of rules that will trigger the postprocess module. 
 
-
-Cuckoo
-^^^^^^
-If the samples match a binary file format you can optionaly send the file for analysis by a Cuckoo Sandbox.
-
-- **api_host**: IP or hostname for a Cuckoo API endpoint. 
-- **api_port**: Port number for a Cuckoo API endpoint.
-
-Viper
-^^^^^
-If the samples match a binary file format you can optionaly send the file to a Viper instance for further analysis.
-
-- **api_host**: IP or hostname for a Cuckoo API endpoint. 
-- **api_port**: Port number for a Cuckoo API endpoint.
+See the `Sandboxes documentation <sandboxes.rst>`_ for information on how to configure the sandboxes used for scanning decoded base64 data.
 
 
 Entropy
