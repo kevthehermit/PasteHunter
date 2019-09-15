@@ -155,7 +155,7 @@ def paste_scanner():
             sleep(0.5)
         else:
             paste_data = q.get()
-            with timeout(seconds=5):
+            with timeout(seconds=10):
                 # Start a timer
                 start_time = time.time()
                 logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
