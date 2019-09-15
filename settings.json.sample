@@ -26,6 +26,15 @@
       "user_blacklist": [],
       "file_blacklist": ["grahamcofborg-eval-package-list", "Changed Paths"]
     },
+    "github": {
+      "enabled": false,
+      "module": "inputs.github",
+      "api_token": "",
+      "api_limit": 100,
+      "store_all": false,
+      "user_blacklist": [],
+      "file_blacklist": []
+    },
     "slexy":{
       "enabled": true,
       "module": "inputs.slexy",
