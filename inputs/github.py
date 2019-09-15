@@ -1,5 +1,6 @@
 import logging
 import math
+import pathlib
 from datetime import datetime
 
 import requests
@@ -90,7 +91,8 @@ def recent_pastes(conf, input_history):
                         continue
                 payload = event_meta.get('payload')
                 if not 'commits' in payload:
-                    logger.info('Skipping event {} due to no commits. Skipping!'.format(event_id))
+                    # Debug, because this is high output
+                    logger.debug('Skipping event {} due to no commits.'.format(event_id))
                     continue
                 for commit_meta in payload.get('commits'):
                     commit_url = commit_meta.get('url')
@@ -104,7 +106,8 @@ def recent_pastes(conf, input_history):
                         # Convert path -> filename
                         if '/' in file_name:
                             file_name = file_name.split('/')[-1]
-
+                        for pattern in gh_file_blacklist:
+                            pathlib.PurePath(file_path).match(pattern)
                         if file_name in gh_file_blacklist:
                             logger.info('Blacklisting file {0} from event {1}'.format(file_name, event_id))
                             continue
@@ -123,5 +126,5 @@ def recent_pastes(conf, input_history):
         # Return results and history
         return paste_list, history
     except Exception as e:
-        logger.error('Unable to parse paste results: {0}'.format(e))
+        logger.exception('Unable to parse paste results: {0}'.format(e), e)
         return paste_list, history
