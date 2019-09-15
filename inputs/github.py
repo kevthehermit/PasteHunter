@@ -97,6 +97,9 @@ def recent_pastes(conf, input_history):
                 for commit_meta in payload.get('commits'):
                     commit_url = commit_meta.get('url')
                     commit_data = _make_request(commit_url, headers)
+                    if not commit_data:
+                        logger.info('No data returned for url {}. Skipping...'.format(commit_url))
+                        continue
                     if commit_data.get('committer') and commit_data.get('committer').get('login') in gh_user_blacklist:
                         logger.info('Blacklisting GitHub event from user: {0}'.format(event_meta['owner']['login']))
                         continue
