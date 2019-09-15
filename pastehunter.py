@@ -175,7 +175,12 @@ def paste_scanner():
                         
                     else:
                         raw_paste_uri = paste_data['scrape_url']
-                        raw_paste_data = requests.get(raw_paste_uri).text
+                        if not raw_paste_uri:
+                            logger.info('Unable to retrieve paste, no uri found.')
+                            logger.debug(json.dumps(paste_data))
+                            raw_paste_data = ""
+                        else:
+                            raw_paste_data = requests.get(raw_paste_uri).text
                         
                 # Cover fetch site SSLErrors
                 except requests.exceptions.SSLError as e:

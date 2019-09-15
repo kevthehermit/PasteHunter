@@ -249,3 +249,303 @@ rule IdeaKey {
     condition:
         filename matches /(\/|^)idea[0-9]{0,}\.key$/is
 }
+rule DBServers {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Database servers (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)connections\.xml$/is
+            or filename matches /(\/|^)\.pgpass$/is
+}
+rule Proftpd {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Proftpd configuration files created by cpanel (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)proftpdpasswd$/is
+}
+rule Ventrilo {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Ventrilo server configuration files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)ventrilo_srv\.ini/is
+}
+rule WinFrameClient {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "WinFrame-Client configuration used to connect to Citrix Application Servers (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "[WFClient] Password="
+    condition:
+        all of them and filename matches /.*\.ica/is
+}
+rule CounterStrikeRCON {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "RCON Credentials for CounterStrike servers (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "rcon" nocase
+        $ = "password" nocase
+    condition:
+        all of them and filename matches /(\/|^)server\.cfg/is
+}
+rule JekyllGitHub {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Jekyll Token for GitHub (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "JEKYLL_GITHUB_TOKEN" nocase
+    condition:
+        all of them
+}
+rule SshdConfig {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "SSHD config files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)sshd_config/is
+}
+rule DhcpConfig {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "DHCP Config files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)dhcpd\.conf/is
+}
+rule Phoenix {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Phoenix prod config and secret files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "prod.secret.exs"
+    condition:
+        filename matches /(\/|^)prod\.secret\.exs/is or (filename matches /(\/|^)prod\.exs/is and not any of them)
+}
+rule JoomlaConfig {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Joomla config files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "JConfig" nocase
+        $ = "password" nocase
+    condition:
+        filename matches /(\/|^)configuration.php/is and all of them
+}
+rule PasswdFile {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Unix /etc/passwd files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "/bin/bash" nocase
+        $ = "/bin/sh" nocase
+        $ = "/usr/sbin/nologin" nocase
+    condition:
+        filename matches /(\/|^)passwd$/is and any of them
+}
+rule ShadowFile {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Unix /etc/shadow files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = ":17737:0:99999" nocase
+        $ = "root:*:" nocase
+        // MD5
+        $ = "$1" nocase
+        // SHA-256
+        $ = "$5" nocase
+        // SHA-1
+        $ = "$6" nocase
+    condition:
+        filename matches /(\/|^)passwd$/is and any of them
+}
+rule Shodan {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Shodan API Keys (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = /shodan_api_key: [a-zA-Z0-9]+/ nocase
+        $ = /shodan_api_key=[a-zA-Z0-9]+/ nocase
+    condition:
+        any of them
+}
+rule Avast {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Avast license files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "support.avast.com" nocase
+    condition:
+        all of them and (filename matches /.*\.avastlic$/is)
+}
+rule DBeaver {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "DBeaver configuration files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)dbeaver-data-sources.xml$/is
+}
+rule ESmtp {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = ".esmtpdrc files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "password" nocase
+    condition:
+        filename matches /(\/|^)\.esmtprc$/is and all of them
+}
+rule Homebrew {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Homebrew github tokens (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "HOMEBREW_GITHUB_API_TOKEN" nocase
+    condition:
+        all of them
+}
+rule MLab {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "MLab mongodb credentials (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = ".mlab.com" nocase
+        $ = "password" nocase
+    condition:
+        all of them
+}
+rule Firefox {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Firefox saved passwords (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)logins\.json$/is
+}
+rule CCCam {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "CCCam server config files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)CCCam\.cfg$/is
+}
+rule IRC {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Nickserv auth configs (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "msg nickserv identify" nocase
+    condition:
+        filename matches /(\/|^)config$/is and all of them
+}
+rule Django {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Django secret keys (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "SECRET_KEY" nocase
+    condition:
+        filename matches /(\/|^)settings.py$/is and all of them
+}
+rule RailsSecrets {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Ruby on rails secrets.yml files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "password" nocase
+    condition:
+        filename matches /(\/|^)secrets\.yml$/is and all of them
+}
+rule RailsMasterKey {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Rails master key files (used for decrypting credentials.yml.enc for Rails 5.2+) (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    strings:
+        $ = "password" nocase
+    condition:
+        filename matches /(\/|^)config\/master\.key$/is and all of them
+}
+rule AtomDeployments {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Multiple files created by different atom extensions for authentication (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)deployment-config\.json$/is or
+        filename matches /(\/|^)remote-sync\.json$/is or
+        filename matches /(\/|^)\.ftpconfig$/is
+}
+rule VscodeSftp {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "VSCode SFTP files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)\.vscode\/sftp\.json$/is
+}
+rule SublimeSftp {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Sublime SFTP files (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)sftp-config\.json$/is
+}
+rule JetbrainsCreds {
+    meta:
+        author = "Dylan Katz (@Plazmaz)"
+        description = "Jetbrains IDE webserver credentials with encoded passwords (Created as part of PasteHunter)"
+        reference = "https://github.com/techgaun/github-dorks"
+        date = "09/15/19"
+    condition:
+        filename matches /(\/|^)WebServers\.xml$/is
+}
