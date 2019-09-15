@@ -208,7 +208,7 @@ def paste_scanner():
                 # Process the paste data here
                 try:
                     # Scan with yara
-                    matches = rules.match(data=raw_paste_data)
+                    matches = rules.match(data=raw_paste_data, externals={'filename': paste_data.get('paste_data')})
                 except Exception as e:
                     logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
                     continue
@@ -311,7 +311,7 @@ if __name__ == "__main__":
         index_file = os.path.join(conf['yara']['rule_path'], 'index.yar')
         rules = yara.compile(index_file)
     except Exception as e:
-        print("Unable to Create Yara index: ", e)
+        logger.exception("Unable to Create Yara index: ", e)
         sys.exit()
 
     # Create Queue to hold paste URI's
