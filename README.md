@@ -8,7 +8,8 @@ For setup instructions please see the official documentation https://pastehunter
 ## Supported Inputs
 Pastehunter currently has support for the following sites:
  - pastebin.com
- - gist.github.com
+ - gist.github.com # Gists
+ - github.com # Public commit activity feed
  - slexy.org
  - stackexchange # There are about 176! 
 
