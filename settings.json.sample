@@ -168,6 +168,11 @@
       "enabled": false,
       "module": "postprocess.post_entropy",
       "rule_list": ["ALL"]
+    },
+    "post_compress": {
+      "enabled": true,
+      "module": "postprocess.post_compress",
+      "rule_list": ["ALL"]
     }
   }
 }

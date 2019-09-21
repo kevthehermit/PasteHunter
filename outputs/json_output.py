@@ -1,7 +1,7 @@
-import os
-import datetime
 import json
 import logging
+import os
+
 from common import parse_config
 
 logger = logging.getLogger('pastehunter')

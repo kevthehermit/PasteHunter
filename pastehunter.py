@@ -286,10 +286,15 @@ def paste_scanner():
                     sha256 = hashlib.sha256(encoded_paste_data).hexdigest()
                     paste_data['MD5'] = md5
                     paste_data['SHA256'] = sha256
-                    paste_data['raw_paste'] = raw_paste_data
+                    # It is possible a post module modified or set this field.
+                    if not paste_data.get('raw_paste'):
+                        paste_data['raw_paste'] = raw_paste_data
+                        paste_data['size'] = len(raw_paste_data)
+                    else:
+                        # Set size based on modified value
+                        paste_data['size'] = len(paste_data['raw_paste'])
+                    
                     paste_data['YaraRule'] = results
-                    # Set the size for all pastes - This will override any size set by the source
-                    paste_data['size'] = len(raw_paste_data)
                     for output in outputs:
                         try:
                             output.store_paste(paste_data)
