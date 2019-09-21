@@ -155,7 +155,7 @@ def paste_scanner():
             sleep(0.5)
         else:
             paste_data = q.get()
-            with timeout(seconds=5):
+            with timeout(seconds=10):
                 # Start a timer
                 start_time = time.time()
                 logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
@@ -175,7 +175,12 @@ def paste_scanner():
                         
                     else:
                         raw_paste_uri = paste_data['scrape_url']
-                        raw_paste_data = requests.get(raw_paste_uri).text
+                        if not raw_paste_uri:
+                            logger.info('Unable to retrieve paste, no uri found.')
+                            logger.debug(json.dumps(paste_data))
+                            raw_paste_data = ""
+                        else:
+                            raw_paste_data = requests.get(raw_paste_uri).text
                         
                 # Cover fetch site SSLErrors
                 except requests.exceptions.SSLError as e:
@@ -208,7 +213,7 @@ def paste_scanner():
                 # Process the paste data here
                 try:
                     # Scan with yara
-                    matches = rules.match(data=raw_paste_data)
+                    matches = rules.match(data=raw_paste_data, externals={'filename': paste_data.get('filename')})
                 except Exception as e:
                     logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
                     continue
@@ -309,9 +314,9 @@ if __name__ == "__main__":
 
         # Compile the yara rules we will use to match pastes
         index_file = os.path.join(conf['yara']['rule_path'], 'index.yar')
-        rules = yara.compile(index_file)
+        rules = yara.compile(index_file, externals={'filename': ''})
     except Exception as e:
-        print("Unable to Create Yara index: ", e)
+        logger.exception("Unable to Create Yara index: ", e)
         sys.exit()
 
     # Create Queue to hold paste URI's
