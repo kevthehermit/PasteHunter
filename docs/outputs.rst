@@ -20,6 +20,17 @@ Elasticsearch was the default output. Storing all pastes and using Kibana as a g
 - **elastic_pass**: Password if using xpack / shield or basic auth.
 - **elastic_ssl**: True or false if Elasticsearch is served over SSL.
 
+Splunk
+-------------
+Splunk output is similar to Elasticsearch. All the data is put into Splunk and then Splunk can be used for graphical frontend and querying.
+
+- **splunk_host**: Hostname of IP of your Splunk instance.
+- **splunk_port**: The Splunk management port. (Usually port 8089)
+- **splunk_user**: Username of your Splunk user.
+- **splunk_pass**: Password for your Splunk user.
+- **splunk_index**: The name of the Splunk index to store the data in.
+- **store_raw**: Include the raw paste in the data sent to Splunk.
+
 JSON
 ----
 

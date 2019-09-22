@@ -24,13 +24,15 @@ from multiprocessing import Queue
 VERSION = 1.0
 
 # Setup Default logging
-logger = logging.getLogger('pastehunter')
-logger.setLevel(logging.INFO)
+root = logging.getLogger()
 ch = logging.StreamHandler()
 ch.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(levelname)s:%(filename)s:%(message)s')
 ch.setFormatter(formatter)
-logger.addHandler(ch)
+root.addHandler(ch)
+
+logger = logging.getLogger('pastehunter')
+logger.setLevel(logging.INFO)
 
 # Version info
 logger.info("Starting PasteHunter Version: {0}".format(VERSION))
