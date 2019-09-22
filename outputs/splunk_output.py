@@ -37,6 +37,7 @@ class SplunkOutput():
 
         try:
             # The edit_tcp capability is required to access this API
-            self.index.submit(json.dumps(local_data), sourcetype="pastehunter")
+            sourcetype = config['outputs']['splunk_output']['splunk_sourcetype']
+            self.index.submit(json.dumps(local_data), sourcetype=sourcetype)
         except Exception as e:
-            logger.error('Error submitting paste_data to splunk')
+            logger.exception('Error submitting paste_data to splunk', e)

@@ -67,6 +67,7 @@
       "splunk_user": "user",
       "splunk_pass": "pass",
       "splunk_index": "paste-test",
+      "splunk_sourcetype": "pastehunter",
       "store_raw": true
     },
     "json_output": {
