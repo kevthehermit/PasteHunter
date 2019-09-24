@@ -58,6 +58,7 @@ def recent_pastes(conf, input_history):
     
                 # Create a new question dict for us to normalize
                 question_data = question
+                question_data['filename'] = ''
                 question_data['confname'] = "stackexchange"
                 # Force type to string else it breaks ES Index mappings
                 question_data['pasteid'] = str(question['question_id']) 

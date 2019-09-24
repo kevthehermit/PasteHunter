@@ -182,7 +182,7 @@
       "rule_list": ["ALL"]
     },
     "post_compress": {
-      "enabled": true,
+      "enabled": false,
       "module": "postprocess.post_compress",
       "rule_list": ["ALL"]
     }
