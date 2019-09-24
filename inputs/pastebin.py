@@ -31,6 +31,7 @@ def recent_pastes(conf, input_history):
 
             # Create a new paste dict for us to normalize
             paste_data = paste
+            paste_data['filename'] = paste['key']
             paste_data['confname'] = 'pastebin'
             paste_data['pasteid'] = paste['key']
             paste_data['pastesite'] = 'pastebin.com'
