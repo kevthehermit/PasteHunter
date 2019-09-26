@@ -63,6 +63,8 @@ def recent_pastes(conf, input_history):
                 # Force type to string else it breaks ES Index mappings
                 question_data['pasteid'] = str(question['question_id']) 
                 question_data['pastesite'] = site
+                # Set the raw uri to avoid breaking other things. Defaults to empty if not found
+                question_data['scrape_url'] = question.get('link', '')
                 # Get the author and then trim the data we store. 
                 question_data['username'] = question['owner']['display_name']
                 del question_data['owner']
