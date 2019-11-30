@@ -10,7 +10,7 @@ class SlexySite(object):
 
     def __init__(self):
         self.site = "slexy.org"
-        url_slexy = "http://" + self.site
+        url_slexy = "https://" + self.site
         self.url_recent = url_slexy + "/recent"
         self.url_view = url_slexy + "/view"
         self.url_raw = url_slexy + "/raw"
@@ -27,7 +27,7 @@ class SlexySite(object):
             data=None,
             headers={
               'Referer': self.url_recent,
-              'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.92 Safari/537.36'
+              'User-Agent': 'PasteHunter'
             }
         )
 
