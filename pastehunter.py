@@ -215,7 +215,7 @@ def paste_scanner():
                 # Process the paste data here
                 try:
                     # Scan with yara
-                    matches = rules.match(data=raw_paste_data, externals={'filename': paste_data.get('filename')})
+                    matches = rules.match(data=raw_paste_data, externals={'filename': paste_data.get('filename', '')})
                 except Exception as e:
                     logger.error("Unable to scan raw paste : {0} - {1}".format(paste_data['pasteid'], e))
                     continue
