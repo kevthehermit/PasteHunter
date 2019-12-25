@@ -1,8 +1,8 @@
 import logging
 import math
-import pathlib
 from datetime import datetime
 
+import fnmatch
 import requests
 
 # Future work/improvement that can happen here: support PR diffs, they contain a patch URL
@@ -105,15 +105,10 @@ def recent_pastes(conf, input_history):
                         continue
                     for file in commit_data.get('files'):
                         file_path = file.get('filename')
-                        file_name = file_path
-                        # Convert path -> filename
-                        if '/' in file_name:
-                            file_name = file_name.split('/')[-1]
                         for pattern in gh_file_blacklist:
-                            pathlib.PurePath(file_path).match(pattern)
-                        if file_name in gh_file_blacklist:
-                            logger.info('Blacklisting file {0} from event {1}'.format(file_name, event_id))
-                            continue
+                            if fnmatch.fnmatch(file_path, pattern):
+                                logger.info('Blacklisting file {0} from event {1} (matched pattern "{2}")'.format(file_path, event_id, pattern))
+                                continue
 
                         gist_data = file
                         gist_data['confname'] = 'github'
