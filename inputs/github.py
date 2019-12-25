@@ -62,6 +62,7 @@ def recent_pastes(conf, input_history):
 
     gh_file_blacklist = conf['inputs']['github']['file_blacklist']
     gh_user_blacklist = conf['inputs']['github']['user_blacklist']
+    ignore_bots = conf['inputs']['github']['ignore_bots']
 
     try:
         # Get the required amount of entries via pagination
@@ -89,6 +90,10 @@ def recent_pastes(conf, input_history):
                     if event_meta.get('actor').get('login') in gh_user_blacklist:
                         logger.info('Blacklisting GitHub event from user: {0}'.format(event_meta.get('login')))
                         continue
+                    if ignore_bots and event_meta.get('actor').get('login').endswith("[bot]"):
+                        logger.info('Ignoring GitHub event from bot user: {0}'.format(event_meta.get('login')))
+                        continue
+
                 payload = event_meta.get('payload')
                 if not 'commits' in payload:
                     # Debug, because this is high output
