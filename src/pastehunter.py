@@ -9,7 +9,7 @@ import os
 import signal
 import sys
 import time
-from io import StringIO, BytesIO
+from io import BytesIO
 from logging import handlers
 from time import sleep
 from urllib.parse import unquote_plus
@@ -80,7 +80,7 @@ if "log" in conf and conf["log"]["log_to_file"]:
         fileFormatter = logging.Formatter("{0}".format(conf["log"]["format"]))
         fileHandler.setFormatter(fileFormatter)
     else:
-        fileHandler.setFormatter(logFormatter)
+        fileHandler.setFormatter(formatter)
     fileHandler.setLevel(conf["log"]["logging_level"])
     logger.addHandler(fileHandler)
     logger.info("Enabled Log File: {0}".format(logfile))
