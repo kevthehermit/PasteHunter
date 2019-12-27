@@ -1,6 +1,3 @@
-import os
-import datetime
-import json
 import logging
 import requests
 from common import parse_config

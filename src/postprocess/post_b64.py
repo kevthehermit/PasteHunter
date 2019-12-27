@@ -1,4 +1,3 @@
-import re
 import hashlib
 import importlib
 import gzip
