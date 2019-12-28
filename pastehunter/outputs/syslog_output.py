@@ -1,5 +1,5 @@
 import socket
-from common import parse_config
+from pastehunter.common import parse_config
 
 config = parse_config()
 

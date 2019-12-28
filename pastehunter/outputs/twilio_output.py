@@ -1,6 +1,6 @@
 import logging
 from twilio.rest import Client
-from common import parse_config
+from pastehunter.common import parse_config
 
 logger = logging.getLogger('pastehunter')
 config = parse_config()

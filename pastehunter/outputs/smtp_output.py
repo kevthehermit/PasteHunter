@@ -9,7 +9,7 @@ from email.mime.multipart import MIMEMultipart
 import json
 import logging
 
-from common import parse_config
+from pastehunter.common import parse_config
 logger = logging.getLogger('pastehunter')
 
 config = parse_config()

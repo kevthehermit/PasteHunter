@@ -1,7 +1,7 @@
 import logging
 import os
 import datetime
-from common import parse_config
+from pastehunter.common import parse_config
 
 logger = logging.getLogger('pastehunter')
 config = parse_config()

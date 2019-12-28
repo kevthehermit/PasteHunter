@@ -1,0 +1,36 @@
+language: python
+sudo: required
+dist: bionic
+group: edge
+cache:
+  pip: true
+python:
+- 3.6
+- 3.6-dev
+before_install:
+- sudo apt-get update -qq
+- sudo apt-get install automake libtool make gcc libmagic-dev -yqq python3-pip unzip
+- wget https://github.com/VirusTotal/yara/archive/v3.10.0.tar.gz
+- tar -xzvf v3.10.0.tar.gz
+- cd yara-3.10.0/ && ./bootstrap.sh && ./configure --enable-dotnet --enable-magic
+  && make && sudo make install && cd ../
+- git clone --recursive https://github.com/VirusTotal/yara-python
+- pip3 install pytest codecov pytest-cov
+- cd yara-python
+- python setup.py build --enable-magic --enable-dotnet
+- python setup.py install && cd ../ && rm -rf yara-python && rm -rf yara-3.10.0/
+install:
+- pip install -r requirements.txt
+- pip install -e .
+script:
+- pastehunter-cli
+after_success:
+- python setup.py sdist
+deploy:
+  provider: pypi
+  user: __token__
+  password:
+    secure: ZYILSwAsPcCWa4Ccslu2F+HVw02Rafdf4HqnQla3uCCTlEQQ+cFyuTKxQB46xytgblFQv/99oxq3SwVTUX4C6cIa8D+zHm/6lR4Tu+YPthYZX9IashF/AMKkyKks8bxbB0x/3t7hBX+7w++OcC1wwCXUyX7btsiOBa28k1NZCsB26NgdpBn02wF/GwqDhkxKkW9Bi7KDjb58GdiyhgVXxOOaOYbRyKiNZqUKQx504zmc0aGSPYCs0gSPwoA0T3FUet4IBcjjTP9DsjjkyQ7K6iMWYNGsAP91HnZe5J4sZYqwrGs++vndJVa/bYpiyMCjUrG4c6okdS0zpSmfbrqJay12wH5qroqqLxwuLtrXcHK+ChlyvhsGHMN51rqX811zdt/IzDwi+hXz84e8Y8/YgUTx7j0/HPEdrHjIIbMoIEd9Wy42+TcRCHJOULjsg7Kc7KLd1ILvxxyV+REnkfaazeqmgSNlqFxM2A65dkq3xNt9CDtYQlX/IhTDBy2/qY3m60uOh92ptd5f5eHF28W89APnkRAHD2JSEVRym1fHNrvPl1NCJT8NavbdYup/dH8hQadMx72X022lmyFASHN92G78O3uA0fZ8B/hzCpVQ4KTTIT4/LqkAXuWlfW4z9wC62V2ZdL6E76lqbMPokeXfH8Tf+chAaw/XHr7Wk6bWkOQ=
+  on:
+    branch: master
+  skip_existing: true

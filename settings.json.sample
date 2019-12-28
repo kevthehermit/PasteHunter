@@ -2,7 +2,7 @@
   "inputs": {
     "pastebin":{
       "enabled": true,
-      "module": "inputs.pastebin",
+      "module": "pastehunter.inputs.pastebin",
       "api_scrape": "https://scrape.pastebin.com/api_scraping.php",
       "api_raw": "https://scrape.pastebin.com/api_scrape_item.php?i=",
       "paste_limit": 200,
@@ -11,7 +11,7 @@
     "dumpz": {
       "enabled": false,
       "comment": "This api endpoint has been removed.",
-      "module": "inputs.dumpz",
+      "module": "pastehunter.inputs.dumpz",
       "api_scrape": "https://dumpz.org/api/recent",
       "api_raw": "https://dumpz.org/api/dump",
       "paste_limit": 200,
@@ -19,7 +19,7 @@
     },
     "gists": {
       "enabled": true,
-      "module": "inputs.gists",
+      "module": "pastehunter.inputs.gists",
       "api_token": "",
       "api_limit": 100,
       "store_all": false,
@@ -28,7 +28,7 @@
     },
     "github": {
       "enabled": false,
-      "module": "inputs.github",
+      "module": "pastehunter.inputs.github",
       "api_token": "",
       "api_limit": 100,
       "store_all": false,
@@ -38,7 +38,7 @@
     },
     "slexy":{
       "enabled": true,
-      "module": "inputs.slexy",
+      "module": "pastehunter.inputs.slexy",
       "store_all": false,
       "api_scrape": "http://slexy.org/recent",
       "api_raw": "http://slexy.org/raw",
@@ -46,7 +46,7 @@
     },
     "stackexchange":{
       "enabled": false,
-      "module": "inputs.stackexchange",
+      "module": "pastehunter.inputs.stackexchange",
       "site_list": ["stackoverflow","serverfault", "superuser", "webapps", "webmasters", "dba"],
       "api_key": "",
       "store_filter": "!)r_ttsG0v3bE1vo3*8Ki",
@@ -58,7 +58,7 @@
   "outputs": {
     "elastic_output": {
       "enabled": true,
-      "module": "outputs.elastic_output",
+      "module": "pastehunter.outputs.elastic_output",
       "classname": "ElasticOutput",
       "elastic_index": "paste-test",
       "elastic_host": "172.16.10.10",
@@ -70,7 +70,7 @@
     },
     "splunk_output": {
       "enabled": false,
-      "module": "outputs.splunk_output",
+      "module": "pastehunter.outputs.splunk_output",
       "classname": "SplunkOutput",
       "splunk_host": "host",
       "splunk_port": 8089,
@@ -82,7 +82,7 @@
     },
     "json_output": {
       "enabled": false,
-      "module": "outputs.json_output",
+      "module": "pastehunter.outputs.json_output",
       "classname": "JsonOutput",
       "output_path": "logs/json/",
       "store_raw": true,
@@ -90,20 +90,20 @@
     },
     "csv_output": {
       "enabled": false,
-      "module": "outputs.csv_output",
+      "module": "pastehunter.outputs.csv_output",
       "classname": "CSVOutput",
       "output_path": "logs/csv/"
     },
     "syslog_output": {
       "enabled": false,
-      "module": "outputs.syslog_output",
+      "module": "pastehunter.outputs.syslog_output",
       "classname": "SyslogOutput",
       "host": "192.168.1.1",
       "port": 514
     },
     "smtp_output": {
       "enabled": false,
-      "module": "outputs.smtp_output",
+      "module": "pastehunter.outputs.smtp_output",
       "classname": "SMTPOutput",
       "smtp_host": "smtp.server.com",
       "smtp_port": 25,
@@ -125,14 +125,14 @@
     },
     "slack_output": {
       "enabled": false,
-      "module": "outputs.slack_output",
+      "module": "pastehunter.outputs.slack_output",
       "classname": "SlackOutput",
       "webhook_url": "",
       "rule_list": ["custom_keywords"]
     },
     "twilio_output": {
       "enabled": false,
-      "module": "outputs.twilio_output",
+      "module": "pastehunter.outputs.twilio_output",
       "classname": "TwilioOutput",
       "account_sid": "",
       "auth_token": "",
@@ -142,7 +142,7 @@
     }
   },
   "yara": {
-    "rule_path": "YaraRules",
+    "rule_path": "pastehunter/YaraRules",
     "blacklist": true,
     "test_rules": false
   },
@@ -160,13 +160,13 @@
   "sandboxes": {
     "cuckoo": {
       "enabled": false,
-      "module": "sandboxes.cuckoo",
+      "module": "pastehunter.sandboxes.cuckoo",
       "api_host": "127.0.0.1",
       "api_port": 8080
     },
     "viper": {
       "enabled": false,
-      "module": "sandboxes.viper",
+      "module": "pastehunter.sandboxes.viper",
       "api_host": "127.0.0.1",
       "api_port": 8080
     }
@@ -174,22 +174,22 @@
   "post_process": {
     "post_email": {
       "enabled": true,
-      "module": "postprocess.post_email",
+      "module": "pastehunter.postprocess.post_email",
       "rule_list": ["email_list"]
     },
     "post_b64": {
       "enabled": true,
-      "module": "postprocess.post_b64",
+      "module": "pastehunter.postprocess.post_b64",
       "rule_list": ["b64_exe", "b64_rar", "b64_zip", "b64_gzip"]
     },
     "post_entropy": {
       "enabled": false,
-      "module": "postprocess.post_entropy",
+      "module": "pastehunter.postprocess.post_entropy",
       "rule_list": ["ALL"]
     },
     "post_compress": {
       "enabled": false,
-      "module": "postprocess.post_compress",
+      "module": "pastehunter.postprocess.post_compress",
       "rule_list": ["ALL"]
     }
   }

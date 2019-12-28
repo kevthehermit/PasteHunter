@@ -1,4 +1,4 @@
-from common import parse_config
+from pastehunter.common import parse_config
 import json
 import logging
 import splunklib.client as client

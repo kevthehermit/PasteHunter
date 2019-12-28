@@ -17,7 +17,7 @@ from urllib.parse import unquote_plus
 import requests
 import yara
 
-from common import parse_config
+from pastehunter.common import parse_config
 
 VERSION = 1.0
 
