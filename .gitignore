@@ -109,3 +109,4 @@ ENV/
 logs/
 
 .c9
+pastehunter/YaraRules/custom_keywords.yar

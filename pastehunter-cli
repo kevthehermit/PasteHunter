@@ -16,7 +16,7 @@ from urllib.parse import unquote_plus
 
 import requests
 import yara
-
+import pastehunter
 from pastehunter.common import parse_config
 
 VERSION = 1.0
@@ -124,23 +124,32 @@ for output_type, output_values in conf["outputs"].items():
         outputs.append(instance)
 
 
-def yara_index(rule_path, blacklist, test_rules):
-    index_file = os.path.join(rule_path, 'index.yar')
-    with open(index_file, 'w') as yar:
-        for filename in os.listdir(rule_path):
-            if filename.endswith('.yar') and filename != 'index.yar':
-                if filename == 'blacklist.yar':
-                    if blacklist:
-                        logger.info("Enable Blacklist Rules")
-                    else:
-                        continue
-                if filename == 'test_rules.yar':
-                    if test_rules:
-                        logger.info("Enable Test Rules")
-                    else:
-                        continue
-                include = 'include "{0}"\n'.format(filename)
-                yar.write(include)
+def yara_index(default_rules, custom_rules, exclude_rules, blacklist, test_rules):
+    rules_list = {}
+    counter = 0
+    if default_rules:
+        for filename in os.listdir(default_rules):
+            if filename in exclude_rules:
+                continue
+            if filename == 'blacklist.yar':
+                if blacklist:
+                    logger.info("Enable Blacklist Rules")
+                else:
+                    continue
+            if filename == 'test_rules.yar':
+                if test_rules:
+                    logger.info("Enable Test Rules")
+                else:
+                    continue
+            rules_list['namespace{0}'.format(counter)] = os.path.join(default_rules, filename)
+            logger.info("Adding rules from {0}".format(filename))
+            counter += 1
+    if custom_rules:
+        for filename in os.listdir(custom_rules):
+            rules_list['namespace{0}'.format(counter)] = os.path.join(custom_rules, filename)
+            logger.info("Adding custom rules from {0}".format(filename))
+            counter += 1
+    return rules_list
 
 
 def paste_scanner(paste_data, rules_buff):
@@ -306,21 +315,33 @@ def paste_scanner(paste_data, rules_buff):
 def main():
     logger.info("Compile Yara Rules")
     try:
-        # Update the yara rules index
-        yara_index(conf['yara']['rule_path'],
-                   conf['yara']['blacklist'],
-                   conf['yara']['test_rules'])
+        if conf['yara']['default_rules']:
+            pastehunter_path = pastehunter.__path__[0]
+            default_rules = os.path.join(pastehunter_path, "YaraRules")
+        else:
+            default_rules = False
+        
+        if conf["yara"]["custom_rules"] != "none":
+            custom_rules = conf["yara"]["custom_rules"]
+        else:
+            custom_rules = False
 
-        # Compile the yara rules we will use to match pastes
-        index_file = os.path.join(conf['yara']['rule_path'], 'index.yar')
-        rules = yara.compile(index_file, externals={'filename': ''})
+        rule_files = yara_index(
+            default_rules,
+            custom_rules,
+            conf['yara']['exclude_rules'],
+            conf['yara']['blacklist'],
+            conf['yara']['test_rules']
+            )
+
+        rules = yara.compile(filepaths=rule_files, externals={'filename': ''})
 
         # Used for sharing across processes
         rules_buff = BytesIO()
         rules.save(file=rules_buff)
 
     except Exception as e:
-        logger.exception("Unable to Create Yara index: ", e)
+        logger.exception("Unable to Create Yara index: {0}".format(e))
         sys.exit()
 
     # Create Queue to hold paste URI's

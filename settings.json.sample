@@ -142,7 +142,9 @@
     }
   },
   "yara": {
-    "rule_path": "pastehunter/YaraRules",
+    "default_rules": true,
+    "custom_rules": "none",
+    "exclude_rules": [],
     "blacklist": true,
     "test_rules": false
   },
