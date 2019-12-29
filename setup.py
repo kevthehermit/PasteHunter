@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='pastehunter',
-    version='1.2.0',
+    version='1.2.1',
     author='@kevthehermit @Plazmaz',
     author_email='info@pastehunter.com',
     description="Pastehunter",

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2019-12-29
+### Changed
+- move config file to ~/.config
+- move custom yara rules
+- refactor yara rules location
+
 ## [1.2.0] - 2019-12-28
 ### Added
 - Changelog
