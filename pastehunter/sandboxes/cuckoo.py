@@ -1,7 +1,7 @@
 import io
 import logging
 import requests
-from common import parse_config
+from pastehunter.common import parse_config
 conf = parse_config()
 
 logger = logging.getLogger('pastehunter')

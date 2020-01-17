@@ -5,6 +5,11 @@ by an organisation or a researcher.
 
 For setup instructions please see the official documentation https://pastehunter.readthedocs.io/en/latest/installation.html
 
+[![PyPI version](https://badge.fury.io/py/pastehunter.svg)](https://badge.fury.io/py/pastehunter)
+
+[![Build Status](https://travis-ci.org/kevthehermit/PasteHunter.svg?branch=master)](https://travis-ci.org/kevthehermit/PasteHunter)
+
+
 ## Supported Inputs
 Pastehunter currently has support for the following sites:
  - pastebin.com

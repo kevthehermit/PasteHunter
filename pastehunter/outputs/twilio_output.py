@@ -1,11 +1,11 @@
 import logging
 from twilio.rest import Client
-from common import parse_config
+from pastehunter.common import parse_config
 
 logger = logging.getLogger('pastehunter')
 config = parse_config()
 
-class TwilioOutput():
+class TwilioOutput(object):
     def __init__(self):
         self.account_sid = config['outputs']['twilio_output']['account_sid']
         self.auth_token = config['outputs']['twilio_output']['auth_token']
@@ -38,7 +38,7 @@ class TwilioOutput():
                     paste_data['scrape_url']
                     )
 
-                print("Sending Twilio Message")
+                logger.debug("Sending Twilio Message")
                 if self.message_type == 'sms':
                     for recipient in self.recipient_list:
                         try:

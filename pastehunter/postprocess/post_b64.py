@@ -1,11 +1,10 @@
-import re
 import hashlib
 import importlib
 import gzip
 import logging
 from base64 import b64decode
 # This gets the raw paste and the paste_data json object
-from common import parse_config
+from pastehunter.common import parse_config
 conf = parse_config()
 
 logger = logging.getLogger('pastehunter')

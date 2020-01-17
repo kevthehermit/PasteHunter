@@ -2,7 +2,7 @@ import json
 import logging
 import os
 
-from common import parse_config
+from pastehunter.common import parse_config
 
 logger = logging.getLogger('pastehunter')
 
