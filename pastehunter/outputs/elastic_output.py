@@ -1,5 +1,5 @@
 from elasticsearch import Elasticsearch
-from common import parse_config
+from pastehunter.common import parse_config
 from datetime import datetime
 import logging
 

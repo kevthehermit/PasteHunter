@@ -2,7 +2,7 @@
   "inputs": {
     "pastebin":{
       "enabled": true,
-      "module": "inputs.pastebin",
+      "module": "pastehunter.inputs.pastebin",
       "api_scrape": "https://scrape.pastebin.com/api_scraping.php",
       "api_raw": "https://scrape.pastebin.com/api_scrape_item.php?i=",
       "paste_limit": 200,
@@ -11,7 +11,7 @@
     "dumpz": {
       "enabled": false,
       "comment": "This api endpoint has been removed.",
-      "module": "inputs.dumpz",
+      "module": "pastehunter.inputs.dumpz",
       "api_scrape": "https://dumpz.org/api/recent",
       "api_raw": "https://dumpz.org/api/dump",
       "paste_limit": 200,
@@ -19,7 +19,7 @@
     },
     "gists": {
       "enabled": true,
-      "module": "inputs.gists",
+      "module": "pastehunter.inputs.gists",
       "api_token": "",
       "api_limit": 100,
       "store_all": false,
@@ -28,16 +28,17 @@
     },
     "github": {
       "enabled": false,
-      "module": "inputs.github",
+      "module": "pastehunter.inputs.github",
       "api_token": "",
       "api_limit": 100,
       "store_all": false,
+      "ignore_bots": false,
       "user_blacklist": [],
-      "file_blacklist": ["node_modules/*", "__pycache__/*", "*/grahamcofborg-eval-package-list", "*/yarn.lock", "*.3ds", "*.3g2", "*.3gp", "*.7z", "*.DS_Store", "*.a", "*.aac", "*.adp", "*.ai", "*.aif", "*.aiff", "*.alz", "*.ape", "*.apk", "*.ar", "*.arj", "*.asf", "*.au", "*.avi", "*.bak", "*.bh", "*.bin", "*.bk", "*.bmp", "*.btif", "*.bz2", "*.bzip2", "*.cab", "*.caf", "*.cgm", "*.class", "*.cmx", "*.cpio", "*.cr2", "*.csv", "*.cur", "*.dat", "*.deb", "*.dex", "*.djvu", "*.dll", "*.dmg", "*.dng", "*.doc", "*.docm", "*.docx", "*.dot", "*.dotm", "*.dra", "*.dsk", "*.dts", "*.dtshd", "*.dvb", "*.dwg", "*.dxf", "*.ecelp4800", "*.ecelp7470", "*.ecelp9600", "*.egg", "*.eol", "*.eot", "*.epub", "*.exe", "*.f4v", "*.fbs", "*.fh", "*.fla", "*.flac", "*.fli", "*.flv", "*.fpx", "*.fst", "*.fvt", "*.g3", "*.gif", "*.graffle", "*.gz", "*.gzip", "*.h261", "*.h263", "*.h264", "*.ico", "*.ief", "*.img", "*.ipa", "*.iso", "*.jar", "*.jpeg", "*.jpg", "*.jpgv", "*.jpm", "*.jxr", "*.key", "*.ktx", "*.lha", "*.lvp", "*.lz", "*.lzh", "*.lzma", "*.lzo", "*.m3u", "*.m4a", "*.m4v", "*.mar", "*.mdi", "*.mht", "*.mid", "*.midi", "*.mj2", "*.mka", "*.mkv", "*.mmr", "*.mng", "*.mobi", "*.mov", "*.movie", "*.mp3", "*.mp4", "*.mp4a", "*.mpeg", "*.mpg", "*.mpga", "*.mxu", "*.nef", "*.npx", "*.numbers", "*.o", "*.oga", "*.ogg", "*.ogv", "*.otf", "*.pages", "*.pbm", "*.pcx", "*.pdf", "*.pea", "*.pgm", "*.pic", "*.png", "*.pnm", "*.pot", "*.potm", "*.potx", "*.ppa", "*.ppam", "*.ppm", "*.pps", "*.ppsm", "*.ppsx", "*.ppt", "*.pptm", "*.pptx", "*.psd", "*.pya", "*.pyc", "*.pyo", "*.pyv", "*.qt", "*.rar", "*.ras", "*.raw", "*.rgb", "*.rip", "*.rlc", "*.rmf", "*.rmvb", "*.rtf", "*.rz", "*.s3m", "*.s7z", "*.scpt", "*.sgi", "*.shar", "*.sil", "*.sketch", "*.slk", "*.smv", "*.so", "*.sub", "*.swf", "*.tar", "*.tbz", "*.tbz2", "*.tga", "*.tgz", "*.thmx", "*.tif", "*.tiff", "*.tlz", "*.ttc", "*.ttf", "*.txz", "*.udf", "*.uvh", "*.uvi", "*.uvm", "*.uvp", "*.uvs", "*.uvu", "*.viv", "*.vob", "*.war", "*.wav", "*.wax", "*.wbmp", "*.wdp", "*.weba", "*.webm", "*.webp", "*.whl", "*.wim", "*.wm", "*.wma", "*.wmv", "*.wmx", "*.woff", "*.woff2", "*.wvx", "*.xbm", "*.xif", "*.xla", "*.xlam", "*.xls", "*.xlsb", "*.xlsm", "*.xlsx", "*.xlt", "*.xltm", "*.xltx", "*.xm", "*.xmind", "*.xpi", "*.xpm", "*.xwd", "*.xz", "*.z", "*.zip", "*.zipx"]
+      "file_blacklist": ["node_modules/*", "__pycache__/*", "*/grahamcofborg-eval-package-list", "*.lock", "*.3ds", "*.3g2", "*.3gp", "*.7z", "*.DS_Store", "*.a", "*.aac", "*.adp", "*.ai", "*.aif", "*.aiff", "*.alz", "*.ape", "*.apk", "*.ar", "*.arj", "*.asf", "*.au", "*.avi", "*.bak", "*.bh", "*.bin", "*.bk", "*.bmp", "*.btif", "*.bz2", "*.bzip2", "*.cab", "*.caf", "*.cgm", "*.class", "*.cmx", "*.cpio", "*.cr2", "*.cur", "*.dat", "*.deb", "*.dex", "*.djvu", "*.dll", "*.dmg", "*.dng", "*.doc", "*.docm", "*.docx", "*.dot", "*.dotm", "*.dra", "*.dsk", "*.dts", "*.dtshd", "*.dvb", "*.dwg", "*.dxf", "*.ecelp4800", "*.ecelp7470", "*.ecelp9600", "*.egg", "*.eol", "*.eot", "*.epub", "*.exe", "*.f4v", "*.fbs", "*.fh", "*.fla", "*.flac", "*.fli", "*.flv", "*.fpx", "*.fst", "*.fvt", "*.g3", "*.gif", "*.graffle", "*.gz", "*.gzip", "*.h261", "*.h263", "*.h264", "*.ico", "*.ief", "*.img", "*.ipa", "*.iso", "*.jar", "*.jpeg", "*.jpg", "*.jpgv", "*.jpm", "*.jxr","*.ktx", "*.lha", "*.lvp", "*.lz", "*.lzh", "*.lzma", "*.lzo", "*.m3u", "*.m4a", "*.m4v", "*.mar", "*.mdi", "*.mht", "*.mid", "*.midi", "*.mj2", "*.mka", "*.mkv", "*.mmr", "*.mng", "*.mobi", "*.mov", "*.movie", "*.mp3", "*.mp4", "*.mp4a", "*.mpeg", "*.mpg", "*.mpga", "*.mxu", "*.nef", "*.npx", "*.numbers", "*.o", "*.oga", "*.ogg", "*.ogv", "*.otf", "*.pages", "*.pbm", "*.pcx", "*.pdf", "*.pea", "*.pgm", "*.pic", "*.png", "*.pnm", "*.pot", "*.potm", "*.potx", "*.ppa", "*.ppam", "*.ppm", "*.pps", "*.ppsm", "*.ppsx", "*.ppt", "*.pptm", "*.pptx", "*.psd", "*.pya", "*.pyc", "*.pyo", "*.pyv", "*.qt", "*.rar", "*.ras", "*.raw", "*.rgb", "*.rip", "*.rlc", "*.rmf", "*.rmvb", "*.rtf", "*.rz", "*.s3m", "*.s7z", "*.scpt", "*.sgi", "*.shar", "*.sil", "*.sketch", "*.slk", "*.smv", "*.so", "*.sub", "*.swf", "*.tar", "*.tbz", "*.tbz2", "*.tga", "*.tgz", "*.thmx", "*.tif", "*.tiff", "*.tlz", "*.ttc", "*.ttf", "*.txz", "*.udf", "*.uvh", "*.uvi", "*.uvm", "*.uvp", "*.uvs", "*.uvu", "*.viv", "*.vob", "*.war", "*.wav", "*.wax", "*.wbmp", "*.wdp", "*.weba", "*.webm", "*.webp", "*.whl", "*.wim", "*.wm", "*.wma", "*.wmv", "*.wmx", "*.woff", "*.woff2", "*.wvx", "*.xbm", "*.xif", "*.xla", "*.xlam", "*.xls", "*.xlsb", "*.xlsm", "*.xlsx", "*.xlt", "*.xltm", "*.xltx", "*.xm", "*.xmind", "*.xpi", "*.xpm", "*.xwd", "*.xz", "*.z", "*.zip", "*.zipx"]
     },
     "slexy":{
       "enabled": true,
-      "module": "inputs.slexy",
+      "module": "pastehunter.inputs.slexy",
       "store_all": false,
       "api_scrape": "http://slexy.org/recent",
       "api_raw": "http://slexy.org/raw",
@@ -45,7 +46,7 @@
     },
     "stackexchange":{
       "enabled": false,
-      "module": "inputs.stackexchange",
+      "module": "pastehunter.inputs.stackexchange",
       "site_list": ["stackoverflow","serverfault", "superuser", "webapps", "webmasters", "dba"],
       "api_key": "",
       "store_filter": "!)r_ttsG0v3bE1vo3*8Ki",
@@ -57,7 +58,7 @@
   "outputs": {
     "elastic_output": {
       "enabled": true,
-      "module": "outputs.elastic_output",
+      "module": "pastehunter.outputs.elastic_output",
       "classname": "ElasticOutput",
       "elastic_index": "paste-test",
       "elastic_host": "172.16.10.10",
@@ -69,7 +70,7 @@
     },
     "splunk_output": {
       "enabled": false,
-      "module": "outputs.splunk_output",
+      "module": "pastehunter.outputs.splunk_output",
       "classname": "SplunkOutput",
       "splunk_host": "host",
       "splunk_port": 8089,
@@ -81,7 +82,7 @@
     },
     "json_output": {
       "enabled": false,
-      "module": "outputs.json_output",
+      "module": "pastehunter.outputs.json_output",
       "classname": "JsonOutput",
       "output_path": "logs/json/",
       "store_raw": true,
@@ -89,20 +90,20 @@
     },
     "csv_output": {
       "enabled": false,
-      "module": "outputs.csv_output",
+      "module": "pastehunter.outputs.csv_output",
       "classname": "CSVOutput",
       "output_path": "logs/csv/"
     },
     "syslog_output": {
       "enabled": false,
-      "module": "outputs.syslog_output",
+      "module": "pastehunter.outputs.syslog_output",
       "classname": "SyslogOutput",
       "host": "192.168.1.1",
       "port": 514
     },
     "smtp_output": {
       "enabled": false,
-      "module": "outputs.smtp_output",
+      "module": "pastehunter.outputs.smtp_output",
       "classname": "SMTPOutput",
       "smtp_host": "smtp.server.com",
       "smtp_port": 25,
@@ -124,14 +125,14 @@
     },
     "slack_output": {
       "enabled": false,
-      "module": "outputs.slack_output",
+      "module": "pastehunter.outputs.slack_output",
       "classname": "SlackOutput",
       "webhook_url": "",
       "rule_list": ["custom_keywords"]
     },
     "twilio_output": {
       "enabled": false,
-      "module": "outputs.twilio_output",
+      "module": "pastehunter.outputs.twilio_output",
       "classname": "TwilioOutput",
       "account_sid": "",
       "auth_token": "",
@@ -141,7 +142,9 @@
     }
   },
   "yara": {
-    "rule_path": "YaraRules",
+    "default_rules": true,
+    "custom_rules": "none",
+    "exclude_rules": [],
     "blacklist": true,
     "test_rules": false
   },
@@ -159,13 +162,13 @@
   "sandboxes": {
     "cuckoo": {
       "enabled": false,
-      "module": "sandboxes.cuckoo",
+      "module": "pastehunter.sandboxes.cuckoo",
       "api_host": "127.0.0.1",
       "api_port": 8080
     },
     "viper": {
       "enabled": false,
-      "module": "sandboxes.viper",
+      "module": "pastehunter.sandboxes.viper",
       "api_host": "127.0.0.1",
       "api_port": 8080
     }
@@ -173,22 +176,22 @@
   "post_process": {
     "post_email": {
       "enabled": true,
-      "module": "postprocess.post_email",
+      "module": "pastehunter.postprocess.post_email",
       "rule_list": ["email_list"]
     },
     "post_b64": {
       "enabled": true,
-      "module": "postprocess.post_b64",
+      "module": "pastehunter.postprocess.post_b64",
       "rule_list": ["b64_exe", "b64_rar", "b64_zip", "b64_gzip"]
     },
     "post_entropy": {
       "enabled": false,
-      "module": "postprocess.post_entropy",
+      "module": "pastehunter.postprocess.post_entropy",
       "rule_list": ["ALL"]
     },
     "post_compress": {
       "enabled": false,
-      "module": "postprocess.post_compress",
+      "module": "pastehunter.postprocess.post_compress",
       "rule_list": ["ALL"]
     }
   }

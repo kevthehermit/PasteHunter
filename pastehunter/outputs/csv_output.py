@@ -1,11 +1,13 @@
+import logging
 import os
 import datetime
-from common import parse_config
+from pastehunter.common import parse_config
 
+logger = logging.getLogger('pastehunter')
 config = parse_config()
 
 
-class CSVOutput():
+class CSVOutput(object):
     def __init__(self):
         base_path = config['outputs']['csv_output']['output_path']
         # Get todays CSV
@@ -18,7 +20,7 @@ class CSVOutput():
                 os.makedirs(base_path)
                 self.test = True
             except OSError as e:
-                print("Unable to create CSV Path: {0}".format(e))
+                logger.error("Unable to create CSV Path: {}".format(e))
                 self.test = False
         else:
             self.test = True
@@ -34,4 +36,4 @@ class CSVOutput():
             with open(self.csv_path, 'a') as out:
                 out.write('{0}\n'.format(csv_line))
         else:
-            print("CSV Output Error")
+            logging.error("CSV Output Error. Output path '{}' was never created.".format(self.csv_path))

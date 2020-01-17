@@ -88,7 +88,14 @@ rule b64_url
         $a4 = "V1dXLg" // WWW.
 
         // ignore vendor certs in this rule. The certs rule will pick them up if we want them
-        $not1 = "GlobalSign Root CA" nocase 
+        $not1 = "GlobalSign Root CA" nocase
+
+        // Ignore data: uris. These are common in html and svg files.
+        $not2 = /data:[a-z\/]+;(base64,)?aHR0cDov/ nocase
+        $not3 = /data:[a-z\/]+;(base64,)?SFRUUDov/ nocase
+        $not4 = /data:[a-z\/]+;(base64,)?d3d3Lg/ nocase
+        $not5 = /data:[a-z\/]+;(base64,)?V1dXLg/ nocase
+
     condition:
         any of ($a*) and not any of ($not*)
 
