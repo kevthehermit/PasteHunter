@@ -1,9 +1,21 @@
 Installation
 ============
 
-There are a few ways to install 
+There are a few ways to install PasteHunter. Pip is the recommended route for stable releases.
 
 
+Pip Installation
+------------------
+Pip installation is supported for versions after 1.2.1. This can easily be done using:
+
+``pip install pastehunter``
+
+You will then need to configure pastehunter. To do this, use:.::
+
+    mkdir -p ~/.config
+    wget https://raw.githubusercontent.com/kevthehermit/PasteHunter/master/settings.json.sample -O ~/.config/pastehunter.json
+
+Then modify ~/.config/pastehunter.json to match your desired settings and run the project using ``pasthunter-cli``
 
 Local Installation
 ------------------

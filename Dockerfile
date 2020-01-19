@@ -21,5 +21,5 @@ WORKDIR /usr/src/pastehunter
 COPY . ./
 RUN pip3 install -r requirements.txt
 
-CMD ["/usr/src/wait-for-it/wait-for-it.sh","-t", "0","172.16.10.10:9200","--", "python3", "pastehunter.py"]
+CMD ["/usr/src/wait-for-it/wait-for-it.sh","-t", "0","172.16.10.10:9200","--", "python3", "pastehunter-cli"]
 
