@@ -1,4 +1,5 @@
-Migrating from a pre-1.2.1 config
+
+Migrating From a <1.2.1 Config
 ==================================
 1.2.1 introduces some breaking configuration changes due to various project structure changes. Most notably,
 all module names will need to be prefixed with "pastehunter.". So for example, this part of the configuration.::

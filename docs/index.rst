@@ -22,5 +22,7 @@ against a series of yara rules looking for information that can be used by an or
    inputs
    outputs
    postprocess
+   sandboxes
+
 
 

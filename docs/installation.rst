@@ -26,9 +26,7 @@ If you want to run the latest stable version grab the latest release from https:
 If you want to run the development version clone the repository or download the latest archive. 
 
 Pastehunter has very few dependancies you can install all the python libraries using the requirements.txt file and ``sudo pip3 install -r requirements.txt``
-    
-    
-    
+
 
 Yara
 ^^^^
@@ -65,6 +63,8 @@ A sample podspec for kubernets is coming soon.
 
 Configuration
 -------------
+**See** :doc:`this page <./migrating>` **for help migrating configs from older versions (<1.2.1)**
+
 Before you can get up and running you will need to set up the basic config. 
 Copy the settings.json.sample to settings.json and edit with your editor of choice. 
 
