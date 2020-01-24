@@ -130,6 +130,15 @@
       "webhook_url": "",
       "rule_list": ["custom_keywords"]
     },
+    "http_output": {
+      "enabled": false,
+      "module": "outputs.http_output",
+      "classname": "HttpOutput",
+      "endpoint_url": "",
+      "http_auth": false,
+      "http_user": "",
+      "http_password": ""
+    },
     "twilio_output": {
       "enabled": false,
       "module": "pastehunter.outputs.twilio_output",
