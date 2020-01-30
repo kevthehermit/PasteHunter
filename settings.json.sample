@@ -135,9 +135,12 @@
       "module": "outputs.http_output",
       "classname": "HttpOutput",
       "endpoint_url": "",
+      "headers": {},
       "http_auth": false,
       "http_user": "",
-      "http_password": ""
+      "http_password": "",
+      "ignore_fields": [],
+      "timezone": "Z"
     },
     "twilio_output": {
       "enabled": false,
