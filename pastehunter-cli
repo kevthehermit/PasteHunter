@@ -186,7 +186,12 @@ def paste_scanner(paste_data, rules_buff):
                         logger.debug(json.dumps(paste_data))
                         raw_paste_data = ""
                     else:
-                        raw_paste_data = requests.get(raw_paste_uri).text
+                        raw_paste_data = ""
+                        req = requests.get(raw_paste_uri)
+                        if req.status_code == 200:
+                            raw_paste_data = req.text
+                        else:
+                            logger.error( "Request returned unexpected response code {}: {}".format(req.status_code, req.text))
 
             # Cover fetch site SSLErrors
             except requests.exceptions.SSLError as e:

@@ -45,7 +45,8 @@ def recent_pastes(conf, input_history):
     conf_limit = conf['inputs']['github']['api_limit']
     gh_limit = min(conf_limit, 300)
     # From GitHub Docs (https://developer.github.com/v3/activity/events/#list-public-events):
-    # Events support pagination, however the per_page option is unsupported. The fixed page size is 30 items. Fetching up to ten pages is supported, for a total of 300 events.
+    # Events support pagination, however the per_page option is unsupported. The fixed page size is 30 items.
+    # Fetching up to ten pages is supported, for a total of 300 events.
     # We modify this to be 100 per page, but the limit is still 300.
     if gh_limit != conf_limit:
         logger.warning('gh_limit exceeds github items returned from public feed. Limiting to 300.')
@@ -67,7 +68,7 @@ def recent_pastes(conf, input_history):
         # Get the required amount of entries via pagination
         for page_num in range(1, page_count + 1):
             url = '{0}?page={1}&per_page=100'.format(api_uri, page_num)
-            logger.debug('Fetching page: {0}'.format(page_num))
+            logger.debug('Fetching page: {0}/{1}'.format(page_num, page_count))
             req = _make_request(url, headers)
             if req is not None:
                 result_pages.append(req)
