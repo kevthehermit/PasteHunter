@@ -10,7 +10,7 @@ rule email_filter
         reference = "https://github.com/securenetworx/PasteHunter/tree/fix-email-filter"
 
     strings:
-	$email_add = /\b[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*\.[a-zA-Z-]+[\w-]\b/
+	    $email_add = /\b[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*\.[a-zA-Z-]+[\w-]\b/
     condition:
         #email_add > 20
 

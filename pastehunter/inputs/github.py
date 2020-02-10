@@ -90,8 +90,9 @@ def recent_pastes(conf, input_history):
                     if event_meta.get('actor').get('login') in gh_user_blacklist:
                         logger.info('Blacklisting GitHub event from user: {0}'.format(event_meta.get('login')))
                         continue
-                    if ignore_bots and event_meta.get('actor').get('login').endswith("[bot]"):
-                        logger.info('Ignoring GitHub event from bot user: {0}'.format(event_meta.get('login')))
+                    login = event_meta.get('actor').get('login')
+                    if ignore_bots and login and login.endswith("[bot]"):
+                        logger.info('Ignoring GitHub event from bot user: {}'.format(login))
                         continue
 
                 payload = event_meta.get('payload')

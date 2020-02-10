@@ -99,12 +99,13 @@ def recent_pastes(conf, input_history):
         for pid in pid_to_process:
             paste = SlexyPaste(pid)
             history.append(paste.pid)
-            paste_data = {}
-            paste_data['confname'] = 'slexy'
-            paste_data['scrape_url'] = paste.url
-            paste_data['pasteid'] = paste.pid
-            paste_data['pastesite'] = paste.site
-            paste_data['@timestamp'] = paste.timestamp
+            paste_data = {
+                'confname': 'slexy',
+                'scrape_url': paste.url,
+                'pasteid': paste.pid,
+                'pastesite': paste.site,
+                '@timestamp': paste.timestamp
+            }
             paste_list.append(paste_data)
         return paste_list, history
     except Exception as e:
