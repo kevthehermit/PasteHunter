@@ -16,12 +16,13 @@ class SlexySite(object):
         self.url_recent = url_slexy + "/recent"
         self.url_view = url_slexy + "/view"
         self.url_raw = url_slexy + "/raw"
+        self.url = None
 
-    def view_link(self, pid):
+    def request_view_link(self, pid):
         return self._make_request("%s/%s" % (self.url_view, pid))
 
     def raw_link(self, pid, args):
-        return self._make_request("%s/%s%s" % (self.url_raw, pid, args))
+        return "%s/%s%s" % (self.url_raw, pid, args)
 
     def _make_request(self, url):
         req = requests.get(url, headers={
@@ -30,15 +31,15 @@ class SlexySite(object):
         }, timeout=10)
         ratelimit_limit = int(req.headers.get('RateLimit-Limit', 30))
         remaining = int(req.headers.get('RateLimit-Remaining', 30))
-        logger.info('Remaining Limit: {0}'.format(remaining))
+        logger.debug('Remaining Slexy Ratelimit: {0}'.format(remaining))
 
         if req.status_code == 429:
             timeout = req.headers.get('Retry-After', 60)
             sleep(timeout)
-            return ''
+            return self._make_request(url)
         # If ratelimit_limit = 60, 60/60 = 1
         # If ratelimit_limit = 30, 60/30 = 2
-        sleep(60 / ratelimit_limit)
+        sleep(30 / ratelimit_limit)
         return req.text
 
 
@@ -47,14 +48,13 @@ class SlexyPaste(SlexySite):
         super(SlexyPaste, self).__init__()
         self.pid = pid
         self.site = self.site
-        self.url = None
         self.timestamp = None
         self.parse()
 
     def parse(self):
-        data = self.view_link(self.pid)
-        self.url = self.get_raw_link(data)
+        data = self.request_view_link(self.pid)
         self.timestamp = self.get_timestamp(data)
+        self.url = self.get_raw_link(data)
 
     def get_raw_link(self, data):
         pattern = '<a href="/raw/%s(.*?)"' % self.pid
@@ -62,7 +62,7 @@ class SlexyPaste(SlexySite):
         return self.raw_link(self.pid, token)
 
     def get_raw_data(self):
-        return self._make_request(self.url)
+        return self._make_request(self.url_raw)
 
     def get_timestamp(self, data):
         pattern = 'Timestamp: <b>(.*?)</b>'

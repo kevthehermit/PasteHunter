@@ -110,22 +110,27 @@ def recent_pastes(conf, input_history):
                         logger.info('Blacklisting GitHub event from user: {0}'.format(event_meta['owner']['login']))
                         continue
                     for file in commit_data.get('files'):
+                        is_blacklisted = False
                         file_path = file.get('filename')
                         for pattern in gh_file_blacklist:
                             if fnmatch.fnmatch(file_path, pattern):
                                 logger.info('Blacklisting file {0} from event {1} (matched pattern "{2}")'.format(file_path, event_id, pattern))
-                                continue
+                                is_blacklisted = True
+                                break
 
-                        gist_data = file
-                        gist_data['confname'] = 'github'
-                        gist_data['@timestamp'] = event_meta['created_at']
-                        gist_data['pasteid'] = event_id
-                        gist_data['user'] = event_meta.get('actor').get('login')
-                        gist_data['pastesite'] = 'github.com'
-                        gist_data['scrape_url'] = file.get('raw_url')
+                        if is_blacklisted:
+                            continue
+
+                        github_data = file
+                        github_data['confname'] = 'github'
+                        github_data['@timestamp'] = event_meta['created_at']
+                        github_data['pasteid'] = event_id
+                        github_data['user'] = event_meta.get('actor').get('login')
+                        github_data['pastesite'] = 'github.com'
+                        github_data['scrape_url'] = file.get('raw_url')
                         # remove some original keys just to keep it a bit cleaner
-                        del gist_data['raw_url']
-                        paste_list.append(gist_data)
+                        del github_data['raw_url']
+                        paste_list.append(github_data)
 
         # Return results and history
         return paste_list, history

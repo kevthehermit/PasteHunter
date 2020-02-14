@@ -164,12 +164,13 @@ def paste_scanner(paste_data, rules_buff):
         with timeout(seconds=conf['general']['process_timeout']):
             # Start a timer
             start_time = time.time()
-            logger.debug("Found New {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+            paste_site = paste_data['pastesite']
+            logger.debug("Found New {0} paste {1}".format(paste_site, paste_data['pasteid']))
             # get raw paste and hash them
             try:
 
                 # Stack questions dont have a raw endpoint
-                if ('stackexchange' in conf['inputs']) and (paste_data['pastesite'] in conf['inputs']['stackexchange']['site_list']):
+                if ('stackexchange' in conf['inputs']) and (paste_site in conf['inputs']['stackexchange']['site_list']):
                     # The body is already included in the first request so we do not need a second call to the API.
 
                     # Unescape the code block strings in the json body.
@@ -187,11 +188,15 @@ def paste_scanner(paste_data, rules_buff):
                         raw_paste_data = ""
                     else:
                         raw_paste_data = ""
-                        req = requests.get(raw_paste_uri)
+                        headers = {}
+                        if paste_site == 'slexy.org':
+                            headers['User-Agent'] = 'PasteHunter'
+
+                        req = requests.get(raw_paste_uri, headers=headers)
                         if req.status_code == 200:
                             raw_paste_data = req.text
                         else:
-                            logger.error( "Request returned unexpected response code {}: {}".format(req.status_code, req.text))
+                            logger.error("Request returned unexpected response code {}: {}".format(req.status_code, req.text))
 
             # Cover fetch site SSLErrors
             except requests.exceptions.SSLError as e:
@@ -272,6 +277,11 @@ def paste_scanner(paste_data, rules_buff):
                 results = []
                 blacklisted = True
                 logger.info("Blacklisted {0} paste {1}".format(paste_data['pastesite'], paste_data['pasteid']))
+
+                if store_all is True:
+                    results.append('no_match')
+                    return True
+                return True
 
 
             # Post Process
