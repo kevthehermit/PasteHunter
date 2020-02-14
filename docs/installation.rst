@@ -6,6 +6,8 @@ There are a few ways to install PasteHunter. Pip is the recommended route for st
 
 Pip Installation
 ------------------
+**Note** Pip or setup.py installation will require ``gcc`` and ``wheel``.
+
 Pip installation is supported for versions after 1.2.1. This can easily be done using:
 
 ``pip install pastehunter``
