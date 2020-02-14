@@ -113,7 +113,7 @@ Starting
 
 You can run pastehunter by calling the script by name. 
 
-``python3 pastehunter.py``
+``python3 pastehunter-cli``
 
 Service
 ^^^^^^^
@@ -130,7 +130,7 @@ Add the following text updating as appropriate for your setup paying attention t
     
     [Service]
     WorkingDirectory=/opt/PasteHunter
-    ExecStart=/usr/bin/python3 /opt/PasteHunter/pastehunter.py
+    ExecStart=/usr/bin/python3 /opt/PasteHunter/pastehunter-cli
     User=localuser
     Group=localuser
     Restart=always
