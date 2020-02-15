@@ -21,9 +21,11 @@ before_install:
 - python setup.py install && cd ../ && rm -rf yara-python && rm -rf yara-3.10.0/
 install:
 - pip install -r requirements.txt
+- pip install pytest
 - pip install -e .
 script:
 - pastehunter-cli
+- pytest
 after_success:
 - python setup.py sdist
 deploy:
