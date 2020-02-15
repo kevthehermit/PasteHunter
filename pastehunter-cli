@@ -281,7 +281,7 @@ def paste_scanner(paste_data, rules_buff):
                 if store_all is True:
                     results.append('no_match')
                     return True
-                return True
+                return False
 
 
             # Post Process
@@ -326,6 +326,8 @@ def paste_scanner(paste_data, rules_buff):
             return True
     except TimeoutError:
         return False
+    except Exception as e:
+        logging.error(e)
 
 def main():
     logger.info("Compile Yara Rules")
