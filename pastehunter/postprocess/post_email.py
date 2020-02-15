@@ -6,7 +6,7 @@ def run(results, raw_paste_data, paste_object):
 
     # Get total unique emails.
 
-    all_emails = re.findall('[\w\.-]+@[\w\.-]+\.\w+', raw_paste_data)
+    all_emails = re.findall(r'\b([\w-]+(?:\.[\w-]+)*@[\w-]+(?:\.[\w-]+)*\.[a-zA-Z-]+[\w-])\b', raw_paste_data)
     domain_list = []
     for email_address in all_emails:
         email_domain = email_address.split("@")

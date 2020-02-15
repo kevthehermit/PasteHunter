@@ -2,33 +2,21 @@
     These rules attempt to find password leaks / dumps
 */
 
-rule email_list
-{
-    meta:
-        author = "@KevTheHermit"
-        info = "Part of PasteHunter"
-        reference = "https://github.com/kevthehermit/PasteHunter"
-
-    strings:
-        $email_add = /\b[\w\.-]+@[\w\.-]+\.\w+\b/
-    condition:
-        #email_add > 20
-
-}
-
-/*
 rule password_list
 {
     meta:
-        author = "@KevTheHermit"
+        author = "@KevTheHermit and @Plazmaz"
         info = "Part of PasteHunter"
         reference = "https://github.com/kevthehermit/PasteHunter"
 
     strings:
-        $data_format = /\b([@a-zA-Z0-9._-]{5,})(:|\|)(.*)\b/
+        // Email validation---------------------------------------------------V
+        // Optional quotes -----------------------------------------------------v
+        // Seperator char (:|,) ------------------------------------------------------v
+        // Continue until word boundary or space ----------------------------------------------v
+        $data_format = /\b[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)*\.[a-zA-Z-]+[\w-]["|']?(:|\|)[^\b\s]+\b/
 
     condition:
         #data_format > 10
 
 }
-*/

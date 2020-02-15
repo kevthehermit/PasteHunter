@@ -6,6 +6,8 @@ There are a few ways to install PasteHunter. Pip is the recommended route for st
 
 Pip Installation
 ------------------
+**Note** Pip or setup.py installation will require ``gcc`` and ``wheel``.
+
 Pip installation is supported for versions after 1.2.1. This can easily be done using:
 
 ``pip install pastehunter``
@@ -113,7 +115,7 @@ Starting
 
 You can run pastehunter by calling the script by name. 
 
-``python3 pastehunter.py``
+``python3 pastehunter-cli``
 
 Service
 ^^^^^^^
@@ -130,7 +132,7 @@ Add the following text updating as appropriate for your setup paying attention t
     
     [Service]
     WorkingDirectory=/opt/PasteHunter
-    ExecStart=/usr/bin/python3 /opt/PasteHunter/pastehunter.py
+    ExecStart=/usr/bin/python3 /opt/PasteHunter/pastehunter-cli
     User=localuser
     Group=localuser
     Restart=always
