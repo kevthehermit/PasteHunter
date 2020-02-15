@@ -189,7 +189,7 @@
     "post_email": {
       "enabled": true,
       "module": "pastehunter.postprocess.post_email",
-      "rule_list": ["email_list"]
+      "rule_list": ["email_filter"]
     },
     "post_b64": {
       "enabled": true,

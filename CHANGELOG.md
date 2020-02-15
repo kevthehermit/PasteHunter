@@ -12,6 +12,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Began ignoring CSS (.css), SASS (.scss), and Unreal asset (.uasset) files by default for GitHub
 - Fixed github filename blacklist being ignored
 - GitHub now uses file blob hashes instead of commit ids for paste_id. This is to prevent collision for commits with multiple matching files
+- Reduced false positives returned from password_list rule
+- Removed email_list rule (superseded) by email_filter
 
 ### Added
 - HTTP Output (#104)
