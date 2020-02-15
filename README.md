@@ -26,6 +26,7 @@ Pastehunter supports several output modules:
  - Dump to JSON file.
  - Dump to CSV file.
  - Send to syslog.
+ - POST to URL
 
  ## Supported Sandboxes
  Pastehunter supports several sandboxes that decoded data can be sent to:

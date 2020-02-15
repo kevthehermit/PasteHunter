@@ -36,11 +36,27 @@ To create your key visit https://github.com/settings/tokens
 - **user_blacklist**: Do not process gists created by these usernames.
 - **file_blacklist**: Do not process gists that match these filenames.
 
+Github Activity
+---------------
+Github's activity feed is a list of public changes made. We specifically filter on commits. It can be accessed in a similar manner to gists:
+
+- Without an access key - You will have a low rate limit.
+- With an access key - You will have a higher rate limit.
+
+Again, the unauthenticated option is not suitable for pastehunter running full time, particularly if you're also running the gist
+input. However, the same token may be used for both inputs.
+
+- **api_token**: The token you generated.
+- **api_limit**: Rate limit to prevent being blocked.
+- **store_all**: Store all pastes regardless of a rule match.
+- **user_blacklist**: Do not process gists created by these usernames.
+- **ignore_bots**: Ignore users with ``[bot]`` in their username (only actual bots can do this)
+- **file_blacklist**: Do not process gists that match these filenames. Supports glob syntax.
 
 Slexy
 ---------
 
-Slexy has some heavy rate limits on it. 
+Slexy has some heavy rate limits (30 requests per 30 seconds), but may still return interesting results.
 
 - **store_all**: Store all pastes regardless of a rule match.
 - **api_scrape**: The URL endpoint for the list of recent pastes.
