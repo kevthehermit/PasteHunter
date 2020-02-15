@@ -24,9 +24,9 @@ copyright = '2019, Kevin Breen'
 author = 'Kevin Breen'
 
 # The short X.Y version
-version = '1.2.1'
+version = '1.3'
 # The full version, including alpha/beta/rc tags
-release = '1.2.1'
+release = '1.3.2'
 
 
 # -- General configuration ---------------------------------------------------
