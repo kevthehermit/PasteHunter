@@ -5,6 +5,7 @@ services:
     container_name: pastehunter
     volumes:
       - ./logs:/usr/src/pastehunter/logs
+      - ~/.config/pastehunter.json:/root/.config/pastehunter.json
     networks:
       esnet:
         ipv4_address: 172.16.10.11
