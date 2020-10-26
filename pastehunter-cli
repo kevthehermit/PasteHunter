@@ -21,6 +21,11 @@ from pastehunter.common import parse_config
 
 VERSION = 1.0
 
+# Decided not to make this configurable as it currently really only applies to pastebin but may change in functionality later.
+# If someone would like this as a config key, please feel free to open an issue or a PR :)
+# TODO: @Plazmaz
+MAX_ITEM_RETRIES = 5
+
 # Setup Default logging
 root = logging.getLogger()
 ch = logging.StreamHandler()
@@ -50,14 +55,16 @@ class timeout:
     def __init__(self, seconds=1, error_message='Timeout'):
         self.seconds = seconds
         self.error_message = error_message
+
     def handle_timeout(self, signum, frame):
         raise TimeoutError("Process timeout: {0}".format(self.error_message))
+
     def __enter__(self):
         signal.signal(signal.SIGALRM, self.handle_timeout)
         signal.alarm(self.seconds)
+
     def __exit__(self, type, value, traceback):
         signal.alarm(0)
-
 
 
 # Set up the log file
@@ -192,11 +199,31 @@ def paste_scanner(paste_data, rules_buff):
                         if paste_site == 'slexy.org':
                             headers['User-Agent'] = 'PasteHunter'
 
-                        req = requests.get(raw_paste_uri, headers=headers)
-                        if req.status_code == 200:
-                            raw_paste_data = req.text
-                        else:
-                            logger.error("Request returned unexpected response code {}: {}".format(req.status_code, req.text))
+                        attempt_count = 0
+                        while attempt_count < MAX_ITEM_RETRIES:
+                            attempt_count += 1
+                            req = requests.get(raw_paste_uri, headers=headers)
+                            if req.status_code == 200:
+                                raw_paste_data = req.text
+                                if attempt_count > 1:
+                                    logger.warning('Successfully resolved 429 exception')
+                                break
+
+                            # We may want to handle other status codes in the future,
+                            # for now 429 is the only code we retry for, just to avoid issues with
+                            # rate limiting and hammering sites for 404s or outages
+                            elif req.status_code == 429:
+                                logger.warning('Encountered unexpected 429 when requesting item at %s'
+                                               + ' for site "%s". Retrying (attempt %d)...', raw_paste_uri,
+                                               paste_site, attempt_count + 1)
+                                sleep(10)
+                            else:
+                                logger.error("Request returned unexpected response code %d: %s", req.status_code,
+                                             req.text)
+
+                        if attempt_count > 1:
+                            logger.error("Unable to resolve 429 exception after %d retries, giving up on item %s.",
+                                         MAX_ITEM_RETRIES, raw_paste_uri)
 
             # Cover fetch site SSLErrors
             except requests.exceptions.SSLError as e:
