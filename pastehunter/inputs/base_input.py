@@ -39,7 +39,7 @@ class BasePasteSite(ABC):
         """
         Returns an id for the given paste object
         :param paste_obj: The raw paste dict
-        :return: The paste i
+        :return: The paste id
         passd (str or int)
         """
 
