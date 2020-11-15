@@ -63,6 +63,12 @@ Slexy has some heavy rate limits (30 requests per 30 seconds), but may still ret
 - **api_raw**: The URL endpoint for the raw paste.
 - **api_view**: The URL enpoint to view the paste.
 
+ix.io
+---------
+
+ix.io is a smaller site used primarily for console/command line pastes.
+
+- **store_all**: Store all pastes regardless of a rule match.
 
 StackExchange
 -------------

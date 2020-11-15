@@ -1,10 +1,7 @@
 import logging
 import re
 from datetime import datetime
-from time import sleep
-from typing import List, Any, Dict, Union
-
-import requests
+from typing import List, Any, Dict, Union, Pattern
 
 from common import base62_decode, base62_encode
 from inputs.base_input import BasePasteSite
@@ -18,7 +15,7 @@ class IxDotIoSite(BasePasteSite):
     # Capturing groups:
     # 1. Paste ID
     # 2. Timestamp
-    _ITEM_ID_RE: re.Pattern = re.compile('<div class="t">[\\sa-zA-Z0-9]+'
+    _ITEM_ID_RE: Pattern = re.compile('<div class="t">[\\sa-zA-Z0-9]+'
                                          '<a href="/(.*?)">\\[r][^\r\n]+'
                                          '\\s+@ (.*?)[\r\n]')
 

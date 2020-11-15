@@ -1,9 +1,9 @@
-from inputs import slexy
 from inputs.pastebin import PastebinPasteSite
 from inputs.slexy import SlexyPasteSite
 
-
 pids_found = []
+
+
 def mock_get_paste_for_pid(pid):
     pids_found.append(pid)
     return "pid_is_" + pid

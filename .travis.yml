@@ -24,8 +24,9 @@ install:
 - pip install pytest
 - pip install -e .
 script:
+- wget https://raw.githubusercontent.com/kevthehermit/PasteHunter/master/settings.json.sample -O ~/.config/pastehunter.json
 - pastehunter-cli
-- pytest
+- python -m pytest
 after_success:
 - python setup.py sdist
 deploy:

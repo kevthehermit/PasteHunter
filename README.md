@@ -3,10 +3,6 @@ PasteHunter is a python3 application that is designed to query a collection of s
 For all the pastes it finds it scans the raw contents against a series of Yara rules looking for information that can be used 
 by an organisation or a researcher.
 
-## Pastebin API Deprecated
-
-We are aware that the pastebin scraping API has been deprectated and are reviewing. 
-
 
 ## Setup 
 For setup instructions please see the official documentation https://pastehunter.readthedocs.io/en/latest/installation.html
