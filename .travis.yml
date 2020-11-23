@@ -1,9 +1,10 @@
 language: python
-sudo: required
 dist: bionic
 group: edge
 cache:
   pip: true
+env:
+  - PYTHONPATH=pastehunter
 python:
 - 3.6
 - 3.6-dev
