@@ -25,7 +25,7 @@ install:
 - pip install -e .
 script:
 - pastehunter-cli
-- pytest
+- python -m pytest
 after_success:
 - python setup.py sdist
 deploy:
