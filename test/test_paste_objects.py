@@ -31,6 +31,7 @@ def test_slexy_site():
         assert paste == 'pid_is_' + str(pid)
         assert paste_data == {"pid": 123}
 
+
 def test_pastebin_site_remap():
     fake_conf = {
         'inputs': {
@@ -47,8 +48,9 @@ def test_pastebin_site_remap():
     }
     pastebin_site = PastebinPasteSite(fake_conf)
     out = pastebin_site.remap_raw_item(data)
-    assert  out == {'key': 'a', 'test': 'b', 'date': '1582595793', 'filename': 'a', 'confname': 'pastebin',
-                    'pasteid': 'a', 'pastesite': 'pastebin.com', '@timestamp': '2020-02-25T01:56:33'}
+    assert out == {'key': 'a', 'test': 'b', 'date': '1582595793', 'filename': 'a', 'confname': 'pastebin',
+                   'pasteid': 'a', 'pastesite': 'pastebin.com', '@timestamp': '2020-02-25T01:56:33'}
+
 
 def test_pastebin_site():
     fake_conf = {
@@ -68,7 +70,7 @@ def test_pastebin_site():
         {
             'key': 'bc',
             'date': '1582595793'
-         }
+        }
     ])
     pastes, paste_ids = pastebin_site.get_recent_items([])
     assert paste_ids == ['ab', 'bc']

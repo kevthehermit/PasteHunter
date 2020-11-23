@@ -19,7 +19,7 @@
       "module": "pastehunter.inputs.dumpz",
       "api_scrape": "https://dumpz.org/api/recent",
       "api_raw": "https://dumpz.org/api/dump",
-      "paste_limit": 200,
+      "paste_limit": 100,
       "store_all": false
     },
     "gists": {
