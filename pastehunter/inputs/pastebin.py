@@ -4,7 +4,7 @@ import requests
 import logging
 from datetime import datetime
 
-from inputs.base_input import BasePasteSite
+from pastehunter.inputs.base_input import BasePasteSite
 
 logger = logging.getLogger('pastehunter')
 
