@@ -4,7 +4,7 @@ from datetime import datetime
 from time import sleep
 from typing import Any, Dict, Optional, List, Union
 
-from inputs.base_input import BasePasteSite
+from pastehunter.inputs.base_input import BasePasteSite
 
 logger = logging.getLogger('pastehunter')
 
