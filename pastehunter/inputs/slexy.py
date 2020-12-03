@@ -11,15 +11,16 @@ logger = logging.getLogger('pastehunter')
 
 class SlexyPasteSite(BasePasteSite):
 
-    def __init__(self):
+    def __init__(self, conf):
         self.url = None
         self.site = "slexy.org"
         url_slexy = "https://" + self.site
         self.url_recent = url_slexy + "/recent"
         self.url_view = url_slexy + "/view"
         self.url_raw = url_slexy + "/raw"
+        self.fetch_timeout = conf.get('fetch_timeout', 15)
 
-    def make_request(self, url: str, timeout: Optional[int] = 10, headers: Optional[Dict[str, Any]] = None):
+    def make_request(self, url: str, timeout: Optional[int] = 15, headers: Optional[Dict[str, Any]] = None):
         req = super(SlexyPasteSite, self).make_request(url, timeout, {
             'Referer': self.url_recent,
             'User-Agent': 'PasteHunter'
@@ -30,8 +31,8 @@ class SlexyPasteSite(BasePasteSite):
         logger.debug('Remaining Slexy Ratelimit: {0}'.format(remaining))
 
         if req.status_code == 429:
-            timeout = req.headers.get('Retry-After', 60)
-            sleep(timeout)
+            delay = req.headers.get('Retry-After', 60)
+            sleep(delay)
             return self.make_request(url, timeout)
         # If ratelimit_limit = 60, 60/60 = 1
         # If ratelimit_limit = 30, 60/30 = 2
@@ -60,10 +61,10 @@ class SlexyPasteSite(BasePasteSite):
         }
 
     def get_raw_data(self, raw_url):
-        return self.make_request(raw_url)
+        return self.make_request(raw_url, self.fetch_timeout)
 
     def get_paste_for_id(self, paste_id: Any) -> str:
-        return self.make_request("%s/%s" % (self.url_view, paste_id))
+        return self.make_request("%s/%s" % (self.url_view, paste_id), self.fetch_timeout)
 
     def get_raw_link(self, data, pid):
         pattern = '<a href="/raw/%s(.*?)"' % pid
@@ -71,7 +72,7 @@ class SlexyPasteSite(BasePasteSite):
         return "%s/%s%s" % (self.url_raw, pid, token)
 
     def get_recent_items(self, input_history: List[str]):
-        data = self.make_request(self.url_recent)
+        data = self.make_request(self.url_recent, self.fetch_timeout)
         pids = re.findall('<td><a href="/view/(.*?)">', data)
         return list(set(pids))
 
@@ -79,7 +80,7 @@ class SlexyPasteSite(BasePasteSite):
 def recent_pastes(conf, input_history):
     history = []
     paste_list = []
-    my_scraper = SlexyPasteSite()
+    my_scraper = SlexyPasteSite(conf['inputs']['slexy'])
     recent_pids = my_scraper.get_recent_items(input_history)
     pid_to_process = set()
     for pid in recent_pids:

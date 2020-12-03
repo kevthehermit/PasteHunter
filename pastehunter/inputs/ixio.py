@@ -3,7 +3,7 @@ import re
 from datetime import datetime
 from typing import List, Any, Dict, Union, Pattern
 
-from common import base62_decode, base62_encode
+from pastehunter.common import base62_decode, base62_encode
 from pastehunter.inputs.base_input import BasePasteSite
 
 logger = logging.getLogger('pastehunter')
