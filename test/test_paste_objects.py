@@ -19,7 +19,7 @@ class FakeRequestJson(object):
 
 def test_slexy_site():
     pid_list_fake = [0, 1, 2, 3, 4]
-    slexy_site = SlexyPasteSite()
+    slexy_site = SlexyPasteSite({})
     slexy_site.get_recent_items = lambda: pid_list_fake
     slexy_site.get_paste_for_id = lambda pid: mock_get_paste_for_pid(str(pid))
     slexy_site.remap_raw_item = lambda raw_data, pid: {"pid": 123}
