@@ -137,7 +137,7 @@
     },
     "http_output": {
       "enabled": false,
-      "module": "outputs.http_output",
+      "module": "pastehunter.outputs.http_output",
       "classname": "HttpOutput",
       "endpoint_url": "",
       "headers": {},
