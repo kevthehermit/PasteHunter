@@ -13,7 +13,7 @@ make && \
 make install
 
 WORKDIR /usr/src/wait-for-it
-RUN git clone https://github.com/vishnubob/wait-for-it . && \
+RUN git clone --depth 1 https://github.com/vishnubob/wait-for-it . && \
 chmod +x /usr/src/wait-for-it/wait-for-it.sh
 
 WORKDIR /usr/src/pastehunter
