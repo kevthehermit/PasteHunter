@@ -2,10 +2,11 @@ from elasticsearch import Elasticsearch
 from pastehunter.common import parse_config
 from datetime import datetime
 import logging
-
+import ssl
+from elasticsearch.connection import create_ssl_context
+      
 logger = logging.getLogger('pastehunter')
 config = parse_config()
-
 
 class ElasticOutput():
     def __init__(self):
@@ -17,9 +18,21 @@ class ElasticOutput():
         self.es_index = config['outputs']['elastic_output']['elastic_index']
         self.weekly = config['outputs']['elastic_output']['weekly_index']
         es_ssl = config['outputs']['elastic_output']['elastic_ssl']
+        verify_certs = config['outputs']['elastic_output'].get('verify_certs', True)
+        
+        if verify_certs is False:
+            import requests
+            requests.packages.urllib3.disable_warnings()
+            ssl_context = create_ssl_context()
+            ssl_context.check_hostname = False
+            ssl_context.verify_mode = ssl.CERT_NONE
+        else:
+            ssl_context = create_ssl_context()
+            ssl_context.verify_mode = ssl.CERT_REQUIRED
+
         self.test = False
         try:
-            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl)
+            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl, verify_certs=verify_certs, ssl_context=ssl_context)
             self.test = True
         except Exception as e:
             logger.error(e)
