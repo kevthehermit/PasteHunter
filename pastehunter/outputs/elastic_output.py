@@ -23,7 +23,7 @@ class ElasticOutput():
         ssl_assert_fingerprint = config['outputs']['elastic_output'].get('ssl_assert_fingerprint', None)
         self.test = False
 
-        if ssl_show_warn is False and verify_certs is False and ssl_assert_fingerprint is not None:
+        if ssl_show_warn is False and verify_certs is False and ssl_assert_fingerprint is None:
             message = '\n' + '#' * 50 + '\n# Shame on you for not verifing certs... \n' + '#' * 50 + '\n'
             logger.info(message)
 
