@@ -24,7 +24,7 @@ class ElasticOutput():
         self.test = False
 
         if ssl_show_warn is False and verify_certs is False and ssl_assert_fingerprint is None:
-            message = '\n' + '#' * 50 + '\n# Shame on you for not verifing certs... \n' + '#' * 50 + '\n'
+            message = '\n' + '#' * 50 + '\n# Shame on you for not verifing certs. At lease you can do set ssl_assert_fingerprint to make sure your connecting to the right server. \n' + '#' * 50 + '\n'
             logger.info(message)
 
         try:
