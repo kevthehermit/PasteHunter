@@ -20,14 +20,15 @@ class ElasticOutput():
         verify_certs = config['outputs']['elastic_output'].get('verify_certs', True)
         ssl_show_warn = config['outputs']['elastic_output'].get('ssl_show_warn', True)
         ca_certs = config['outputs']['elastic_output'].get('ca_certs', None)
+        ssl_assert_fingerprint = config['outputs']['elastic_output'].get('ssl_assert_fingerprint', None)
         self.test = False
 
-        if ssl_show_warn is False and verify_certs is False:
+        if ssl_show_warn is False and verify_certs is False and ssl_assert_fingerprint is None:
             message = '\n' + '#' * 50 + '\n# Shame on you for not verifing certs... \n' + '#' * 50 + '\n'
             logger.info(message)
 
         try:
-            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl, ca_certs=ca_certs, verify_certs=verify_certs, ssl_show_warn=ssl_show_warn)
+            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl, ca_certs=ca_certs, verify_certs=verify_certs, ssl_show_warn=ssl_show_warn, ssl_assert_fingerprint=ssl_assert_fingerprint)
             self.test = True
         except Exception as e:
             logger.error(e)
