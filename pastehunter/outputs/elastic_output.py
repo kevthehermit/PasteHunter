@@ -16,10 +16,19 @@ class ElasticOutput():
         es_pass = config['outputs']['elastic_output']['elastic_pass']
         self.es_index = config['outputs']['elastic_output']['elastic_index']
         self.weekly = config['outputs']['elastic_output']['weekly_index']
-        es_ssl = config['outputs']['elastic_output']['elastic_ssl']
+        es_ssl = config['outputs']['elastic_output'].get('elastic_ssl', False)
+        verify_certs = config['outputs']['elastic_output'].get('verify_certs', True)
+        ssl_show_warn = config['outputs']['elastic_output'].get('ssl_show_warn', True)
+        ca_certs = config['outputs']['elastic_output'].get('ca_certs', None)
+        ssl_assert_fingerprint = config['outputs']['elastic_output'].get('ssl_assert_fingerprint', None)
         self.test = False
+
+        if ssl_show_warn is False and verify_certs is False and ssl_assert_fingerprint is None:
+            message = '\n' + '#' * 50 + '\n# Shame on you for not verifing certs. At lease you can do set ssl_assert_fingerprint to make sure your connecting to the right server. \n' + '#' * 50 + '\n'
+            logger.info(message)
+
         try:
-            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl)
+            self.es = Elasticsearch(es_host, port=es_port, http_auth=(es_user, es_pass), use_ssl=es_ssl, ca_certs=ca_certs, verify_certs=verify_certs, ssl_show_warn=ssl_show_warn, ssl_assert_fingerprint=ssl_assert_fingerprint)
             self.test = True
         except Exception as e:
             logger.error(e)
